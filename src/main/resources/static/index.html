@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Stuhel</title>
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+    <!-- Bootstrap Icons-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+    <!-- Google fonts-->
+    <link href="https://fonts.googleapis.com/css?family=Merriweather+Sans:400,700" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic" rel="stylesheet" type="text/css" />
+    <!-- SimpleLightbox plugin CSS-->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/SimpleLightbox/2.1.0/simpleLightbox.min.css" rel="stylesheet" />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="css/styles.css" rel="stylesheet" />
+    <!--로그인폼-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" crossorigin="anonymous"></script>
+    <!--sweet alert-->
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+</head>
+
+<body id="page-top">
+
+<!-- Navigation-->
+<nav class="navbar navbar-expand-lg navbar-light fixed-top py-3" id="mainNav">
+    <div class="container px-4 px-lg-5">
+        <!--<a class="navbar-brand" href="#page-top">welcome to here</a>-->
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ms-auto my-2 my-lg-0">
+                <li class="nav-item"><a class="nav-link" href="#login">로그인</a></li>
+                <li class="nav-item"><a class="nav-link" href="#join">회원가입</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+<!-- WELCOME-->
+<header class="masthead">
+    <div class="container px-4 px-lg-5 h-100">
+        <div class="row gx-4 gx-lg-5 h-100 align-items-center justify-content-center text-center">
+            <div class="col-lg-8 align-self-end">
+                <h1 class="text-white font-weight-bold">Study Helper</h1>
+                <hr class="divider" />
+            </div>
+            <div class="col-lg-8 align-self-baseline">
+                <p class="text-white-75 mb-5">STUDY HELPER에 오신걸 환영합니다.</br> 로그인 후 사용할 수 있습니다.</p>
+
+                <a class="btn btn-primary btn-xl" href="#login">login</a>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+<!--LOGIN-->
+<section class="page-section bg-primary" id="login">
+    <div class="container px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-lg-8 text-center">
+                <h2 class="text-white mt-0">Login</h2>
+                <hr class="divider divider-light"/>
+                        <form>
+                            <div class="form-floating mb-3">
+                                <input class="form-control" id="inputIdentity" type="identity" placeholder="ID" />
+                                <label for="inputIdentity">ID</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input class="form-control" id="inputPassword" type="password" placeholder="Password" />
+                                <label for="inputPassword">Password</label>
+                            </div>
+                    <!--             <div class="form-check mb-3">
+                                     <input class="form-check-input" id="inputRememberPassword" type="checkbox" value="" />
+                                     <label class="form-check-label" for="inputRememberPassword" style="text-aline:left">Remember Password</label>
+                                 </div>
+                                 <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
+                                     <a class="small" href="password.html">Forgot Password?</a>
+                                 </div>
+                    -->
+                             <div >
+                                <div class="text-center mb-3">
+                                    <div class="fw-bolder" id="loginMsg" style="color:#1a1e21; font-size:18px;"></div>
+                                </div>
+                            </div>
+                            <input type="button" class="btn btn-light btn-xl" id="loginButton" value="Login"/>  <!--href="index.html"-->
+                            <a class="btn btn-primary btn-xl" href="#join">회원가입</a>
+                        </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- Join-->
+<section class="page-section" id="join">
+    <div class="container px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-lg-8 col-xl-6 text-center">
+                <h2 class="mt-0">회원가입</h2>
+                <hr class="divider" />
+                <p class="text-muted mb-5">원활한 회원가입을 위해 아래의 항목을 전부 기입해주시기바랍니다.</p>
+            </div>
+
+        </div>
+        <div class="row gx-4 gx-lg-5 justify-content-center mb-5">
+            <div class="col-lg-6">
+                <form id="joinForm" data-sb-form-api-token="API_TOKEN">
+
+                    <!-- Name input-->
+                    <div class="form-floating mb-3">
+                        <input class="form-control" id="name" type="text" placeholder="Enter your name..." data-sb-validations="required" />
+                        <label for="name">Full name</label>
+                    </div>
+
+                    <!-- ID input-->
+                    <div class="form-floating mb-3">
+                        <input class="form-control" id="identity" type="identity" placeholder="ID" data-sb-validations="required" />
+                        <label for="identity">ID</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input class="btn btn-primary btn-xl" type="button" id="idDoubleCheck" value="ID중복확인"/>
+                    </div>
+
+                    <!-- Password input-->
+                    <div class="form-floating mb-3">
+                        <input class="form-control" id="password" type="password" placeholder="Password" data-sb-validations="required"/>
+                        <label for="password">Password</label>
+                    </div>
+
+                    <!-- Password confirm input-->
+                    <div class="form-floating mb-3">
+                        <input class="form-control" id="confirm-password" type="password" placeholder="Password-Check" data-sb-validations="required" />
+                        <label for="confirm-password">Password-Check</label>
+                    </div>
+
+                    <!-- Credit Number-->
+                    <div class="form-floating mb-3">
+                        <input class="form-control" id="cn" type="cn" placeholder="Credit Number" data-sb-validations="required" />
+                        <label for="cn">Credit Number</label>
+                    </div>
+
+                    <!---->
+                    <div >
+                        <div class="text-center mb-3">
+                            <div class="fw-bolder" id="joinResultMessage" style="color:tomato; font-size:18px;"></div>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button-->
+                    <div class="d-grid"><input type="button"class="btn btn-primary btn-xl" id="submitButton" value="완료" /></div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+
+<!-- Footer-->
+<footer class="bg-light py-5">
+    <div class="container px-4 px-lg-5"><div class="small text-center text-muted">Copyright &copy; 2021 - isjiji</div></div>
+</footer>
+
+
+<!-- Bootstrap core JS-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- SimpleLightbox plugin JS-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/SimpleLightbox/2.1.0/simpleLightbox.min.js"></script>
+
+<!-- Core theme JS-->
+<script src="js/scripts.js"></script>
+<script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
+
+<script>
+    const submitButton = document.querySelector("#submitButton"); //아이디를 객체로 만들경우 const로 변경불가하게 만들어준다.
+    const idDoubleCheck =document.querySelector("#idDoubleCheck");
+    const identity = document.querySelector("#identity");
+
+    const loginButton = document.querySelector("#loginButton");
+    const inputIdentity = document.querySelector("#inputIdentity");
+    const inputPassword = document.querySelector("#inputPassword");
+    const loginMsg = document.querySelector("#loginMsg");
+
+    const name = document.querySelector("#name");
+    const password = document.querySelector("#password");
+    const creditNumber = document.querySelector("#cn");
+    const confirmPassword = document.querySelector("#confirm-password");
+    const joinResultMsg = document.querySelector("#joinResultMessage");
+
+
+    /*로그인*/
+    loginButton.addEventListener('click',() =>{
+       if(inputPassword.value.trim()==null||inputPassword.value.trim()=="" ||
+           inputIdentity.value.trim()==null||inputIdentity.value.trim()==""
+       ){
+           loginMsg.innerHTML = "※ ID 혹은 비밀번호를 입력해주세요";
+           return;
+       }else{
+           let loginData = {"password":inputPassword.value, "id":inputIdentity.value}
+           loginData = JSON.stringify(loginData);
+
+           let xhr = new XMLHttpRequest();
+           xhr.open('POST', "/member/login?"
+               + "loginData=" + encodeURI(loginData)
+               ,true);
+           xhr.setRequestHeader('Accept', 'application/json');
+           xhr.send();
+           xhr.onreadystatechange = () => {
+               if (xhr.readyState == 4 && xhr.status == 200) {
+                   // 데이터 확인
+                   let txt = xhr.responseText;
+                   txt = JSON.parse(txt);
+                   console.log(txt.errorCode);
+                   console.log(txt.errorMsg);
+                   if (txt.errorCode == -1 || txt.errorCode == -2 ) {
+                      loginMsg.innerHTML = "※ " + txt.errorMsg;
+                       return;
+                   } else {
+                      location.href="/home.html";
+                   }
+               }
+           }
+       }
+    });
+
+
+    /*아이디 중복체크*/
+    idDoubleCheck.addEventListener('click', () => {
+        if(identity.value.trim()==""||identity.value.trim()==null){
+            joinResultMsg.innerHTML="ID를 입력해주세요";
+            return;
+        }
+        let xhr = new XMLHttpRequest();
+        xhr.open('Get', "/member/idDoubleCheck?"
+            + "identity=" + identity.value
+            ,true);
+        xhr.setRequestHeader('Accept', 'application/json');
+        xhr.send();
+        xhr.onreadystatechange = () => {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                // 데이터 확인
+                let txt = xhr.responseText;
+                txt = JSON.parse(txt);
+                if (txt.errorCode < 0) {
+                    joinResultMsg.innerHTML="※ 이미 사용중인 아이디입니다.";
+                    idDoubleCheck.value="ID중복확인";
+                    return;
+                }
+                joinResultMsg.innerHTML="※ 사용 가능한 아이디입니다.";
+                idDoubleCheck.value="사용가능";
+            }
+        }
+    });
+
+
+    /*회원가입*/
+    submitButton.addEventListener('click', () => {
+
+        if (identity.value.trim()==""||identity.value==null
+                ||name.value.trim()==""||name.value==null
+                ||password.value.trim()==""||password.value==null
+                ||creditNumber.value.trim()==""||creditNumber.value==null){
+
+            joinResultMsg.innerHTML = "※ 빈칸이 있습니다. </br>모든 정보를 기입하세요.";
+            return;
+        } else if(idDoubleCheck.value != "사용가능"){
+            joinResultMsg.innerHTML = "※ 아이디 중복 검사가 필요합니다.";
+            return;
+        } else if (password.value != confirmPassword.value) {
+            joinResultMsg.innerHTML = "※ 비밀번호를 다시 확인해주세요";
+            return;
+
+        }else {
+
+            let joinData ={"id" : identity.value, "name" : name.value, "password" : password.value, "creditNumber" : creditNumber.value};
+            joinData = JSON.stringify(joinData);
+
+            let xhr = new XMLHttpRequest();
+            xhr.open('POST', "/member/join?"
+                                 + "joinData=" + encodeURI(joinData)
+                , true);
+            xhr.setRequestHeader('Accept', 'application/json');
+            xhr.send();
+            xhr.onreadystatechange = () => {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    // 데이터 확인
+                    let txt = xhr.responseText;
+                    txt = JSON.parse(txt);
+                    if (txt.errorCode < 0) {
+                        joinResultMsg.innerHTML = "※ 오류 발생 관리자에게 문의바람";
+                        return;
+                    }
+                    joinResultMsg.innerHTML = "ヽ(✿ﾟ▽ﾟ)ノ</br>회원가입에 성공했습니다";
+                    idDoubleCheck.value = "ID중복확인";
+                    identity.value=null;
+                    name.value=null;
+                    password.value=null;
+                    creditNumber.value=null;
+                    confirmPassword.value=null;
+
+                    swal({
+                          title : '회원가입 성공'
+                        , text : 'ヽ(✿ﾟ▽ﾟ)ノ 로그인 후 이용해주세요'
+                        , icon : 'success'
+                        , button : '로그인'
+                        , buttonColor : '#FAED7D'
+                    }).then(function() {
+                        location.href = "#login";
+                    });
+                }
+            }
+        }
+    });
+
+</script>
+</body>
+</html>

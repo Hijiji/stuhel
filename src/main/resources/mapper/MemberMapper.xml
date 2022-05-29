@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.helper.study.stuhel.mapper.MemberDAO">
+
+    <resultMap type="com.helper.study.stuhel.to.MemberTO" id="Member">
+        <result property="id" column="ID" />
+        <result property="password" column="PASSWORD" />
+        <result property="name" column="NAME" />
+        <result property="creditNumber" column="CREDITNUMBER" />
+    </resultMap>
+
+    <select id="selectMemberData" parameterType="com.helper.study.stuhel.to.MemberTO" resultMap="Member">
+        select * from MEMBER_SECURITY
+                 where ID = #{id}
+                 AND PASSWORD = #{password}
+    </select>
+
+
+    <resultMap type="com.helper.study.stuhel.to.MemberTO" id="MemberIdResult">
+        <result property="id" column="ID" />
+    </resultMap>
+
+    <select id="selectMemberId" resultType="String" parameterType="String">
+        SELECT ID FROM MEMBER_SECURITY
+        WHERE ID = #{identity}
+    </select>
+
+    <insert id="insertMember" parameterType="com.helper.study.stuhel.to.MemberTO">
+        INSERT INTO
+            MEMBER_SECURITY(
+            ID,
+            NAME,
+            PASSWORD,
+            CREDITNUMBER
+        ) VALUES(
+                    #{id},
+                    #{name},
+                    #{password},
+                    #{creditNumber}
+                )
+    </insert>
+</mapper>

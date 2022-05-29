@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+    <title>Welcome! Stuhel's home</title>
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+    <!-- Bootstrap Icons-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+    <!-- Google fonts-->
+    <link href="https://fonts.googleapis.com/css?family=Merriweather+Sans:400,700" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic" rel="stylesheet" type="text/css" />
+    <!-- SimpleLightbox plugin CSS-->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/SimpleLightbox/2.1.0/simpleLightbox.min.css" rel="stylesheet" />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="css/styles.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">    <!-- flatpicker css -->
+    <script src="https://npmcdn.com/flatpickr/dist/flatpickr.min.js"></script>    <!-- flatpicker min js -->
+    <script src="https://npmcdn.com/flatpickr/dist/l10n/ko.js"></script>          <!-- flatpicker ko -->
+
+</head>
+<body id="page-top">
+<!-- Navigation-->
+<nav class="navbar navbar-expand-lg navbar-light fixed-top py-3" id="mainNav">
+    <div class="container px-4 px-lg-5">
+        <a class="navbar-brand" href="#page-top">Start Bootstrap</a>
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ms-auto my-2 my-lg-0">
+                <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+                <li class="nav-item"><a class="nav-link" href="#services">Services</a></li>
+                <li class="nav-item"><a class="nav-link" href="#portfolio">Portfolio</a></li>
+                <li class="nav-item"><a class="nav-link" onclick="logoutButton()">logout</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<!-- Masthead-->
+<header class="masthead">
+    <div class="container px-4 px-lg-5 h-100">
+        <div class="row gx-4 gx-lg-5 h-100 align-items-center justify-content-center text-center">
+            <div class="col-lg-8 align-self-center">
+                <h1 class="text-white font-weight-bold">Stuhel은</br> 당신의 노력을 돕습니다.</h1>
+                <hr class="divider" />
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Services-->
+<section class="page-section" id="services">
+    <div class="container px-4 px-lg-5">
+        <h2 class="text-center mt-0">At Your Service</h2>
+        <hr class="divider" />
+        <div class="row gx-4 gx-lg-5">
+            <div class="col-lg-3 col-md-6 text-center">
+                <div class="mt-5" href="#booking">
+                    <div class="mb-2"><i class="bi-laptop fs-1 text-primary"></i></div>
+                    <h3 class="h4 mb-2">Booking</h3>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 text-center">
+                <div class="mt-5">
+                    <div class="mb-2"><i class="bi-globe fs-1 text-primary"></i></div>
+                    <h3 class="h4 mb-2">Data sharing</h3>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 text-center">
+                <div class="mt-5">
+                    <div class="mb-2"><i class="bi-gem fs-1 text-primary"></i></div>
+                    <h3 class="h4 mb-2">Monthly</br>Challenge</h3>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 text-center">
+                <div class="mt-5">
+                    <div class="mb-2"><i class="bi-heart fs-1 text-primary"></i></div>
+                    <h3 class="h4 mb-2">My page</h3>
+                    <p class="text-muted mb-0"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- booking -->
+<section class="page-section" id="booking">
+    <div class="container px-4 px-lg-5">
+        <h2 class="text-center mt-0">Booking Zone</h2>
+        <input class="form-control" type="text" id="date-time-picker" >
+        <select class="form-control" id="bookingTime">
+            <option value="9">09:00 - 10:00</option>
+            <option value="10">10:00 - 11:00</option>
+            <option value="11">11:00 - 12:00</option>
+            <option value="12">12:00 - 13:00</option>
+            <option value="13">13:00 - 14:00</option>
+            <option value="14">14:00 - 15:00</option>
+            <option value="15">15:00 - 16:00</option>
+            <option value="16">16:00 - 17:00</option>
+            <option value="17">17:00 - 18:00</option>
+            <option value="18">18:00 - 19:00</option>
+            <option value="19">19:00 - 20:00</option>
+            <option value="20">20:00 - 21:00</option>
+            <option value="21">21:00 - 22:00</option>
+        </select>
+        <input type="button" id="dateTimeSave" value="강의실보기">
+    </div>
+</section>
+
+<!-- Portfolio-->
+<div id="portfolio">
+    <div class="container-fluid p-0">
+        <div class="row g-0">
+            <div class="col-lg-4 col-sm-6">
+                <a class="portfolio-box" href="assets/img/portfolio/fullsize/1.jpg" title="Project Name">
+                    <img class="img-fluid" src="assets/img/portfolio/thumbnails/1.jpg" alt="..." />
+                    <div class="portfolio-box-caption">
+                        <div class="project-category text-white-50">Category</div>
+                        <div class="project-name">Project Name</div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-4 col-sm-6">
+                <a class="portfolio-box" href="assets/img/portfolio/fullsize/2.jpg" title="Project Name">
+                    <img class="img-fluid" src="assets/img/portfolio/thumbnails/2.jpg" alt="..." />
+                    <div class="portfolio-box-caption">
+                        <div class="project-category text-white-50">Category</div>
+                        <div class="project-name">Project Name</div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-4 col-sm-6">
+                <a class="portfolio-box" href="assets/img/portfolio/fullsize/3.jpg" title="Project Name">
+                    <img class="img-fluid" src="assets/img/portfolio/thumbnails/3.jpg" alt="..." />
+                    <div class="portfolio-box-caption">
+                        <div class="project-category text-white-50">Category</div>
+                        <div class="project-name">Project Name</div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-4 col-sm-6">
+                <a class="portfolio-box" href="assets/img/portfolio/fullsize/4.jpg" title="Project Name">
+                    <img class="img-fluid" src="assets/img/portfolio/thumbnails/4.jpg" alt="..." />
+                    <div class="portfolio-box-caption">
+                        <div class="project-category text-white-50">Category</div>
+                        <div class="project-name">Project Name</div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-4 col-sm-6">
+                <a class="portfolio-box" href="assets/img/portfolio/fullsize/5.jpg" title="Project Name">
+                    <img class="img-fluid" src="assets/img/portfolio/thumbnails/5.jpg" alt="..." />
+                    <div class="portfolio-box-caption">
+                        <div class="project-category text-white-50">Category</div>
+                        <div class="project-name">Project Name</div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-4 col-sm-6">
+                <a class="portfolio-box" href="assets/img/portfolio/fullsize/6.jpg" title="Project Name">
+                    <img class="img-fluid" src="assets/img/portfolio/thumbnails/6.jpg" alt="..." />
+                    <div class="portfolio-box-caption p-3">
+                        <div class="project-category text-white-50">Category</div>
+                        <div class="project-name">Project Name</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Call to action-->
+<section class="page-section bg-dark text-white">
+    <div class="container px-4 px-lg-5 text-center">
+        <h2 class="mb-4">Free Download at Start Bootstrap!</h2>
+        <a class="btn btn-light btn-xl" href="https://startbootstrap.com/theme/creative/">Download Now!</a>
+    </div>
+</section>
+
+<!-- Footer-->
+<!-- Footer-->
+<footer class="bg-light py-5">
+    <div class="container px-4 px-lg-5"><div class="small text-center text-muted">Copyright &copy; 2021 - isjiji</div></div>
+</footer>
+
+<!-- Bootstrap core JS-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- SimpleLightbox plugin JS-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/SimpleLightbox/2.1.0/simpleLightbox.min.js"></script>
+<!-- Core theme JS-->
+<script src="js/scripts.js"></script>
+<script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
+
+<script>
+    const bookingBtn = document.querySelector("#bookingBtn");
+    const bookingTime = document.querySelector("#bookingTime");
+    const bookingDate = document.querySelector("#date-time-picker");
+    const dateTimeSave = document.querySelector("#dateTimeSave");
+
+    $("#date-time-picker").flatpickr({
+        //enableTime: true,            // 시간 선택 여부
+        altInput: true,              // 기존 입력을 숨기고 새 입력을 만듦
+        altFormat: 'Y-m-d',      // 날짜 선택 후 표시 형태
+        dateFormat: 'Y-m-d',     // date format 형식
+        defaultDate: new Date(),     // 기본 선택 시간
+        minDate: new Date(),         // 최소 선택 시간
+        locale: 'en',                // 한국어
+        //time_24hr: true,             // 24시간 형태
+        disableMobile: true          // 모바일 지원
+    });
+
+
+    /*로그아웃*/
+    function logoutButton(){
+        let xhr = new XMLHttpRequest();
+        xhr.open('Get', "/member/logout"
+            ,true);
+        xhr.setRequestHeader('Accept', 'application/json');
+        xhr.send();
+        xhr.onreadystatechange = () => {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                // 데이터 확인
+                let txt = xhr.responseText;
+                console.log("로그아웃되었습니다.");
+                location.href="/index.html";
+            }
+        }
+    }
+
+    dateTimeSave.addEventListener('click',()=>{
+        alert(bookingTime.value);
+        alert(bookingDate.value);
+        let xhr = new XMLHttpRequest();
+        xhr.open('Get'
+                  , "/book/roomSearch?bookingTime="+bookingTime.value+"&bookingDate="+bookingDate.value
+                  , true);
+        xhr.setRequestHeader('Accept','application/json');
+        xhr.send();
+        xhr.onreadystatechange = () => {
+            if(xhr.readyState == 4 && xhr.status == 200){
+                let txt = xhr.responseText;
+                alert("성공");
+                alert(txt.bookId);
+            }
+        }
+    });
+</script>
+<!--
+$('#sandbox-container input').datepicker({
+todayBtn: "linked",
+language: "ko"
+});
+
+-->
+</body>
+</html>
