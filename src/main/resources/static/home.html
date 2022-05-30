@@ -21,7 +21,24 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">    <!-- flatpicker css -->
     <script src="https://npmcdn.com/flatpickr/dist/flatpickr.min.js"></script>    <!-- flatpicker min js -->
     <script src="https://npmcdn.com/flatpickr/dist/l10n/ko.js"></script>          <!-- flatpicker ko -->
+    <!--sweet alert-->
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <style>
 
+#roomStyle {
+  background-color: blue;
+  border: none;
+  color: white;
+  padding: 15px 30px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+
+</style>
 </head>
 <body id="page-top">
 <!-- Navigation-->
@@ -85,29 +102,66 @@
         </div>
     </div>
 </section>
-
 <!-- booking -->
 <section class="page-section" id="booking">
-    <div class="container px-4 px-lg-5">
+    <div class="container px-4 px-lg-5 ">
         <h2 class="text-center mt-0">Booking Zone</h2>
-        <input class="form-control" type="text" id="date-time-picker" >
-        <select class="form-control" id="bookingTime">
-            <option value="9">09:00 - 10:00</option>
-            <option value="10">10:00 - 11:00</option>
-            <option value="11">11:00 - 12:00</option>
-            <option value="12">12:00 - 13:00</option>
-            <option value="13">13:00 - 14:00</option>
-            <option value="14">14:00 - 15:00</option>
-            <option value="15">15:00 - 16:00</option>
-            <option value="16">16:00 - 17:00</option>
-            <option value="17">17:00 - 18:00</option>
-            <option value="18">18:00 - 19:00</option>
-            <option value="19">19:00 - 20:00</option>
-            <option value="20">20:00 - 21:00</option>
-            <option value="21">21:00 - 22:00</option>
-        </select>
-        <input type="button" id="dateTimeSave" value="강의실보기">
+        <div class="row gx-4 gx-lg-5 ">
+            <div class="text-center mb-3">
+                <div class="col-lg-3 col-md-6 text-center">
+                    <input type="text" width="10" align="center" id="date-time-picker" > <!-class="form-control" --->
+                </div>
+            </div>
+            <div class="text-center mb-3">
+                <div class="col-lg-3 col-md-6 text-center">
+                    <select id="bookingTime" >
+                        <option value="9">09:00 - 10:00</option>
+                        <option value="10">10:00 - 11:00</option>
+                        <option value="11">11:00 - 12:00</option>
+                        <option value="12">12:00 - 13:00</option>
+                        <option value="13">13:00 - 14:00</option>
+                        <option value="14">14:00 - 15:00</option>
+                        <option value="15">15:00 - 16:00</option>
+                        <option value="16">16:00 - 17:00</option>
+                        <option value="17">17:00 - 18:00</option>
+                        <option value="18">18:00 - 19:00</option>
+                        <option value="19">19:00 - 20:00</option>
+                        <option value="20">20:00 - 21:00</option>
+                        <option value="21">21:00 - 22:00</option>
+                    </select>
+                </div>
+            </div>
+            <div class="text-center mb-3">
+                <div class="col-lg-3 col-md-6 text-center">
+                    <input type="button" id="dateTimeSave" value="강의실보기">
+                </div>
+            </div>
+            <div class="text-center mb-3">
+                <div class="col-lg-3 col-md-6 text-center">
+                    <table>
+                        <tr>
+                            <td><input type="button" value="101" id="room101" disabled="true" onclick="sendRoomId(this)" class="btn btn-primary btn-xl" /></td>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <td><input type="button" value="102" id="room102" disabled="true" onclick="sendRoomId(this)" class="btn btn-primary btn-xl" /></td>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <td><input type="button" value="103" id="room103" disabled="true" onclick="sendRoomId(this)" class="btn btn-primary btn-xl" /></td>
+                        </tr>
+                        <tr>
+                            &nbsp;&nbsp;&nbsp;
+                        </tr>
+                        <tr>
+                            <td><input type="button" value="104" id="room104" disabled="true" onclick="sendRoomId(this)" class="btn btn-primary btn-xl" /></td>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <td><input type="button" value="105" id="room105" disabled="true" onclick="sendRoomId(this)" class="btn btn-primary btn-xl" /></td>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <td><input type="button" value="106" id="room106" disabled="true" onclick="sendRoomId(this)" class="btn btn-primary btn-xl" /></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
+
 </section>
 
 <!-- Portfolio-->
@@ -198,6 +252,13 @@
     const bookingTime = document.querySelector("#bookingTime");
     const bookingDate = document.querySelector("#date-time-picker");
     const dateTimeSave = document.querySelector("#dateTimeSave");
+    const room101 = document.querySelector("#room101");
+    const room102 = document.querySelector("#room102");
+    const room103 = document.querySelector("#room103");
+    const room104 = document.querySelector("#room104");
+    const room105 = document.querySelector("#room105");
+    const room106 = document.querySelector("#room106");
+
 
     $("#date-time-picker").flatpickr({
         //enableTime: true,            // 시간 선택 여부
@@ -230,29 +291,72 @@
     }
 
     dateTimeSave.addEventListener('click',()=>{
-        alert(bookingTime.value);
-        alert(bookingDate.value);
+
         let xhr = new XMLHttpRequest();
         xhr.open('Get'
                   , "/book/roomSearch?bookingTime="+bookingTime.value+"&bookingDate="+bookingDate.value
-                  , true);
+                      , true);
         xhr.setRequestHeader('Accept','application/json');
         xhr.send();
         xhr.onreadystatechange = () => {
             if(xhr.readyState == 4 && xhr.status == 200){
                 let txt = xhr.responseText;
-                alert("성공");
-                alert(txt.bookId);
+                txt = JSON.parse(txt);
+                console.log(txt.roomId);
+                for(let i of txt.roomId){
+                    if(i=101){
+                        room101.disabled=false;
+                        room101.style.backgroundColor="orange";
+                    }
+                     if(i=102){
+                        room102.disabled=false;
+                        room102.style.backgroundColor="orange";
+                    }
+                     if(i=103){
+                        room103.disabled=false;
+                        room103.style.backgroundColor="orange";
+                    }
+                     if(i=104){
+                        room104.disabled=false;
+                        room104.style.backgroundColor="orange";
+                    }
+                     if(i=105){
+                        room105.disabled=false;
+                        room105.style.backgroundColor="orange";
+                    }
+                     if(i=106){
+                        room106.disabled=false;
+                        room106.style.backgroundColor="orange";
+                    }
+                }
             }
         }
     });
+
+    function sendRoomId(roomId){
+                    swal({
+                          title : '세미나실 예약'
+                        , text : 'ヽ(✿ﾟ▽ﾟ)ノ \n'
+                                  +bookingDate.value+' '+bookingTime.value+'~'+bookingTime.value+1
+                                  +'\n 해당 일시에 '+roomId.value+'호 세미나실을 예약하시겠습니까?'
+                        , button : '확인'
+                        , buttonColor : 'tomato'
+                    }).then(function() {
+                        sendBookdata(roomId.value); <!--예약자, 예약방, 예약시간, 예약날짜 DB로 보내서 insert해주기-->
+                    });
+        }
+
+    function sendBookdata(){
+
+    }
 </script>
 <!--
 $('#sandbox-container input').datepicker({
 todayBtn: "linked",
 language: "ko"
 });
-
+alert(bookingTime.value);
+        alert(bookingDate.value);
 -->
 </body>
 </html>
