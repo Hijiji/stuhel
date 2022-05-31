@@ -8,4 +8,6 @@ import java.util.HashMap;
 @Mapper
 public interface BookDAO {
    ArrayList<Integer> bookSearch(BookTO bookTO);
-}
+   void roomBook(BookTO bookTO);
+
+   }

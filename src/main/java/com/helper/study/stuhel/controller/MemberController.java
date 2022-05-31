@@ -43,6 +43,10 @@ public class MemberController {
             session.setAttribute("sessionId", session.getId());
             session.setAttribute("memberId", memberTO.getId());
             session.setAttribute("memberName", memberTO.getName());
+            System.out.println("id");
+            System.out.println(session.getAttribute("memberId"));
+            System.out.println("name");
+            System.out.println(session.getAttribute("memberName"));
 
         } catch (IdNotFoundException e1) {
             //e1.printStackTrace();
@@ -62,6 +66,7 @@ public class MemberController {
     @GetMapping("/logout")
     public String logout(HttpServletRequest request){
         HttpSession session = request.getSession();
+        System.out.println(session.getAttribute("memberId"));
         session.invalidate();
 
         return "index.html";

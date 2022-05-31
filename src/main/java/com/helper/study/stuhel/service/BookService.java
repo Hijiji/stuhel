@@ -8,4 +8,5 @@ import java.util.HashMap;
 public interface BookService {
 
     ArrayList<Integer> bookSearch(BookTO bookTO);
+    HashMap<String, Integer> roomBook(BookTO bookTO);
 }

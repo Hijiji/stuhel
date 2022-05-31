@@ -13,4 +13,20 @@
                                  where r.BOOKING_DATE != #{bookingDate}
                                          and r.BOOKING_TIME != #{bookingTime})
     </select>
+
+    <insert id="roomBook" parameterType="com.helper.study.stuhel.to.BookTO">
+        INSERT INTO ROOM_BOOK (
+            BOOKING_ID
+            ,USER_ID
+            ,ROOM_ID
+            ,BOOKING_DATE
+            ,BOOKING_TIME
+        )VALUES(
+            ROOM_SEQ.NEXTVAL
+            ,#{userId}
+            ,#{roomId}
+            ,#{bookingDate}
+            ,#{bookingTime}
+        )
+    </insert>
 </mapper>
