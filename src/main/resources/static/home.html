@@ -38,6 +38,12 @@
   cursor: pointer;
 }
 
+#test{
+    display : flex;
+    align-items: center;
+    <!--text-align: center;-->
+}
+
 </style>
 </head>
 <body id="page-top">
@@ -103,13 +109,128 @@
     </div>
 </section>
 <!-- booking -->
+
+<section class="page-section" id="booking">
+    <div class="container px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-lg-8 col-xl-6 text-center">
+                <h2 class="mt-0">Booking Zone</h2>
+                <hr class="divider" />
+                <form class="text-center mb-3"><!--수정중-->
+                    <div class="text-center mb-3">
+                        <div class="col-lg-3 col-md-6 text-center">
+                            <input type="text" width="15" align="center" id="date-time-picker" > <!-class="form-control" -&ndash;&gt;
+                        </div>
+                    </div>
+                <div class="text-center mb-3">
+                    <div class="col-lg-3 col-md-6 text-center">
+                        <select id="bookingTime" >
+                            <option value="9">09:00 - 10:00</option>
+                            <option value="10">10:00 - 11:00</option>
+                            <option value="11">11:00 - 12:00</option>
+                            <option value="12">12:00 - 13:00</option>
+                            <option value="13">13:00 - 14:00</option>
+                            <option value="14">14:00 - 15:00</option>
+                            <option value="15">15:00 - 16:00</option>
+                            <option value="16">16:00 - 17:00</option>
+                            <option value="17">17:00 - 18:00</option>
+                            <option value="18">18:00 - 19:00</option>
+                            <option value="19">19:00 - 20:00</option>
+                            <option value="20">20:00 - 21:00</option>
+                            <option value="21">21:00 - 22:00</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="text-center mb-3">
+                    <div class="col-lg-3 col-md-6 text-center">
+                        <input type="button" id="dateTimeSave" value="강의실보기">
+                    </div>
+                </div>
+                <div class="text-center mb-3">
+                    <div class="col-lg-3 col-md-6 text-center">
+                        <table>
+                            <tr>
+                                <td><input type="button" value="101" id="room101" disabled="true" onclick="sendRoomId(this)" class="btn btn-primary btn-xl" /></td>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <td><input type="button" value="102" id="room102" disabled="true" onclick="sendRoomId(this)" class="btn btn-primary btn-xl" /></td>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <td><input type="button" value="103" id="room103" disabled="true" onclick="sendRoomId(this)" class="btn btn-primary btn-xl" /></td>
+                            </tr>
+                            <tr>
+                                &nbsp;&nbsp;&nbsp;
+                            </tr>
+                            <tr>
+                                <td><input type="button" value="104" id="room104" disabled="true" onclick="sendRoomId(this)" class="btn btn-primary btn-xl" /></td>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <td><input type="button" value="105" id="room105" disabled="true" onclick="sendRoomId(this)" class="btn btn-primary btn-xl" /></td>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <td><input type="button" value="106" id="room106" disabled="true" onclick="sendRoomId(this)" class="btn btn-primary btn-xl" /></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+<!--
+                <form id="joinForm" data-sb-form-api-token="API_TOKEN">
+
+                    &lt;!&ndash; Name input&ndash;&gt;
+                    <div class="form-floating mb-3">
+                        <input class="form-control" id="name" type="text" placeholder="Enter your name..." data-sb-validations="required" />
+                        <label for="name">Full name</label>
+                    </div>
+
+                    &lt;!&ndash; ID input&ndash;&gt;
+                    <div class="form-floating mb-3">
+                        <input class="form-control" id="identity" type="identity" placeholder="ID" data-sb-validations="required" />
+                        <label for="identity">ID</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input class="btn btn-primary btn-xl" type="button" id="idDoubleCheck" value="ID중복확인"/>
+                    </div>
+
+                    &lt;!&ndash; Password input&ndash;&gt;
+                    <div class="form-floating mb-3">
+                        <input class="form-control" id="password" type="password" placeholder="Password" data-sb-validations="required"/>
+                        <label for="password">Password</label>
+                    </div>
+
+                    &lt;!&ndash; Password confirm input&ndash;&gt;
+                    <div class="form-floating mb-3">
+                        <input class="form-control" id="confirm-password" type="password" placeholder="Password-Check" data-sb-validations="required" />
+                        <label for="confirm-password">Password-Check</label>
+                    </div>
+
+                    &lt;!&ndash; Credit Number&ndash;&gt;
+                    <div class="form-floating mb-3">
+                        <input class="form-control" id="cn" type="cn" placeholder="Credit Number" data-sb-validations="required" />
+                        <label for="cn">Credit Number</label>
+                    </div>
+
+                    &lt;!&ndash;&ndash;&gt;
+                    <div >
+                        <div class="text-center mb-3">
+                            <div class="fw-bolder" id="joinResultMessage" style="color:tomato; font-size:18px;"></div>
+                        </div>
+                    </div>
+
+                    &lt;!&ndash; Submit Button&ndash;&gt;
+                    <div class="d-grid"><input type="button"class="btn btn-primary btn-xl" id="submitButton" value="완료" /></div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
 <section class="page-section" id="booking">
     <div class="container px-4 px-lg-5 ">
         <h2 class="text-center mt-0">Booking Zone</h2>
         <div class="row gx-4 gx-lg-5 ">
             <div class="text-center mb-3">
                 <div class="col-lg-3 col-md-6 text-center">
-                    <input type="text" width="10" align="center" id="date-time-picker" > <!-class="form-control" --->
+                    <input type="text" width="10" align="center" id="date-time-picker" > <!-class="form-control" -&ndash;&gt;
                 </div>
             </div>
             <div class="text-center mb-3">
@@ -163,7 +284,7 @@
     </div>
 
 </section>
-
+-->
 <!-- Portfolio-->
 <div id="portfolio">
     <div class="container-fluid p-0">
@@ -304,29 +425,25 @@
                 txt = JSON.parse(txt);
                 console.log(txt.roomId);
                 for(let i of txt.roomId){
-                    if(i=101){
+                    if(i==101){
                         room101.disabled=false;
-                        room101.style.backgroundColor="orange";
-                    }
-                     if(i=102){
+                        room101.style.backgroundColor="tomato";
+                    }else if(i==102){
+                       alert(i);
                         room102.disabled=false;
-                        room102.style.backgroundColor="orange";
-                    }
-                     if(i=103){
+                        room102.style.backgroundColor="tomato";
+                    }else if(i==103){
                         room103.disabled=false;
-                        room103.style.backgroundColor="orange";
-                    }
-                     if(i=104){
+                        room103.style.backgroundColor="tomato";
+                    }else if(i==104){
                         room104.disabled=false;
-                        room104.style.backgroundColor="orange";
-                    }
-                     if(i=105){
+                        room104.style.backgroundColor="tomato";
+                    }else if(i==105){
                         room105.disabled=false;
-                        room105.style.backgroundColor="orange";
-                    }
-                     if(i=106){
+                        room105.style.backgroundColor="tomato";
+                    }else if(i==106){
                         room106.disabled=false;
-                        room106.style.backgroundColor="orange";
+                        room106.style.backgroundColor="tomato";
                     }
                 }
             }

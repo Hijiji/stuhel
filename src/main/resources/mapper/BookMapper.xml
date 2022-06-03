@@ -10,8 +10,8 @@
         SELECT ROOM_ID FROM STUDY_ROOM S
         WHERE S.ROOM_ID NOT IN (select r.ROOM_ID
                                   from ROOM_BOOK r
-                                 where r.BOOKING_DATE != #{bookingDate}
-                                         and r.BOOKING_TIME != #{bookingTime})
+                                 where r.BOOKING_DATE = #{bookingDate}
+                                         and r.BOOKING_TIME = #{bookingTime})
     </select>
 
     <insert id="roomBook" parameterType="com.helper.study.stuhel.to.BookTO">
