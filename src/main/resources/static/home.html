@@ -38,15 +38,33 @@
   cursor: pointer;
 }
 
-#test{
-    display : flex;
-    align-items: center;
-    <!--text-align: center;-->
-}
+
 
 </style>
 </head>
+
 <body id="page-top">
+
+<script><!--세션체크-->
+    (function(){
+        let xhr = new XMLHttpRequest();
+        xhr.open('Get', "/member/sessionCheck"
+            ,true);
+        xhr.setRequestHeader('Accept', 'application/json');
+        xhr.send();
+        xhr.onreadystatechange = () => {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                // 데이터 확인
+                let sessionStatus = xhr.responseText;
+                if(sessionStatus==-1){
+                    location.href="/index.html";
+                }else if(sessionStatus==0){
+
+                }
+            }
+        }
+    })();
+</script>
 <!-- Navigation-->
 <nav class="navbar navbar-expand-lg navbar-light fixed-top py-3" id="mainNav">
     <div class="container px-4 px-lg-5">
@@ -56,6 +74,7 @@
             <ul class="navbar-nav ms-auto my-2 my-lg-0">
                 <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
                 <li class="nav-item"><a class="nav-link" href="#services">Services</a></li>
+                <li class="nav-item"><a class="nav-link" href="#booking">Booking</a></li>
                 <li class="nav-item"><a class="nav-link" href="#portfolio">Portfolio</a></li>
                 <li class="nav-item"><a class="nav-link" onclick="logoutButton()">logout</a></li>
             </ul>
@@ -63,7 +82,7 @@
     </div>
 </nav>
 <!-- Masthead-->
-<header class="masthead">
+<header class="masthead" id="about">
     <div class="container px-4 px-lg-5 h-100">
         <div class="row gx-4 gx-lg-5 h-100 align-items-center justify-content-center text-center">
             <div class="col-lg-8 align-self-center">
@@ -80,10 +99,10 @@
         <h2 class="text-center mt-0">At Your Service</h2>
         <hr class="divider" />
         <div class="row gx-4 gx-lg-5">
-            <div class="col-lg-3 col-md-6 text-center">
-                <div class="mt-5" href="#booking">
-                    <div class="mb-2"><i class="bi-laptop fs-1 text-primary"></i></div>
-                    <h3 class="h4 mb-2">Booking</h3>
+            <div class="col-lg-3 col-md-6 text-center" href="#booking">
+                <div class="mt-5" >
+                    <div class="mb-2"  ><i class="bi-laptop fs-1 text-primary"> </i></div>
+                    <h3 class="h4 mb-2"  >Booking</h3>
                 </div>
             </div>
             <div class="col-lg-3 col-md-6 text-center">
@@ -108,8 +127,8 @@
         </div>
     </div>
 </section>
-<!-- booking -->
 
+<!-- booking -->
 <section class="page-section" id="booking">
     <div class="container px-4 px-lg-5">
         <div class="row gx-4 gx-lg-5 justify-content-center">
@@ -143,7 +162,7 @@
                 </div>
                 <div class="text-center mb-3">
                     <div class="col-lg-3 col-md-6 text-center">
-                        <input type="button" id="dateTimeSave" value="강의실보기">
+                        <input type="button" id="RoomSave" value="강의실보기">
                     </div>
                 </div>
                 <div class="text-center mb-3">
@@ -174,117 +193,6 @@
         </div>
     </div>
 </section>
-<!--
-                <form id="joinForm" data-sb-form-api-token="API_TOKEN">
-
-                    &lt;!&ndash; Name input&ndash;&gt;
-                    <div class="form-floating mb-3">
-                        <input class="form-control" id="name" type="text" placeholder="Enter your name..." data-sb-validations="required" />
-                        <label for="name">Full name</label>
-                    </div>
-
-                    &lt;!&ndash; ID input&ndash;&gt;
-                    <div class="form-floating mb-3">
-                        <input class="form-control" id="identity" type="identity" placeholder="ID" data-sb-validations="required" />
-                        <label for="identity">ID</label>
-                    </div>
-                    <div class="form-floating mb-3">
-                        <input class="btn btn-primary btn-xl" type="button" id="idDoubleCheck" value="ID중복확인"/>
-                    </div>
-
-                    &lt;!&ndash; Password input&ndash;&gt;
-                    <div class="form-floating mb-3">
-                        <input class="form-control" id="password" type="password" placeholder="Password" data-sb-validations="required"/>
-                        <label for="password">Password</label>
-                    </div>
-
-                    &lt;!&ndash; Password confirm input&ndash;&gt;
-                    <div class="form-floating mb-3">
-                        <input class="form-control" id="confirm-password" type="password" placeholder="Password-Check" data-sb-validations="required" />
-                        <label for="confirm-password">Password-Check</label>
-                    </div>
-
-                    &lt;!&ndash; Credit Number&ndash;&gt;
-                    <div class="form-floating mb-3">
-                        <input class="form-control" id="cn" type="cn" placeholder="Credit Number" data-sb-validations="required" />
-                        <label for="cn">Credit Number</label>
-                    </div>
-
-                    &lt;!&ndash;&ndash;&gt;
-                    <div >
-                        <div class="text-center mb-3">
-                            <div class="fw-bolder" id="joinResultMessage" style="color:tomato; font-size:18px;"></div>
-                        </div>
-                    </div>
-
-                    &lt;!&ndash; Submit Button&ndash;&gt;
-                    <div class="d-grid"><input type="button"class="btn btn-primary btn-xl" id="submitButton" value="완료" /></div>
-                </form>
-            </div>
-        </div>
-    </div>
-</section>
-<section class="page-section" id="booking">
-    <div class="container px-4 px-lg-5 ">
-        <h2 class="text-center mt-0">Booking Zone</h2>
-        <div class="row gx-4 gx-lg-5 ">
-            <div class="text-center mb-3">
-                <div class="col-lg-3 col-md-6 text-center">
-                    <input type="text" width="10" align="center" id="date-time-picker" > <!-class="form-control" -&ndash;&gt;
-                </div>
-            </div>
-            <div class="text-center mb-3">
-                <div class="col-lg-3 col-md-6 text-center">
-                    <select id="bookingTime" >
-                        <option value="9">09:00 - 10:00</option>
-                        <option value="10">10:00 - 11:00</option>
-                        <option value="11">11:00 - 12:00</option>
-                        <option value="12">12:00 - 13:00</option>
-                        <option value="13">13:00 - 14:00</option>
-                        <option value="14">14:00 - 15:00</option>
-                        <option value="15">15:00 - 16:00</option>
-                        <option value="16">16:00 - 17:00</option>
-                        <option value="17">17:00 - 18:00</option>
-                        <option value="18">18:00 - 19:00</option>
-                        <option value="19">19:00 - 20:00</option>
-                        <option value="20">20:00 - 21:00</option>
-                        <option value="21">21:00 - 22:00</option>
-                    </select>
-                </div>
-            </div>
-            <div class="text-center mb-3">
-                <div class="col-lg-3 col-md-6 text-center">
-                    <input type="button" id="dateTimeSave" value="강의실보기">
-                </div>
-            </div>
-            <div class="text-center mb-3">
-                <div class="col-lg-3 col-md-6 text-center">
-                    <table>
-                        <tr>
-                            <td><input type="button" value="101" id="room101" disabled="true" onclick="sendRoomId(this)" class="btn btn-primary btn-xl" /></td>
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            <td><input type="button" value="102" id="room102" disabled="true" onclick="sendRoomId(this)" class="btn btn-primary btn-xl" /></td>
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            <td><input type="button" value="103" id="room103" disabled="true" onclick="sendRoomId(this)" class="btn btn-primary btn-xl" /></td>
-                        </tr>
-                        <tr>
-                            &nbsp;&nbsp;&nbsp;
-                        </tr>
-                        <tr>
-                            <td><input type="button" value="104" id="room104" disabled="true" onclick="sendRoomId(this)" class="btn btn-primary btn-xl" /></td>
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            <td><input type="button" value="105" id="room105" disabled="true" onclick="sendRoomId(this)" class="btn btn-primary btn-xl" /></td>
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            <td><input type="button" value="106" id="room106" disabled="true" onclick="sendRoomId(this)" class="btn btn-primary btn-xl" /></td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-
-</section>
--->
 <!-- Portfolio-->
 <div id="portfolio">
     <div class="container-fluid p-0">
@@ -372,7 +280,7 @@
     const bookingBtn = document.querySelector("#bookingBtn");
     const bookingTime = document.querySelector("#bookingTime");
     const bookingDate = document.querySelector("#date-time-picker");
-    const dateTimeSave = document.querySelector("#dateTimeSave");
+    const searchRoom = document.querySelector("#searchRoom");
     const room101 = document.querySelector("#room101");
     const room102 = document.querySelector("#room102");
     const room103 = document.querySelector("#room103");
@@ -411,7 +319,8 @@
         }
     }
 
-    dateTimeSave.addEventListener('click',()=>{
+    <!--사용가능한 세미나실 -->
+    searchRoom.addEventListener('click',()=>{
 
         let xhr = new XMLHttpRequest();
         xhr.open('Get'
@@ -450,6 +359,7 @@
         }
     });
 
+    <!--세미나실 예약확인 창 -->
     function sendRoomId(roomId){
                     swal({
                           title : '세미나실 예약'
@@ -462,7 +372,7 @@
                         sendBookdata(roomId.value); <!--예약자, 예약방, 예약시간, 예약날짜 DB로 보내서 insert해주기-->
                     });
         }
-
+    <!--세미나실 예약-->
     function sendBookdata(roomId){
 
         let insertBookData ={"roomId":roomId,"bookingTime":bookingTime.value,"bookingDate":bookingDate.value};
@@ -485,13 +395,5 @@
 
     }
 </script>
-<!--
-$('#sandbox-container input').datepicker({
-todayBtn: "linked",
-language: "ko"
-});
-alert(bookingTime.value);
-        alert(bookingDate.value);
--->
 </body>
 </html>

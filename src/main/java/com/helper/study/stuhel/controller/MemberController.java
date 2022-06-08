@@ -28,6 +28,14 @@ public class MemberController {
         this.memberService = memberService;
     }
 
+    @GetMapping("/sessionCheck") /*세션확인*/
+    public int sessionCheck(HttpServletRequest request){
+        HttpSession session = request.getSession();
+        if(session.getAttribute("memberId")==null){
+            return -1;
+        }
+        return 0;
+    }
     /*로그인*/
     @PostMapping("/login")
     public HashMap<String, Object> login(@RequestParam("loginData") String loginData,HttpServletRequest request){
@@ -43,6 +51,7 @@ public class MemberController {
             session.setAttribute("sessionId", session.getId());
             session.setAttribute("memberId", memberTO.getId());
             session.setAttribute("memberName", memberTO.getName());
+            session.setMaxInactiveInterval(30*60);
             System.out.println("id");
             System.out.println(session.getAttribute("memberId"));
             System.out.println("name");
