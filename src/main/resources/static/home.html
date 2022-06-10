@@ -24,22 +24,6 @@
     <!--sweet alert-->
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <style>
-
-#roomStyle {
-  background-color: blue;
-  border: none;
-  color: white;
-  padding: 15px 30px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  margin: 4px 2px;
-  cursor: pointer;
-}
-
-
-
 </style>
 </head>
 
@@ -99,10 +83,14 @@
         <h2 class="text-center mt-0">At Your Service</h2>
         <hr class="divider" />
         <div class="row gx-4 gx-lg-5">
-            <div class="col-lg-3 col-md-6 text-center" href="#booking">
-                <div class="mt-5" >
-                    <div class="mb-2"  ><i class="bi-laptop fs-1 text-primary"> </i></div>
-                    <h3 class="h4 mb-2"  >Booking</h3>
+            <div class="col-lg-3 col-md-6 text-center">
+                <div class="mt-5">
+                    <a href="#booking">
+                        <div class="mb-2">
+                            <i class="bi-laptop fs-1 text-primary"> </i>
+                        </div>
+                        <h3 class="h4 mb-2">Booking</h3>
+                    </a>
                 </div>
             </div>
             <div class="col-lg-3 col-md-6 text-center">
@@ -135,15 +123,14 @@
             <div class="col-lg-8 col-xl-6 text-center">
                 <h2 class="mt-0">Booking Zone</h2>
                 <hr class="divider" />
-                <form class="text-center mb-3"><!--수정중-->
-                    <div class="text-center mb-3">
-                        <div class="col-lg-3 col-md-6 text-center">
-                            <input type="text" width="15" align="center" id="date-time-picker" > <!-class="form-control" -&ndash;&gt;
+                    <div><!--class="text-center mb-3"-->
+                        <div><!--class="col-lg-3 col-md-6 text-center"-->
+                            <input type="button" id="date-time-picker" class="form-control">
                         </div>
                     </div>
-                <div class="text-center mb-3">
-                    <div class="col-lg-3 col-md-6 text-center">
-                        <select id="bookingTime" >
+                <div class="mb-3"><!--class="text-center mb-3"-->
+                    <div ><!--class="col-lg-3 col-md-6 text-center"-->
+                        <select id="bookingTime">
                             <option value="9">09:00 - 10:00</option>
                             <option value="10">10:00 - 11:00</option>
                             <option value="11">11:00 - 12:00</option>
@@ -160,20 +147,19 @@
                         </select>
                     </div>
                 </div>
-                <div class="text-center mb-3">
-                    <div class="col-lg-3 col-md-6 text-center">
-                        <input type="button" id="RoomSave" value="강의실보기">
+                <div class="mb-3"><!-- class="text-center mb-3"-->
+                    <div><!--class="col-lg-3 col-md-6 text-center"-->
+                        <input type="button" id="searchRoom" value="강의실보기">
                     </div>
                 </div>
-                <div class="text-center mb-3">
-                    <div class="col-lg-3 col-md-6 text-center">
+                <form>
                         <table>
                             <tr>
-                                <td><input type="button" value="101" id="room101" disabled="true" onclick="sendRoomId(this)" class="btn btn-primary btn-xl" /></td>
+                                <td><input type="button" value="101" id="room101" disabled="true" onclick="sendRoomId(this)" class="btn btn-primary btn-xl"/></td>
                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                <td><input type="button" value="102" id="room102" disabled="true" onclick="sendRoomId(this)" class="btn btn-primary btn-xl" /></td>
+                                <td><input type="button" value="102" id="room102" disabled="true" onclick="sendRoomId(this)" class="btn btn-primary btn-xl"/></td>
                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                <td><input type="button" value="103" id="room103" disabled="true" onclick="sendRoomId(this)" class="btn btn-primary btn-xl" /></td>
+                                <td><input type="button" value="103" id="room103" disabled="true" onclick="sendRoomId(this)" class="btn btn-primary btn-xl"/></td>
                             </tr>
                             <tr>
                                 &nbsp;&nbsp;&nbsp;
@@ -186,8 +172,6 @@
                                 <td><input type="button" value="106" id="room106" disabled="true" onclick="sendRoomId(this)" class="btn btn-primary btn-xl" /></td>
                             </tr>
                         </table>
-                    </div>
-                </div>
                 </form>
             </div>
         </div>
@@ -338,7 +322,6 @@
                         room101.disabled=false;
                         room101.style.backgroundColor="tomato";
                     }else if(i==102){
-                       alert(i);
                         room102.disabled=false;
                         room102.style.backgroundColor="tomato";
                     }else if(i==103){

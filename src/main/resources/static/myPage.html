@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+    <title>Welcome! Stuhel's home</title>
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+    <!-- Bootstrap Icons-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+    <!-- Google fonts-->
+    <link href="https://fonts.googleapis.com/css?family=Merriweather+Sans:400,700" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic" rel="stylesheet" type="text/css" />
+    <!-- SimpleLightbox plugin CSS-->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/SimpleLightbox/2.1.0/simpleLightbox.min.css" rel="stylesheet" />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="css/styles.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">    <!-- flatpicker css -->
+    <script src="https://npmcdn.com/flatpickr/dist/flatpickr.min.js"></script>    <!-- flatpicker min js -->
+    <script src="https://npmcdn.com/flatpickr/dist/l10n/ko.js"></script>          <!-- flatpicker ko -->
+    <!--sweet alert-->
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <style>
+    </style>
+</head>
+
+<body id="page-top">
+
+<script><!--세션체크-->
+    (function(){
+        let xhr = new XMLHttpRequest();
+        xhr.open('Get', "/member/sessionCheck"
+            ,true);
+        xhr.setRequestHeader('Accept', 'application/json');
+        xhr.send();
+        xhr.onreadystatechange = () => {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                // 데이터 확인
+                let sessionStatus = xhr.responseText;
+                if(sessionStatus==-1){
+                    location.href="/index.html";
+                }else if(sessionStatus==0){
+
+                }
+            }
+        }
+    })();
+</script>
+<!-- Navigation-->
+<nav class="navbar navbar-expand-lg navbar-light fixed-top py-3" id="mainNav">
+    <div class="container px-4 px-lg-5">
+        <a class="navbar-brand" href="#page-top">Start Bootstrap</a>
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ms-auto my-2 my-lg-0">
+                <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+                <li class="nav-item"><a class="nav-link" href="#myInfo">회원정보</a></li>
+                <li class="nav-item"><a class="nav-link" href="#bookStatus">예약현황</a></li>
+                <li class="nav-item"><a class="nav-link" href="#portfolio">Portfolio</a></li>
+                <li class="nav-item"><a class="nav-link" onclick="logoutButton()">logout</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<!-- Masthead-->
+<header class="masthead" id="about">
+    <div class="container px-4 px-lg-5 h-100">
+        <div class="row gx-4 gx-lg-5 h-100 align-items-center justify-content-center text-center">
+            <div class="col-lg-8 align-self-center">
+                <h1 class="text-white font-weight-bold">MY PAGE</h1>
+                <hr class="divider" />
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Services-->
+<section class="page-section" id="myInfo">
+    <div class="container px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-lg-8 col-xl-6 text-center">
+                <h2 class="mt-0">회원정보</h2>
+                <hr class="divider" />
+            </div>
+        </div>
+        <div class="row gx-4 gx-lg-5 justify-content-center mb-5">
+            <div class="col-lg-6">
+                <form id="joinForm" data-sb-form-api-token="API_TOKEN">
+
+                    <!-- Name input-->
+                    <div class="form-floating mb-3">
+                        <h6 class="mt-0"> NAME </h6> <input class="form-control" id="name" type="text" disabled/>
+                    </div>
+
+                    <!-- ID input-->
+                    <div class="form-floating mb-3">
+                        <h6 class="mt-0"> I D </h6><input class="form-control" id="identity" type="identity" disabled/><!--placeholder="ID" data-sb-validations="required" -->
+                    </div>
+
+                    <!-- birth input-->
+                    <div class="form-floating mb-3">
+                        <h6 class="mt-0"> BIRTH </h6><input class="form-control" id="birth"  disabled/><!--placeholder="ID" data-sb-validations="required" -->
+                    </div>
+
+                    <!-- ID DoubleCheck input-->
+                    <div class="form-floating mb-3" id="idCheckDiv" style="display:none" >
+                        <input class="btn btn-primary btn-xl" type="button" id="idDoubleCheck" value="ID중복확인"/>
+                    </div>
+
+                    <!-- Password input-->
+                    <div class="form-floating mb-3" id="pwDiv" style="display:none" >
+                        <h6 class="mt-0"> P W </h6><input class="form-control" id="password" type="password" placeholder="Password" data-sb-validations="required"/>
+                    </div>
+
+                    <!-- Password confirm input-->
+                    <div class="form-floating mb-3" id="pwConfirmDiv" style="display:none" >
+                        <h6 class="mt-0"> PW-CONFIRM : </h6><input class="form-control" id="confirm-password" type="password" /><!--placeholder="Password-Check" data-sb-validations="required" -->
+                    </div>
+
+                    <!--수정창 오픈-->
+                    <div class="d-grid">
+                        <input type="button"class="btn btn-primary btn-xl" id="changeButton" value="정보수정"/>
+                    </div>
+                    <!--수정저장-->
+                    <div class="d-grid">
+                        <input type="button"  class="btn btn-primary btn-xl" id="submitButton" value="완료" style="display:none"/>
+                    </div>
+                    <!--수정취소-->
+                    <div class="d-grid">
+                        <input type="button"class="btn btn-primary btn-xl" id="changeCancelButton"  style="display:none" value="수정취소" onClick="window.location.reload()"/>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- booking -->
+<section class="page-section" id="bookStatus">
+    <div class="container px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-lg-8 col-xl-6 text-center">
+                <h2 class="mt-0">예약현황</h2>
+                <hr class="divider" />
+            </div>
+            <div>
+                //여기에 뒷단에서 내 아이디가 예약한 세미나실 데이터 가져오기 로직 짠다. javascript로 짠다. 예약 취소버튼 만든다.
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer-->
+<!-- Footer-->
+<footer class="bg-light py-5">
+    <div class="container px-4 px-lg-5"><div class="small text-center text-muted">Copyright &copy; 2021 - isjiji</div></div>
+</footer>
+
+<!-- Bootstrap core JS-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- SimpleLightbox plugin JS-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/SimpleLightbox/2.1.0/simpleLightbox.min.js"></script>
+<!-- Core theme JS-->
+<script src="js/scripts.js"></script>
+<script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
+
+<script>
+    const changeButton = document.querySelector("#changeButton");
+    const submitButton = document.querySelector("#submitButton");
+    const name = document.querySelector("#name");
+    const identity = document.querySelector("#identity");
+    const birth = document.querySelector("#birth");
+    const idCheckDiv = document.querySelector("#idCheckDiv");
+    const pwDiv = document.querySelector("#pwDiv");
+    const pwConfirmDiv = document.querySelector("#pwConfirmDiv");
+    const changeCancelButton = document.querySelector("#changeCancelButton");
+    <!--const  = document.querySelector("#");-->
+
+
+    <!--회원정보 수정 -->
+    changeButton.addEventListener('click',()=>{
+    <!--클릭하면 ID PW 체크 하게 만들기 그 다음에 아래 로직 수행-->
+        name.disabled=false;
+        identity.disabled=false;
+        birth.disabled=false;
+        password.style.display="block";
+        idCheckDiv.style.display="block";
+        pwDiv.style.display="block";
+        pwConfirmDiv.style.display="block";
+        changeButton.style.display="none";
+        submitButton.style.display="block";
+        changeCancelButton.display="block";
+    });
+
+
+    submitButton.addEventListener('click',()=>{
+       alert("변경하시겠습니까?");
+       <!--클릭하면 변경하겠냐고 묻고 취소하면 이전화면으로, 확인 하면 뒷단으로 가서 update시켜준다. 그 후에 아래로직 수정 -->
+        name.disabled=true;
+        identity.disabled=true;
+        birth.disabled=true;
+        password.style.display="none";
+        idCheckDiv.style.display="none";
+        pwDiv.style.display="none";
+        pwConfirmDiv.style.display="none";
+        changeButton.style.display="block";
+        submitButton.style.display="none";
+        changeCancelButton.display="none";
+       alert("변경이 완료되었습니다.");
+    });
+
+
+
+    <!--세미나실 예약확인 창 -->
+    function sendRoomId(roomId){
+                    swal({
+                          title : '세미나실 예약'
+                        , text : 'ヽ(✿ﾟ▽ﾟ)ノ \n'
+                                  +bookingDate.value+' '+bookingTime.value+'~'+bookingTime.value+1
+                                  +'\n 해당 일시에 '+roomId.value+'호 세미나실을 예약하시겠습니까?'
+                        , button : '확인'
+                        , buttonColor : 'tomato'
+                    }).then(function() {
+                        sendBookdata(roomId.value); <!--예약자, 예약방, 예약시간, 예약날짜 DB로 보내서 insert해주기-->
+                    });
+        }
+    <!--세미나실 예약-->
+    function sendBookdata(roomId){
+
+        let insertBookData ={"roomId":roomId,"bookingTime":bookingTime.value,"bookingDate":bookingDate.value};
+        insertBookData=JSON.stringify(insertBookData);
+
+        let xhr = new XMLHttpRequest();
+        xhr.open('Get'
+                  , "/book/roomBook?insertBookData="+encodeURI(insertBookData)
+                      , true);
+        xhr.setRequestHeader('Accept','application/json');
+        xhr.send();
+        xhr.onreadystatechange = () => {
+            if(xhr.readyState == 4 && xhr.status == 200){
+                let txt = xhr.responseText;
+                txt = JSON.parse(txt);
+                alert("뚄꾠!!");
+            }
+        }
+
+
+    }
+    /*로그아웃*/
+    function logoutButton(){
+        let xhr = new XMLHttpRequest();
+        xhr.open('Get', "/member/logout"
+            ,true);
+        xhr.setRequestHeader('Accept', 'application/json');
+        xhr.send();
+        xhr.onreadystatechange = () => {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                // 데이터 확인
+                let txt = xhr.responseText;
+                console.log("로그아웃되었습니다.");
+                location.href="/index.html";
+            }
+        }
+    }
+</script>
+</body>
+</html>
