@@ -24,12 +24,45 @@
     <!--sweet alert-->
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <style>
+
+.modal-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-new {
+  background: white;
+  padding: 24px 16px;
+  border-radius: 4px;
+  width: 320px;
+}
+
+.modal-title {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.modal p {
+  font-size: 16px;
+}
+
+.close-wrapper {
+  text-align: right;
+}
     </style>
 </head>
 
 <body id="page-top">
 
 <script><!--세션체크-->
+let sessionStatus = null;
     (function(){
         let xhr = new XMLHttpRequest();
         xhr.open('Get', "/member/sessionCheck"
@@ -39,7 +72,7 @@
         xhr.onreadystatechange = () => {
             if (xhr.readyState == 4 && xhr.status == 200) {
                 // 데이터 확인
-                let sessionStatus = xhr.responseText;
+                sessionStatus = xhr.responseText;
                 if(sessionStatus==-1){
                     location.href="/index.html";
                 }else if(sessionStatus==0){
@@ -65,6 +98,24 @@
         </div>
     </div>
 </nav>
+<!--회원조회 모달-->
+<div class="modal-wrapper" style="display: none;">
+    <div class="modal-new">
+        <div class="modal-title">사용자 확인</div>
+        <div>
+        I  D  <input class="form-control" type="text" id="checkId"/>
+        P W  <input class="form-control" type="text" id="checkPw"/>
+        </div>
+        </br>
+        <div class="fw-bolder" id="checkMsg" style="color:#1a1e21;"></div>
+        </br>
+        <div class="close-wrapper">
+            <button class="btn btn-light btn-xl" id="IdPwConfirm" onclick="IdPwConfirm()">확인</button>&nbsp&nbsp
+            <button class="btn btn-light btn-xl" id="close">취소</button>
+        </div>
+    </div>
+</div>
+
 <!-- Masthead-->
 <header class="masthead" id="about">
     <div class="container px-4 px-lg-5 h-100">
@@ -100,14 +151,14 @@
                         <h6 class="mt-0"> I D </h6><input class="form-control" id="identity" type="identity" disabled/><!--placeholder="ID" data-sb-validations="required" -->
                     </div>
 
-                    <!-- birth input-->
-                    <div class="form-floating mb-3">
-                        <h6 class="mt-0"> BIRTH </h6><input class="form-control" id="birth"  disabled/><!--placeholder="ID" data-sb-validations="required" -->
-                    </div>
-
                     <!-- ID DoubleCheck input-->
                     <div class="form-floating mb-3" id="idCheckDiv" style="display:none" >
                         <input class="btn btn-primary btn-xl" type="button" id="idDoubleCheck" value="ID중복확인"/>
+                    </div>
+
+                    <!-- birth input-->
+                    <div class="form-floating mb-3">
+                        <h6 class="mt-0"> BIRTH </h6><input class="form-control" id="birth"  disabled/><!--placeholder="ID" data-sb-validations="required" -->
                     </div>
 
                     <!-- Password input-->
@@ -138,7 +189,7 @@
     </div>
 </section>
 
-<!-- booking -->
+
 <section class="page-section" id="bookStatus">
     <div class="container px-4 px-lg-5">
         <div class="row gx-4 gx-lg-5 justify-content-center">
@@ -177,22 +228,96 @@
     const pwDiv = document.querySelector("#pwDiv");
     const pwConfirmDiv = document.querySelector("#pwConfirmDiv");
     const changeCancelButton = document.querySelector("#changeCancelButton");
+    const close = document.getElementById("close");
+    const modal = document.querySelector(".modal-wrapper");
+    const checkId = document.querySelector("#checkId");
+    const checkPw = document.querySelector("#checkPw");
+    const checkMsg = document.querySelector("#checkMsg");
     <!--const  = document.querySelector("#");-->
 
+<!--초기회원정보화면-->
+    function retrieve(){
+        if(sessionStatus==0){
+            let xhr = new XMLHttpRequest();
+            xhr.open('POST', "/myPage/retrieve?"
+                   ,true);
+            xhr.setRequestHeader('Accept', 'application/json');
+            xhr.send();
+            xhr.onreadystatechange = () => {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    // 데이터 확인
+                    let txt = xhr.responseText;
+                    txt = JSON.parse(txt);
+
+                    if ( ) {
+
+                    } else {
+
+                    }
+                }
+            }
+        }
+    }
+
+<!--회원정보수정시 회원인증-->
+
+    function IdPwConfirm(){
+        if(checkPw.value.trim()==null||checkPw.value.trim()=="" ||
+           checkId.value.trim()==null||checkId.value.trim()==""
+        ){
+           checkMsg.innerHTML = "※ ID 혹은 비밀번호를 입력해주세요";
+           return;
+        }else{
+           let loginData = {"password":checkPw.value, "id":checkId.value}
+           loginData = JSON.stringify(loginData);
+
+           let xhr = new XMLHttpRequest();
+           xhr.open('POST', "/member/login?"
+               + "loginData=" + encodeURI(loginData)
+               ,true);
+           xhr.setRequestHeader('Accept', 'application/json');
+           xhr.send();
+           xhr.onreadystatechange = () => {
+               if (xhr.readyState == 4 && xhr.status == 200) {
+                   // 데이터 확인
+                   let txt = xhr.responseText;
+                   txt = JSON.parse(txt);
+                   console.log(txt.errorCode);
+                   console.log(txt.errorMsg);
+                   if (txt.errorCode == -1 || txt.errorCode == -2 ) {
+                      checkMsg.innerHTML = "※ " + txt.errorMsg;
+                       return;
+                   } else {
+                      modal.style.display = "none";
+                      name.disabled=false;
+                      identity.disabled=false;
+                      birth.disabled=false;
+                      password.style.display="block";
+                      idCheckDiv.style.display="block";
+                      pwDiv.style.display="block";
+                      pwConfirmDiv.style.display="block";
+                      changeButton.style.display="none";
+                      submitButton.style.display="block";
+                      changeCancelButton.display="block";
+                      checkPw.value="";
+                      checkId.value="";
+                      checkMsg.innerHTML="";
+                   }
+               }
+           }
+        }
+    }
+    close.onclick = () => {
+        modal.style.display = "none";
+        checkPw.value="";
+        checkId.value="";
+        checkMsg.innerHTML="";
+    };
 
     <!--회원정보 수정 -->
     changeButton.addEventListener('click',()=>{
+    modal.style.display = "flex";
     <!--클릭하면 ID PW 체크 하게 만들기 그 다음에 아래 로직 수행-->
-        name.disabled=false;
-        identity.disabled=false;
-        birth.disabled=false;
-        password.style.display="block";
-        idCheckDiv.style.display="block";
-        pwDiv.style.display="block";
-        pwConfirmDiv.style.display="block";
-        changeButton.style.display="none";
-        submitButton.style.display="block";
-        changeCancelButton.display="block";
     });
 
 
