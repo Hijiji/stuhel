@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.helper.study.stuhel.mapper.MyPageDAO">
+
+    <resultMap type="com.helper.study.stuhel.to.MemberTO" id="Member">
+        <result property="id" column="ID" />
+        <result property="password" column="PASSWORD" />
+        <result property="name" column="NAME" />
+        <result property="creditNumber" column="CREDITNUMBER" />
+        <result property="birthsay" column="BIRTHDAY" />
+    </resultMap>
+
+    <select id="retrieve" parameterType="com.helper.study.stuhel.to.MemberTO" resultMap="Member">
+        select * from MEMBER_SECURITY
+        where ID = #{id}
+    </select>
+
+
+
+    <update id="insertMember" parameterType="com.helper.study.stuhel.to.MemberTO">
+        UPDATE MEMBER_SECURITY
+        SET
+            ID = #{id},
+            NAME = #{name},
+            PASSWORD = #{password}
+            BIRTHDAY = #{birthday}
+        WHERE ID = #{id}
+    </update>
+</mapper>

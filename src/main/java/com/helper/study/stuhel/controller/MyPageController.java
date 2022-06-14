@@ -1,5 +1,7 @@
 package com.helper.study.stuhel.controller;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.helper.study.stuhel.service.MyPageService;
 import com.helper.study.stuhel.to.MemberTO;
 import org.apache.catalina.session.StandardSession;
@@ -18,7 +20,7 @@ import java.util.HashMap;
 @RequestMapping("/myPage")
 @ResponseBody
 public class MyPageController {
-
+    private static Gson gson = new GsonBuilder().serializeNulls().create(); // 속성값이 null 인 속성도 json 변환
     private final MyPageService myPageService;
 
     @Autowired
@@ -27,17 +29,23 @@ public class MyPageController {
     }
 
     @PostMapping("/retrieve")
-    HashMap<String, MemberTO> retrieve(HttpServletRequest request) {
+    String retrieve(HttpServletRequest request) {
         HttpSession session = request.getSession();
         HashMap<String, MemberTO> map=new HashMap<>();
         MemberTO memberTO=new MemberTO();
+        String result;
+        System.out.println("****************1****************");
         if(session.getAttribute("memberId")==null) {
-            map.put("memberId", null);
+            System.out.println(session.getAttribute("memberId"));
+           result=null;
         }else {
+            System.out.println(session.getAttribute("memberId"));
             memberTO.setId((String)session.getAttribute("memberId"));
-            memberTO=myPageService.retrieve(memberTO);  //뒷단돌려서 받아온 member 정보 gsom으로 역직렬화 하는법 찾기
+            memberTO=myPageService.retrieve(memberTO);  //뒷단돌려서 받아온 member 정보 gson으로 역직렬화 하는법 찾기
+            result =gson.toJson(memberTO);
+            System.out.println(result);
         }
-        return map;
+        return result;
     }
 
 }
