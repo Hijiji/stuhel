@@ -48,4 +48,14 @@ public class MyPageController {
         return result;
     }
 
+    @PostMapping("/changeInfo")
+    HashMap<String, Integer> changeInfo(HttpServletRequest request, @RequestParam("changeInfo") String changeInfo){
+        HttpSession session = request.getSession();
+        String sessionMemberId=(String)session.getAttribute("memberId");
+        MemberTO memberTO = gson.fromJson(changeInfo, MemberTO.class);
+        HashMap<String, Integer> map = new HashMap<>();
+        myPageService.changeInfo(memberTO,sessionMemberId);
+
+        return null;
+    }
 }

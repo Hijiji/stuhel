@@ -108,11 +108,13 @@
                     <!-- Name input-->
                     <div class="form-floating mb-3">
                         <h6 class="mt-0"> NAME </h6> <input class="form-control" id="name" type="text" disabled/>
+                        <label for="name" id="nameLabel"></label>
                     </div>
 
                     <!-- ID input-->
                     <div class="form-floating mb-3">
-                        <h6 class="mt-0"> I D </h6><input class="form-control" id="identity" type="identity" disabled/><!--placeholder="ID" data-sb-validations="required" -->
+                        <h6 class="mt-0"> I D </h6><input class="form-control" id="identity" type="text" disabled/><!--placeholder="ID" data-sb-validations="required" -->
+                        <label for="identity" id="idLabel"></label>
                     </div>
 
                     <!-- ID DoubleCheck input-->
@@ -123,16 +125,19 @@
                     <!-- birth input-->
                     <div class="form-floating mb-3">
                         <h6 class="mt-0"> BIRTH </h6><input class="form-control" id="birth"  disabled/><!--placeholder="ID" data-sb-validations="required" -->
+                        <label for="birth" id="birthLabel"></label>
                     </div>
 
                     <!-- Password input-->
                     <div class="form-floating mb-3" id="pwDiv" style="display:none" >
-                        <h6 class="mt-0"> P W </h6><input class="form-control" id="password" type="password" placeholder="Password" data-sb-validations="required"/>
+                        <h6 class="mt-0"> NEW PW </h6><input class="form-control" id="password" type="password" placeholder="Password" data-sb-validations="required"/>
+                        <label for="password" id="pwLabel">변경할 비밀번호를 입력하세요</label>
                     </div>
 
                     <!-- Password confirm input-->
                     <div class="form-floating mb-3" id="pwConfirmDiv" style="display:none" >
-                        <h6 class="mt-0"> PW-CONFIRM : </h6><input class="form-control" id="confirm-password" type="password" /><!--placeholder="Password-Check" data-sb-validations="required" -->
+                        <h6 class="mt-0"> PW CONFIRM</h6><input class="form-control" id="confirmPassword" type="password" /><!--placeholder="Password-Check" data-sb-validations="required" -->
+                        <label for="confirm-password" id="confirmPasswordLabel">비밀번호를 한번 더 입력하세요</label>
                     </div>
 
                     <!--수정창 오픈-->
@@ -174,7 +179,7 @@
         <div class="modal-title">사용자 확인</div>
         <div>
             I  D  <input class="form-control" type="text" id="checkId"/>
-            P W  <input class="form-control" type="text" id="checkPw"/>
+            P W  <input class="form-control" type="password" id="checkPw"/>
         </div>
         </br>
         <div class="fw-bolder" id="checkMsg" style="color:#1a1e21;"></div>
@@ -200,11 +205,19 @@
 <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
 
 <script>
+    const dbName = "";
+    const dbIdentity = "";
+    const dbBirth = "";
+
+
     const changeButton = document.querySelector("#changeButton");
     const submitButton = document.querySelector("#submitButton");
     const name = document.querySelector("#name");
     const identity = document.querySelector("#identity");
     const birth = document.querySelector("#birth");
+    const password = document.querySelector("#password");
+    const confirmPassword = document.querySelector("#confirmPassword");
+
     const idCheckDiv = document.querySelector("#idCheckDiv");
     const pwDiv = document.querySelector("#pwDiv");
     const pwConfirmDiv = document.querySelector("#pwConfirmDiv");
@@ -214,52 +227,62 @@
     const checkId = document.querySelector("#checkId");
     const checkPw = document.querySelector("#checkPw");
     const checkMsg = document.querySelector("#checkMsg");
+    const nameLable = document.querySelector("#nameLable");
+    const identityLable = document.querySelector("#identityLable");
+    const birthLable = document.querySelector("#birthLable");
+    const passwordLable = document.querySelector("#passwordLable");
+    const confirmpasswordLabel = document.querySelector("#confirmpasswordLabel");
+
     <!--const  = document.querySelector("#");-->
 
-<!--세션체크-->
-let sessionStatus = null;
-    (function(){
-        let xhr = new XMLHttpRequest();
-        xhr.open('Get', "/member/sessionCheck"
-            ,true);
-        xhr.setRequestHeader('Accept', 'application/json');
-        xhr.send();
-        xhr.onreadystatechange = () => {
-            if (xhr.readyState == 4 && xhr.status == 200) {
-                // 데이터 확인
-                sessionStatus = xhr.responseText;
-                if(sessionStatus==-1){
-                    location.href="/index.html";
-                }else if(sessionStatus==0){
-                    retrieve();
-                }
-
-                <!--초기회원정보화면-->
-                function retrieve(){
-                    if(sessionStatus==0){
-                        let xhr = new XMLHttpRequest();
-                        xhr.open('POST', "/myPage/retrieve?"
-                                ,true);
-                        xhr.setRequestHeader('Accept', 'application/json');
-                        xhr.send();
-                        xhr.onreadystatechange = () => {
-                                if (xhr.readyState == 4 && xhr.status == 200) {
-                                // 데이터 확인
-                                    let txt = xhr.responseText;
-                                    txt = JSON.parse(txt);
-                                    name.value=txt.name;
-                                    identity.value=txt.id;
-
-                                }
-                        }
+    <!--세션체크-->
+    let sessionStatus = null;
+        (function(){
+            let xhr = new XMLHttpRequest();
+            xhr.open('Get', "/member/sessionCheck"
+                    ,true);
+            xhr.setRequestHeader('Accept', 'application/json');
+            xhr.send();
+            xhr.onreadystatechange = () => {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    // 데이터 확인
+                    sessionStatus = xhr.responseText;
+                    if(sessionStatus==-1){
+                        location.href="/index.html";
+                    }else if(sessionStatus==0){
+                        retrieve();
                     }
                 }
             }
-        }
     })();
 
+    <!--초기회원정보화면-->
+    function retrieve(){
+        if(sessionStatus==0){
+            let xhr = new XMLHttpRequest();
+                xhr.open('POST', "/myPage/retrieve?"
+                        ,true);
+                xhr.setRequestHeader('Accept', 'application/json');
+                xhr.send();
+                xhr.onreadystatechange = () => {
+                    if (xhr.readyState == 4 && xhr.status == 200) {
+                        // 데이터 확인
+                        let txt = xhr.responseText;
+                        txt = JSON.parse(txt);
+                        dbName.value=txt.name;
+                        dbIdentity.value=txt.id;
+                        //dbBirth.value=txt.id;
 
-<!--회원정보수정시 회원인증-->
+                        name.value=dbName.value;
+                        identity.value=dbIdentity.value;
+                        //birth.value=dbBirth.value;
+                    }
+                }
+        }
+    }
+
+
+    <!--회원정보수정시 회원인증-->
     function IdPwConfirm(){
         if(checkPw.value.trim()==null||checkPw.value.trim()=="" ||
            checkId.value.trim()==null||checkId.value.trim()==""
@@ -301,11 +324,18 @@ let sessionStatus = null;
                       checkPw.value="";
                       checkId.value="";
                       checkMsg.innerHTML="";
+                      name.value = "";
+                      identity.value  = "";
+                      birth.value  = "";
+                      nameLable.innerHTML = dbName.value;
+                      identityLable.innerHTML= dbIdentity;
+                      //birthLable.innerHTML = dbBirth;
                    }
                }
            }
         }
     }
+
     <!--회원인증창 닫기-->
     close.onclick = () => {
         modal.style.display = "none";
@@ -320,7 +350,7 @@ let sessionStatus = null;
     <!--클릭하면 ID PW 체크 하게 만들기 그 다음에 아래 로직 수행-->
     });
 
-<!--아이디 더블체크-->
+    <!--아이디 더블체크-->
     idDoubleCheck.addEventListener('click', () => {
         if(identity.value.trim()==""||identity.value.trim()==null){
             joinResultMsg.innerHTML="ID를 입력해주세요";
@@ -347,10 +377,64 @@ let sessionStatus = null;
             }
         }
     });
+    const changeName="" ;
+    const changeIdentity="";
+    const changeBirth="";
+    const changePassword="";
+    const changeConfirmTxt="회원님의 ";
 
     submitButton.addEventListener('click',()=>{
-       alert("변경하시겠습니까?");
-       <!--클릭하면 변경하겠냐고 묻고 취소하면 이전화면으로, 확인 하면 뒷단으로 가서 update시켜준다. 그 후에 아래로직 수정 -->
+        if(name.value.trim()!=null || name.value.trim()!=""){
+            changeName=name.value;
+            changeConfirmTxt+="이름 ";
+        }else if(identity.value.trim()!=null || name.value.trim()!=""){
+            if(idDoubleCheck.value=="사용가능"){
+                changeIdentity=identity.value;
+                changeConfirmTxt+="아이디 ";
+            }else{
+                alert("변경 아이디 중복체크가 필요합니다.");
+                return;
+            }
+        }else if(birth.value.trim()!=null || birth.value.trim()!=""){
+            if(isNaN(birth.value)){
+                alert("숫자만 입력가능합니다.");
+                return;
+            }else {
+                changeBirth=birth.value;
+                changeConfirmTxt+="생일 ";
+            }
+        }else if(password.value.trim()!=null || password.value.trim()!="" || confirmPassword.value.trim()!=null || confirmPassword.value.trim()!=""){
+            if(password.value==confirmPassword.value){
+                changePassword.value=password.value;
+                changeConfirmTxt+="비밀번호 ";
+            }else{
+                alert("입력한 비밀번호를 확인해주세요.");
+                return;
+            }
+        }
+       alert(changeConfirmTxt+"정보를 변경하시겠습니까?");
+       let changeInfo = {} //데이터 추가하기
+           changeInfo = JSON.stringify(changeInfo);
+
+           let xhr = new XMLHttpRequest();
+           xhr.open('POST',  "/myPage/retrieve?"
+               + "changeInfo=" + encodeURI(changeInfo)
+               ,true);
+           xhr.setRequestHeader('Accept', 'application/json');
+           xhr.send();
+           xhr.onreadystatechange = () => {
+               if (xhr.readyState == 4 && xhr.status == 200) {
+                   // 데이터 확인
+                   let txt = xhr.responseText;
+                   txt = JSON.parse(txt);
+                   console.log(txt.errorCode);
+                   console.log(txt.errorMsg);
+                   if (txt.errorCode == -1 || txt.errorCode == -2 ) {
+                      alert(errMsg);
+                       return;
+                   } else {
+                       alert("변경이 완료되었습니다.");
+                   }
         name.disabled=true;
         identity.disabled=true;
         birth.disabled=true;
@@ -361,7 +445,15 @@ let sessionStatus = null;
         changeButton.style.display="block";
         submitButton.style.display="none";
         changeCancelButton.display="none";
-       alert("변경이 완료되었습니다.");
+        name.value = dbName.value;
+        identity.value  = dbIdentity.value;
+        birth.value  = dbBirth.value;
+        nameLable.innerHTML = "";
+        identityLable.innerHTML= "";
+         //birthLable.innerHTML = "";
+
+               }
+           }
     });
 
 

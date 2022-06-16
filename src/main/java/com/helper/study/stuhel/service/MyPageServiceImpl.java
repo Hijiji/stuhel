@@ -23,6 +23,11 @@ public class MyPageServiceImpl implements MyPageService{
         return myPageDAO.retrieve(memberTO);
     }
 
+    public MemberTO changeInfo(MemberTO memberTO, String sessionMemberId){
+        myPageDAO.changeInfo(memberTO, sessionMemberId);
+        return  null;
+    }
+
     @Override
     public MemberTO bookInfo(MemberTO memberTO) {
         return null;
