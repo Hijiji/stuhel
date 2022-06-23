@@ -34,7 +34,7 @@ public class MyPageController {
         HashMap<String, MemberTO> map=new HashMap<>();
         MemberTO memberTO=new MemberTO();
         String result;
-        System.out.println("****************1****************");
+
         if(session.getAttribute("memberId")==null) {
             System.out.println(session.getAttribute("memberId"));
            result=null;
@@ -52,8 +52,11 @@ public class MyPageController {
     HashMap<String, Integer> changeInfo(HttpServletRequest request, @RequestParam("changeInfo") String changeInfo){
         HttpSession session = request.getSession();
         String sessionMemberId=(String)session.getAttribute("memberId");
+        System.out.println("sessionMemberId = " + sessionMemberId);
         MemberTO memberTO = gson.fromJson(changeInfo, MemberTO.class);
+        System.out.println("memberTO.getId() = " + memberTO.getId());
         HashMap<String, Integer> map = new HashMap<>();
+        System.out.println("****************1****************");
         myPageService.changeInfo(memberTO,sessionMemberId);
 
         return null;

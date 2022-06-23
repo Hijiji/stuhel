@@ -19,13 +19,13 @@ public class MyPageServiceImpl implements MyPageService{
 
     @Override
     public MemberTO retrieve(MemberTO memberTO) {
-        System.out.println("****************2****************");
         return myPageDAO.retrieve(memberTO);
     }
 
     public MemberTO changeInfo(MemberTO memberTO, String sessionMemberId){
-        myPageDAO.changeInfo(memberTO, sessionMemberId);
-        return  null;
+        System.out.println("****************2****************");
+
+        return  myPageDAO.changeInfo(memberTO, sessionMemberId);
     }
 
     @Override
