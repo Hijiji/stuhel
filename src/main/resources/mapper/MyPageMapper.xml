@@ -17,13 +17,11 @@
 
 
 
-    <update id="changeInfo" parameterType="com.helper.study.stuhel.to.MemberTO">
+    <update id="changeInfo" parameterType="String">
         UPDATE MEMBER_SECURITY
         SET
-            ID = #{id},
-            NAME = #{name},
-            PASSWORD = #{password}
-            BIRTHDAY = #{birthday}
+            1=1
+            #{cha}
         WHERE ID = #{sessionMemberId}  <!--TO에 sessionId 없어서 에러뜰 수도 있음 파라메터타입 ...바꾸든지 어쩌던지 해봐 ~-->
     </update>
 </mapper>

@@ -24,8 +24,18 @@ public class MyPageServiceImpl implements MyPageService{
 
     public MemberTO changeInfo(MemberTO memberTO, String sessionMemberId){
         System.out.println("****************2****************");
-
-        return  myPageDAO.changeInfo(memberTO, sessionMemberId);
+        String cha="";
+        if(memberTO.getId()!=null || memberTO.getId().trim()!="") {
+            cha += " ,ID =" + memberTO.getId();
+        }if(memberTO.getName()!=null){
+            cha +=" ,NAME ="+memberTO.getName();
+        }if(memberTO.getPassword()!=null){
+            cha +=" ,PASSWORD ="+memberTO.getPassword();
+        }if(memberTO.getBirthday()!=0){
+            cha +=" ,BIRTHDAY ="+memberTO.getBirthday();
+        }
+        System.out.println("cha : "+cha);
+        return  myPageDAO.changeInfo(cha, sessionMemberId);
     }
 
     @Override

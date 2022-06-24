@@ -385,7 +385,7 @@
         if(name.value.trim()!=dbName){
             changeName=name.value.trim();
             changeConfirmTxt+="이름 ";
-        }else if(identity.value.trim()!=dbIdentity){
+        }if(identity.value.trim()!=dbIdentity){
             if(idDoubleCheck.value=="사용가능"){
                 changeIdentity=identity.value.trim();
                 changeConfirmTxt+="아이디 ";
@@ -393,7 +393,7 @@
                 alert("변경 아이디 중복체크가 필요합니다.");
                 return;
             }
-        }else if(birth.value.trim()!=dbBirth){
+        }if(birth.value.trim()!=dbBirth){
             if(isNaN(birth.value)){
                 alert("숫자만 입력가능합니다.");
                 return;
@@ -401,7 +401,7 @@
                 changeBirth=birth.value.trim();
                 changeConfirmTxt+="생일 ";
             }
-        }else if(password.value.trim()!=null || password.value.trim()!="" || confirmPassword.value.trim()!=null || confirmPassword.value.trim()!=""){
+        }if(password.value.trim()!=null || password.value.trim()!="" || confirmPassword.value.trim()!=null || confirmPassword.value.trim()!=""){
             if(password.value==confirmPassword.value){
                 changePassword=password.value.trim();
                 changeConfirmTxt+="비밀번호 ";
