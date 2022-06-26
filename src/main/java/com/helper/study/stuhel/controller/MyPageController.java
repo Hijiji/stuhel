@@ -41,8 +41,11 @@ public class MyPageController {
         }else {
             System.out.println(session.getAttribute("memberId"));
             memberTO.setId((String)session.getAttribute("memberId"));
+            memberTO.setName((String)session.getAttribute("memberName"));
             memberTO=myPageService.retrieve(memberTO);  //뒷단돌려서 받아온 member 정보 gson으로 역직렬화 하는법 찾기
+
             result =gson.toJson(memberTO);
+            //session.setAttribute("");
             System.out.println(result);
         }
         return result;
@@ -57,7 +60,7 @@ public class MyPageController {
         System.out.println("memberTO.getId() = " + memberTO.getId());
         HashMap<String, Integer> map = new HashMap<>();
         System.out.println("****************1****************");
-        myPageService.changeInfo(memberTO,sessionMemberId);
+        myPageService.changeInfo(memberTO,session);
 
         return null;
     }
