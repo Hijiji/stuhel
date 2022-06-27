@@ -25,10 +25,27 @@ public class MyPageServiceImpl implements MyPageService{
 
     public MemberTO changeInfo(MemberTO memberTO, HttpSession session){
         System.out.println("****************2****************");
-        String id="", password="", name=""; int birthDay=0;
+        /*String id="", password="", name=""; String birthDay="";*/
+        String sessionId=(String)session.getAttribute("memberId");
+        memberTO.setSessionId(sessionId);
+        if(memberTO.getId()==null || memberTO.getId().trim()=="") {
+            memberTO.setId(sessionId);
+        }
+        if(memberTO.getName()==null){
+            memberTO.setName((String)session.getAttribute("memberName"));
+        }
+        if(memberTO.getPassword()==null){
+            memberTO.setPassword((String)session.getAttribute("memberPassword"));
+        }
+        if(memberTO.getBirthday()==0){
+            memberTO.setBirthday(0);
+        }
+        System.out.println("memberTO.getId() = " + memberTO.getId());
+        //(int)session.getAttribute("memberBirthDay");
 
-        if(memberTO.getId()!=null || memberTO.getId().trim()!="") {
-            id = (String)session.getAttribute("memberId");
+/*
+        if(memberTO.getId()==null || memberTO.getId().trim()!="") {
+            id = sessionId;
         }else id =  memberTO.getId();
         if(memberTO.getName()!=null){
             name = (String)session.getAttribute("memberName");
@@ -38,10 +55,10 @@ public class MyPageServiceImpl implements MyPageService{
         }else password = memberTO.getPassword();
         if(memberTO.getBirthday()!=0){
             birthDay = memberTO.getBirthday();
-        }else birthDay =0;
+        }else birthDay ="0";
                 //(int)session.getAttribute("memberBirthDay");
-
-        return  myPageDAO.changeInfo(id, name, password, birthDay);
+*/
+        return  myPageDAO.changeInfo(memberTO);
     }
 
     @Override

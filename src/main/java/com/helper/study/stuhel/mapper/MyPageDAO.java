@@ -7,6 +7,6 @@ import org.apache.ibatis.annotations.Param;
 @Mapper
 public interface MyPageDAO {
     MemberTO retrieve(MemberTO memberTO);
-    MemberTO changeInfo(@Param("id")String id, @Param("name") String name, @Param("password") String password, @Param("birthDay") int birthDay);
+    MemberTO changeInfo(MemberTO memberTO);
     MemberTO bookInfo(MemberTO MemberTO);
 }

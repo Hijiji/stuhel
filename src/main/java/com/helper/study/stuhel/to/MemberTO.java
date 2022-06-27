@@ -14,5 +14,6 @@ public class MemberTO {
     private int creditNumber;
     private String password;
     private int birthday;
+    private String sessionId;
 
 }

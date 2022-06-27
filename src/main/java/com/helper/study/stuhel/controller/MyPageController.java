@@ -40,6 +40,7 @@ public class MyPageController {
            result=null;
         }else {
             System.out.println(session.getAttribute("memberId"));
+            System.out.println(session.getAttribute("memberName"));
             memberTO.setId((String)session.getAttribute("memberId"));
             memberTO.setName((String)session.getAttribute("memberName"));
             memberTO=myPageService.retrieve(memberTO);  //뒷단돌려서 받아온 member 정보 gson으로 역직렬화 하는법 찾기
@@ -55,10 +56,29 @@ public class MyPageController {
     HashMap<String, Integer> changeInfo(HttpServletRequest request, @RequestParam("changeInfo") String changeInfo){
         HttpSession session = request.getSession();
         String sessionMemberId=(String)session.getAttribute("memberId");
+        String sessionName=(String)session.getAttribute("memberName");
         System.out.println("sessionMemberId = " + sessionMemberId);
         MemberTO memberTO = gson.fromJson(changeInfo, MemberTO.class);
-        System.out.println("memberTO.getId() = " + memberTO.getId());
+
         HashMap<String, Integer> map = new HashMap<>();
+        memberTO.setSessionId(sessionMemberId);
+        if(memberTO.getId().isEmpty()|| memberTO.getId()==null || memberTO.getId().trim()=="") {
+            memberTO.setId(sessionMemberId);
+        }
+        if(memberTO.getName().isEmpty()|| memberTO.getName()==null || memberTO.getName().trim()==""){
+            memberTO.setName(sessionName);
+        }
+        if(memberTO.getPassword().isEmpty()||memberTO.getPassword()==null){
+            memberTO.setPassword((String)session.getAttribute("memberPassword"));
+        }
+        if(memberTO.getBirthday()==0){
+            memberTO.setBirthday(0);
+        }
+        System.out.println("memberTO.getId() = " + memberTO.getId());
+        System.out.println("memberTO.getName() = " + memberTO.getName());
+        System.out.println("memberTO.getPass() = " + memberTO.getPassword());
+        System.out.println("memberTO.getBirth() = " + memberTO.getBirthday());
+        System.out.println("memberTO.getSessionId() = " + memberTO.getSessionId());
         System.out.println("****************1****************");
         myPageService.changeInfo(memberTO,session);
 
