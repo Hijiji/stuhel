@@ -7,7 +7,7 @@ import java.util.HashMap;
 
 public interface MyPageService {
     MemberTO retrieve(MemberTO memberTO);
-    MemberTO changeInfo(MemberTO memberTO, HttpSession session);
+    HashMap<String,Integer> changeInfo(MemberTO memberTO, HttpSession session);
     MemberTO bookInfo(MemberTO MemberTO);
 
 }

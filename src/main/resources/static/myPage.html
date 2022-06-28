@@ -268,7 +268,6 @@
                         let txt = xhr.responseText;
                         txt = JSON.parse(txt);
 
-                        alert(txt.name);
                         dbName=txt.name;
                         dbIdentity=txt.id;
                         dbBirth=txt.birthday;
@@ -304,8 +303,6 @@
                    // 데이터 확인
                    let txt = xhr.responseText;
                    txt = JSON.parse(txt);
-                   console.log(txt.errorCode);
-                   console.log(txt.errorMsg);
                    if (txt.errorCode == -1 || txt.errorCode == -2 ) {
                       checkMsg.innerHTML = "※ " + txt.errorMsg;
                        return;
@@ -399,9 +396,11 @@
                 return;
             }else {
                 changeBirth=birth.value.trim();
+                alert(changeBirth);
                 changeConfirmTxt+="생일 ";
             }
-        }if(password.value.trim()!=null || password.value.trim()!="" || confirmPassword.value.trim()!=null || confirmPassword.value.trim()!=""){
+        }else changeBirth=dbBirth;
+        if(password.value!=null || password.value.trim()!="" && confirmPassword.value!=null || confirmPassword.value.trim()!=""){
             if(password.value==confirmPassword.value){
                 changePassword=password.value.trim();
                 changeConfirmTxt+="비밀번호 ";
@@ -410,49 +409,63 @@
                 return;
             }
         }
-       alert(changeConfirmTxt+"정보를 변경하시겠습니까?");
-       let changeInfo = {"birth":changeBirth,"password":changePassword,"id":changeIdentity,"name":changeName} //데이터 추가하기
-           changeInfo = JSON.stringify(changeInfo);
+        swal({
+                  title : '회원정보 변경'
+                , text : 'ヽ(✿ﾟ▽ﾟ)ノ \n'
+                        +'회원님의 정보 \n'+
+                        +changeConfirmTxt
+                        +'를 변경하시겠습니까?'
+                , buttons : ["취소","확인"]
+                , buttonColor : 'tomato'
+             }).then(function(result) {
+                console.log(result);
+                if(result==null){
+                    return;
+                }else {
+                        let changeInfo = {"birthday":changeBirth,"password":changePassword,"id":changeIdentity,"name":changeName} //데이터 추가하기
+                        changeInfo = JSON.stringify(changeInfo);
 
-           let xhr = new XMLHttpRequest();
-           xhr.open('POST',  "/myPage/changeInfo?"
-               + "changeInfo=" + encodeURI(changeInfo)
-               ,true);
-           xhr.setRequestHeader('Accept', 'application/json');
-           xhr.send();
-           xhr.onreadystatechange = () => {
-               if (xhr.readyState == 4 && xhr.status == 200) {
-                   // 데이터 확인
-                   let txt = xhr.responseText;
-                   txt = JSON.parse(txt);
-                   console.log(txt.errorCode);
-                   console.log(txt.errorMsg);
-                   if (txt.errorCode == -1 || txt.errorCode == -2 ) {
-                      alert(errMsg);
-                       return;
-                   } else {
-                       alert("변경이 완료되었습니다.");
-                   }
-        name.disabled=true;
-        identity.disabled=true;
-        birth.disabled=true;
-        password.style.display="none";
-        idCheckDiv.style.display="none";
-        pwDiv.style.display="none";
-        pwConfirmDiv.style.display="none";
-        changeButton.style.display="block";
-        submitButton.style.display="none";
-        changeCancelButton.display="none";
-        name.value = dbName;
-        identity.value  = dbIdentity
-        birth.value  = dbBirth;
-        idDoubleCheck.value="ID중복확인";
-        password.value="";
-        confirmPassword.value="";
-        idCheckResultMsg.innerHTML="";
-
-               }
-           }
+                        let xhr = new XMLHttpRequest();
+                        xhr.open('POST',  "/myPage/changeInfo?"
+                                            + "changeInfo=" + encodeURI(changeInfo)
+                                ,true);
+                        xhr.setRequestHeader('Accept', 'application/json');
+                        xhr.send();
+                        xhr.onreadystatechange = () => {
+                            if (xhr.readyState == 4 && xhr.status == 200) {
+                                // 데이터 확인
+                                let txt = xhr.responseText;
+                                txt = JSON.parse(txt);
+                                console.log(txt.errorCode);
+                                console.log(txt.errorMsg);
+                                if (txt.errorCode == -1 || txt.errorCode == -2 ) {
+                                    alert(errMsg);
+                                    return;
+                                } else {
+                                    alert("변경이 완료되었습니다.");
+                                }
+                                name.disabled=true;
+                                identity.disabled=true;
+                                birth.disabled=true;
+                                password.style.display="none";
+                                idCheckDiv.style.display="none";
+                                pwDiv.style.display="none";
+                                pwConfirmDiv.style.display="none";
+                                changeButton.style.display="block";
+                                submitButton.style.display="none";
+                                changeCancelButton.display="none";
+                                name.value = dbName;
+                                identity.value  = dbIdentity
+                                birth.value  = dbBirth;
+                                idDoubleCheck.value="ID중복확인";
+                                password.value="";
+                                confirmPassword.value="";
+                                idCheckResultMsg.innerHTML="";
+                                retrieve();
+                            }
+                        }
+                }
+             });
     });
 
 

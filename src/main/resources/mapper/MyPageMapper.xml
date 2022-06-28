@@ -15,8 +15,6 @@
         where ID = #{id}
     </select>
 
-
-
     <update id="changeInfo" parameterType="com.helper.study.stuhel.to.MemberTO">
         UPDATE MEMBER_SECURITY
         SET

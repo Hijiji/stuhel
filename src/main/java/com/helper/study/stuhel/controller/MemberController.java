@@ -46,11 +46,11 @@ public class MemberController {
         try{
             MemberTO memberTO = gson.fromJson(loginData, MemberTO.class);
             MemberTO member = memberService.login(memberTO);
-            System.out.println(" controller ");
+            System.out.println(" memberController ");
 
             session.setAttribute("sessionId", session.getId());
-            session.setAttribute("memberId", memberTO.getId());
-            session.setAttribute("memberName", memberTO.getName());
+            session.setAttribute("memberId", member.getId());
+            session.setAttribute("memberName", member.getName());
             session.setMaxInactiveInterval(30*60);
             System.out.println("id");
             System.out.println(session.getAttribute("memberId"));

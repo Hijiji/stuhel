@@ -23,7 +23,7 @@ public class MemberServiceImpl implements MemberService {
     /*로그인*/
     @Override
     public MemberTO login(MemberTO memberTO) throws IdNotFoundException, PwMissMatchException {
-
+        System.out.println("MemberService - login");
         String id = memberDAO.selectMemberId(memberTO.getId());
         if (id == null || id.equalsIgnoreCase("null") || id.isEmpty()) {
             throw new IdNotFoundException("존재하지 않는 ID 입니다.");
@@ -44,6 +44,7 @@ public class MemberServiceImpl implements MemberService {
     /*id 중복검사*/
     @Override
     public HashMap<String, Integer> idDoubleCheck(String identity) {
+        System.out.println("MemberService - idDoubleCheck");
         HashMap<String, Integer> map = new HashMap<>();
         String result;
 
@@ -62,6 +63,7 @@ public class MemberServiceImpl implements MemberService {
     /*회원가입*/
     @Override
     public HashMap<String, Integer> memberJoinData(MemberTO memberTO) {
+        System.out.println("MemberService - memberJoinData");
         HashMap<String, Integer> map = new HashMap<>();
 
         memberDAO.insertMember(memberTO);

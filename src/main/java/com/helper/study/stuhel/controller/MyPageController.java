@@ -30,34 +30,33 @@ public class MyPageController {
 
     @PostMapping("/retrieve")
     String retrieve(HttpServletRequest request) {
+        System.out.println("MyPageController - retrieve");
         HttpSession session = request.getSession();
         HashMap<String, MemberTO> map=new HashMap<>();
         MemberTO memberTO=new MemberTO();
         String result;
 
         if(session.getAttribute("memberId")==null) {
-            System.out.println(session.getAttribute("memberId"));
            result=null;
         }else {
-            System.out.println(session.getAttribute("memberId"));
-            System.out.println(session.getAttribute("memberName"));
             memberTO.setId((String)session.getAttribute("memberId"));
             memberTO.setName((String)session.getAttribute("memberName"));
             memberTO=myPageService.retrieve(memberTO);  //뒷단돌려서 받아온 member 정보 gson으로 역직렬화 하는법 찾기
-
+            session.setAttribute("memberName",memberTO.getName());
+            session.setAttribute("birthday",memberTO.getBirthday());
+            session.setAttribute("password",memberTO.getPassword());
             result =gson.toJson(memberTO);
-            //session.setAttribute("");
-            System.out.println(result);
         }
         return result;
     }
 
     @PostMapping("/changeInfo")
     HashMap<String, Integer> changeInfo(HttpServletRequest request, @RequestParam("changeInfo") String changeInfo){
+        System.out.println("MyPageController - changeInfo");
         HttpSession session = request.getSession();
         String sessionMemberId=(String)session.getAttribute("memberId");
         String sessionName=(String)session.getAttribute("memberName");
-        System.out.println("sessionMemberId = " + sessionMemberId);
+        System.out.println("changeInfo = " + changeInfo);
         MemberTO memberTO = gson.fromJson(changeInfo, MemberTO.class);
 
         HashMap<String, Integer> map = new HashMap<>();
@@ -69,19 +68,16 @@ public class MyPageController {
             memberTO.setName(sessionName);
         }
         if(memberTO.getPassword().isEmpty()||memberTO.getPassword()==null){
-            memberTO.setPassword((String)session.getAttribute("memberPassword"));
+            memberTO.setPassword((String)session.getAttribute("password"));
         }
+        System.out.println("memberTO.getBirthday() = " + memberTO.getBirthday());
         if(memberTO.getBirthday()==0){
-            memberTO.setBirthday(0);
+            memberTO.setBirthday((int)session.getAttribute("birthday"));
         }
-        System.out.println("memberTO.getId() = " + memberTO.getId());
-        System.out.println("memberTO.getName() = " + memberTO.getName());
-        System.out.println("memberTO.getPass() = " + memberTO.getPassword());
-        System.out.println("memberTO.getBirth() = " + memberTO.getBirthday());
-        System.out.println("memberTO.getSessionId() = " + memberTO.getSessionId());
-        System.out.println("****************1****************");
-        myPageService.changeInfo(memberTO,session);
+        System.out.println("memberTO.getBirthday() = " + memberTO.getBirthday());
 
-        return null;
+        map=myPageService.changeInfo(memberTO,session);
+
+        return map;
     }
 }

@@ -1,6 +1,5 @@
 package com.helper.study.stuhel.service;
 
-import com.helper.study.stuhel.mapper.MemberDAO;
 import com.helper.study.stuhel.mapper.MyPageDAO;
 import com.helper.study.stuhel.to.MemberTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,12 +22,11 @@ public class MyPageServiceImpl implements MyPageService{
         return myPageDAO.retrieve(memberTO);
     }
 
-    public MemberTO changeInfo(MemberTO memberTO, HttpSession session){
-        System.out.println("****************2****************");
-        /*String id="", password="", name=""; String birthDay="";*/
+    public HashMap<String,Integer> changeInfo(MemberTO memberTO, HttpSession session){
+        HashMap<String, Integer> map = new HashMap<>();
         String sessionId=(String)session.getAttribute("memberId");
         memberTO.setSessionId(sessionId);
-        if(memberTO.getId()==null || memberTO.getId().trim()=="") {
+        if(memberTO.getId()==null) {
             memberTO.setId(sessionId);
         }
         if(memberTO.getName()==null){
@@ -40,25 +38,10 @@ public class MyPageServiceImpl implements MyPageService{
         if(memberTO.getBirthday()==0){
             memberTO.setBirthday(0);
         }
-        System.out.println("memberTO.getId() = " + memberTO.getId());
-        //(int)session.getAttribute("memberBirthDay");
 
-/*
-        if(memberTO.getId()==null || memberTO.getId().trim()!="") {
-            id = sessionId;
-        }else id =  memberTO.getId();
-        if(memberTO.getName()!=null){
-            name = (String)session.getAttribute("memberName");
-        }else name =  memberTO.getName();
-        if(memberTO.getPassword()!=null){
-            password = (String)session.getAttribute("memberPassword");
-        }else password = memberTO.getPassword();
-        if(memberTO.getBirthday()!=0){
-            birthDay = memberTO.getBirthday();
-        }else birthDay ="0";
-                //(int)session.getAttribute("memberBirthDay");
-*/
-        return  myPageDAO.changeInfo(memberTO);
+        myPageDAO.changeInfo(memberTO);
+        map.put("errorCode", 1);
+        return map;
     }
 
     @Override
