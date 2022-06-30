@@ -124,13 +124,13 @@
             <div class="col-lg-8 col-xl-6 text-center">
                 <h2 class="mt-0">Booking Zone</h2>
                 <hr class="divider" />
-                    <div><!--class="text-center mb-3"-->
+                    <div class="mb-3"><!--class="text-center mb-3"-->
                         <div><!--class="col-lg-3 col-md-6 text-center"-->
-                            <input type="button" id="date-time-picker" class="form-control">
+                            <input type="button" id="date-time-picker">
                         </div>
                     </div>
                 <div class="mb-3"><!--class="text-center mb-3"-->
-                    <div ><!--class="col-lg-3 col-md-6 text-center"-->
+                    <div><!--class="col-lg-3 col-md-6 text-center"-->
                         <select id="bookingTime">
                             <option value="9">09:00 - 10:00</option>
                             <option value="10">10:00 - 11:00</option>
@@ -153,7 +153,8 @@
                         <input type="button" id="searchRoom" value="강의실보기">
                     </div>
                 </div>
-                <form>
+                <div class="mb-3">
+                    <form>
                         <table>
                             <tr>
                                 <td><input type="button" value="101" id="room101" disabled="true" onclick="sendRoomId(this)" class="btn btn-primary btn-xl"/></td>
@@ -173,7 +174,8 @@
                                 <td><input type="button" value="106" id="room106" disabled="true" onclick="sendRoomId(this)" class="btn btn-primary btn-xl" /></td>
                             </tr>
                         </table>
-                </form>
+                    </form>
+                </div>
             </div>
         </div>
     </div>

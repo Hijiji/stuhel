@@ -74,7 +74,7 @@
                 <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
                 <li class="nav-item"><a class="nav-link" href="#myInfo">회원정보</a></li>
                 <li class="nav-item"><a class="nav-link" href="#bookStatus">예약현황</a></li>
-                <li class="nav-item"><a class="nav-link" href="#portfolio">Portfolio</a></li>
+                <li class="nav-item"><a class="nav-link" href="/home.html">home</a></li>
                 <li class="nav-item"><a class="nav-link" onclick="logoutButton()">logout</a></li>
             </ul>
         </div>
@@ -168,11 +168,31 @@
                 <hr class="divider" />
             </div>
             <div>
+                달력 만들기 버튼화하기 + 예약있는 날짜에 빨간표시하기 + 날짜 누르면 예약현황 알려주기 + 예약현황에 예약취소버튼 !
                 //여기에 뒷단에서 내 아이디가 예약한 세미나실 데이터 가져오기 로직 짠다. javascript로 짠다. 예약 취소버튼 만든다.
             </div>
         </div>
     </div>
 </section>
+
+<!--예약현황 모달-->
+<div class="modal-wrapper" style="display: none;">
+    <div class="modal-new">
+        <div class="modal-title">예약현황</div>
+        <div>
+            년월  <input class="form-control" type="text" id=""/>
+            일시  <input class="form-control" type="text" id=""/>
+            방번호 <input class="form-control" type="text" id=""/>
+        </div>
+        </br>
+        <div class="fw-bolder" id="bookMsg" style="color:#1a1e21;"></div>
+        </br>
+        <div class="close-wrapper">
+            예약취소 <input class="form-control" type="button" id=""/>
+        </div>
+    </div>
+</div>
+
 
 <!--회원조회 모달-->
 <div class="modal-wrapper" style="display: none;">
@@ -279,7 +299,47 @@
                 }
         }
     }
+function bookStatusRetrieve(){
+        if(sessionStatus==0){
+            let xhr = new XMLHttpRequest();
+                xhr.open('POST', "/myPage/bookStatusRetrieve?"
+                        ,true);
+                xhr.setRequestHeader('Accept', 'application/json');
+                xhr.send();
+                xhr.onreadystatechange = () => {
+                    if (xhr.readyState == 4 && xhr.status == 200) {
+                        // 데이터 확인
+                        let txt = xhr.responseText;
+                        txt = JSON.parse(txt);
 
+                        달력포멧에 현재 월을 담은 날짜세팅
+                        월변수 만들어서 데이터가 없으면 현재월
+                        데이터가 있으면(달 변경시 입력) 입력된 날짜를 뒷단으로보낸다. //뒷단으로 안보내도 될듯. 안보내고 자바스크립트로 만든다음에
+
+                        서버에 선택된 월을 보내면 서버에서 예약현황 데이터 들고와서 맞는 날자에 빨간점을 세팅한다. !!! 굿굿
+                    }
+                }
+        }
+    }
+    function book(){
+        if(sessionStatus==0){
+            let xhr = new XMLHttpRequest();
+                xhr.open('POST', "/myPage/book?"
+                        ,true);
+                xhr.setRequestHeader('Accept', 'application/json');
+                xhr.send();
+                xhr.onreadystatechange = () => {
+                    if (xhr.readyState == 4 && xhr.status == 200) {
+                        // 데이터 확인
+                        let txt = xhr.responseText;
+                        txt = JSON.parse(txt);
+
+                        신청한 월, 일 을 뒤로 넘기고 넘긴걸로 당일 데이터 찾아서 받아온다. 그리고 세팅해준다.
+                    }
+                }
+        }
+    }
+<!--예약취소 onclick 안에 정말 취소하시겠습니까? sweetalert 마지막에 bookStatusRetrieve()-->
 
     <!--회원정보수정시 회원인증-->
     function IdPwConfirm(){
