@@ -168,6 +168,17 @@
                 <hr class="divider" />
             </div>
             <div>
+                <div>
+                    <input type="button" onclick="minusMonth()" value="◀"> &nbsp;&nbsp;&nbsp;&nbsp;
+                    <span id="year" style="font-size:xx-large;"> </span>년&nbsp;
+                    <span id="month" style="font-size:xx-large;"> </span>월&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="button" onclick="plusMonth()" value="▶">
+                </div>
+                <div>
+                    <table id="bookCalendar">
+
+                    </table>
+                </div>
                 달력 만들기 버튼화하기 + 예약있는 날짜에 빨간표시하기 + 날짜 누르면 예약현황 알려주기 + 예약현황에 예약취소버튼 !
                 //여기에 뒷단에서 내 아이디가 예약한 세미나실 데이터 가져오기 로직 짠다. javascript로 짠다. 예약 취소버튼 만든다.
             </div>
@@ -563,6 +574,39 @@ function bookStatusRetrieve(){
             }
         }
 
+<!--달력-->
+const today = new Date();
+        let choiceMonth=today.getMonth();
+        let choiceYear=today.getFullYear();
+        let bookCalendar = document.querySelector("#bookCalendar");
+        let month=document.querySelector("#month");
+        let year=document.querySelector("#year");
+        t();
+
+        function t(){
+            year.innerHTML=choiceYear;
+            month.innerHTML=choiceMonth;
+        }
+        function minusMonth(){
+            if(choiceYear>=today.getFullYear()){
+                if(choiceMonth<2){
+                    choiceMonth=12;
+                    choiceYear--;
+                }else{
+                    choiceMonth--;
+                }
+            }
+            t();
+        }
+        function plusMonth(){
+            if(choiceYear<=today.getFullYear()+1){
+                if(choiceMonth>11) {
+                    choiceMonth=1;
+                    choiceYear++;
+                } else choiceMonth++;
+                t();
+            }
+        }
 
     }
     /*로그아웃*/
