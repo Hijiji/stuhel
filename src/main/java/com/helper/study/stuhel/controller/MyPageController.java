@@ -2,6 +2,7 @@ package com.helper.study.stuhel.controller;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.helper.study.stuhel.service.BookServiceImpl;
 import com.helper.study.stuhel.service.MyPageService;
 import com.helper.study.stuhel.to.MemberTO;
 import org.apache.catalina.session.StandardSession;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 @Controller
@@ -79,5 +81,10 @@ public class MyPageController {
         map=myPageService.changeInfo(memberTO,session);
 
         return map;
+    }
+    public ArrayList<Integer> bookDateSearch(@RequestParam("id") String id){
+        MemberTO member = gson.fromJson(id, MemberTO.class);
+        myPageService.bookDateSearch(member);
+        return
     }
 }

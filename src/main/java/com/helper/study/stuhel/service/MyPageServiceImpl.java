@@ -4,8 +4,10 @@ import com.helper.study.stuhel.mapper.MyPageDAO;
 import com.helper.study.stuhel.to.MemberTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 @Service
@@ -47,5 +49,10 @@ public class MyPageServiceImpl implements MyPageService{
     @Override
     public MemberTO bookInfo(MemberTO memberTO) {
         return null;
+    }
+
+    @Override
+    public ArrayList<Integer> bookDateSearch(MemberTO member) {
+        return myPageDAO.bookDateSearch(member);
     }
 }

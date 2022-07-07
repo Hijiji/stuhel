@@ -191,9 +191,9 @@
     <div class="modal-new">
         <div class="modal-title">예약현황</div>
         <div>
-            년월  <input class="form-control" type="text" id=""/>
-            일시  <input class="form-control" type="text" id=""/>
-            방번호 <input class="form-control" type="text" id=""/>
+            년월  <input class="form-control" type="text" id="y"/>
+            일시  <input class="form-control" type="text" id="d"/>
+            방번호 <input class="form-control" type="text" id="r"/>
         </div>
         </br>
         <div class="fw-bolder" id="bookMsg" style="color:#1a1e21;"></div>
@@ -579,11 +579,13 @@ const today = new Date();
         let choiceMonth=today.getMonth();
         let choiceYear=today.getFullYear();
         let bookCalendar = document.querySelector("#bookCalendar");
-        let month=document.querySelector("#month");
-        let year=document.querySelector("#year");
+        const month=document.querySelector("#month");
+        const year=document.querySelector("#year");
+        alert(choiceMonth);
         t();
 
         function t(){
+        alert(choiceYear);
             year.innerHTML=choiceYear;
             month.innerHTML=choiceMonth;
         }

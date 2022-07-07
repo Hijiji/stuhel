@@ -24,4 +24,11 @@
         ,BIRTHDAY = #{birthday}
         WHERE ID = #{sessionId}  <!--TO에 sessionId 없어서 에러뜰 수도 있음 파라메터타입 ...바꾸든지 어쩌던지 해봐 ~-->
     </update>
+
+    <select id="bookDateSearch" parameterType="com.helper.study.stuhel.to.MemberTO" resultMap="">
+        SELECT ROOM_ID, BOOKING_DATE,BOOKING_TIME
+        FROM STUDY_ROOM
+        WHERE ROOM_ID = #{id}
+    </select>
+
 </mapper>
