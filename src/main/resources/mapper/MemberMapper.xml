@@ -20,7 +20,7 @@
         <result property="id" column="ID" />
     </resultMap>
 
-    <select id="selectMemberId" resultType="String" parameterType="String">
+    <select id="selectMemberId" resultType="java.lang.String" parameterType="java.lang.String">
         SELECT ID FROM MEMBER_SECURITY
         WHERE ID = #{identity}
     </select>

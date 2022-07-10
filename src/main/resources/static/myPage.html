@@ -175,11 +175,11 @@
                     <input type="button" onclick="plusMonth()" value="▶">
                 </div>
                 <div>
-                    <table id="bookCalendar">
+                    <table id="tableTag">
 
                     </table>
                 </div>
-                달력 만들기 버튼화하기 + 예약있는 날짜에 빨간표시하기 + 날짜 누르면 예약현황 알려주기 + 예약현황에 예약취소버튼 !
+                //달력 만들기 버튼화하기 + 예약있는 날짜에 빨간표시하기 + 날짜 누르면 예약현황 알려주기 + 예약현황에 예약취소버튼 !
                 //여기에 뒷단에서 내 아이디가 예약한 세미나실 데이터 가져오기 로직 짠다. javascript로 짠다. 예약 취소버튼 만든다.
             </div>
         </div>
@@ -262,8 +262,6 @@
 
     const idCheckResultMsg = document.querySelector("#idCheckResultMsg");
 
-    <!--const  = document.querySelector("#");-->
-
     <!--세션체크-->
     let sessionStatus = null;
         (function(){
@@ -308,9 +306,80 @@
                         birth.value=dbBirth;
                     }
                 }
+                setDate();
         }
     }
-function bookStatusRetrieve(){
+
+    <!--달력-->
+    const today = new Date();
+    let choiceMonth=today.getMonth();
+    let choiceYear=today.getFullYear();
+    let bookCalendar = document.querySelector("#bookCalendar");
+    const month=document.querySelector("#month");
+    const year=document.querySelector("#year");
+
+    function setDate(){
+            year.innerHTML=choiceYear;
+            month.innerHTML=choiceMonth;
+            creatCalendar(choiceYear,choiceMonth);
+    }
+    function minusMonth(){
+        if(choiceYear>=today.getFullYear()){
+            if(choiceMonth<2){
+                choiceMonth=12;
+                choiceYear--;
+            }else
+                choiceMonth--;
+        }
+        setDate();
+    }
+    function plusMonth(){
+        if(choiceYear<=today.getFullYear()+1){
+            if(choiceMonth>11) {
+                choiceMonth=1;
+                choiceYear++;
+            } else
+                choiceMonth++;
+        }
+        setDate();
+    }
+    const dayArray=["일","월","화","수","목","금","토"];
+    function creatCalendar(choiceYear,choiceMonth){
+
+        let lastDate =new Date(choiceYear,choiceMonth+1,0).getDate();
+        console.log("마지막날 "+lastDate);
+        let dayNum=new Date(choiceYear,choiceMonth).getDay();
+        console.log("요일 "+dayNum);
+        let firstBlankNum=7-dayNum;
+        console.log("공백갯수 "+firstBlankNum);
+        let lineNum=5;
+        if(dayNum+lastDate > 35) lineNum=6;
+
+        for(var line=0;line<lineNum+1;line++){
+            const trTag=document.createElement("tr");
+            for(var j=0;j<7;j++){
+                const tdTag=document.createElement("td");
+                if(line==0){
+                    tdTag.innterHTML = dayArray[j];
+                }else if(line==1){
+                    for(var b=1;b<dayNum; b++)
+                        tdTag.innterHTML = "&nbsp";
+                    for(var fLine=1; fLine<firstBlankNum; fLine++)
+                        tdTag.innterHTML = fLine;
+                }else{
+                    for(var aLine=1; aLine<8;aLine++){
+                        tdTag.innerHTML=++firstBlankNum;
+                        if(firstBlankNum>lastDate)
+                            tdTag.innerHTML="$nbsp;";
+                    }
+                }
+                trTag.appendChild(tdTag);
+            }
+            tableTag.appendChild(trTag);
+        }
+    }
+
+    function bookStatusRetrieve(){
         if(sessionStatus==0){
             let xhr = new XMLHttpRequest();
                 xhr.open('POST', "/myPage/bookStatusRetrieve?"
@@ -323,15 +392,50 @@ function bookStatusRetrieve(){
                         let txt = xhr.responseText;
                         txt = JSON.parse(txt);
 
-                        달력포멧에 현재 월을 담은 날짜세팅
-                        월변수 만들어서 데이터가 없으면 현재월
-                        데이터가 있으면(달 변경시 입력) 입력된 날짜를 뒷단으로보낸다. //뒷단으로 안보내도 될듯. 안보내고 자바스크립트로 만든다음에
+                        //달력포멧에 현재 월을 담은 날짜세팅
+                        //월변수 만들어서 데이터가 없으면 현재월
+                        //데이터가 있으면(달 변경시 입력) 입력된 날짜를 뒷단으로보낸다. //뒷단으로 안보내도 될듯. 안보내고 자바스크립트로 만든다음에
 
-                        서버에 선택된 월을 보내면 서버에서 예약현황 데이터 들고와서 맞는 날자에 빨간점을 세팅한다. !!! 굿굿
+                        //서버에 선택된 월을 보내면 서버에서 예약현황 데이터 들고와서 맞는 날자에 빨간점을 세팅한다. !!! 굿굿
                     }
                 }
         }
     }
+    <!--세미나실 예약확인 창 -->
+    function sendRoomId(roomId){
+                    swal({
+                          title : '세미나실 예약'
+                        , text : 'ヽ(✿ﾟ▽ﾟ)ノ \n'
+                                  +bookingDate.value+' '+bookingTime.value+'~'+bookingTime.value+1
+                                  +'\n 해당 일시에 '+roomId.value+'호 세미나실을 예약하시겠습니까?'
+                        , button : '확인'
+                        , buttonColor : 'tomato'
+                    }).then(function() {
+                        sendBookdata(roomId.value); <!--예약자, 예약방, 예약시간, 예약날짜 DB로 보내서 insert해주기-->
+                    });
+        }
+
+    <!--세미나실 예약-->
+    function sendBookdata(roomId){
+
+        let insertBookData ={"roomId":roomId,"bookingTime":bookingTime.value,"bookingDate":bookingDate.value};
+        insertBookData=JSON.stringify(insertBookData);
+
+        let xhr = new XMLHttpRequest();
+        xhr.open('Get'
+                  , "/book/roomBook?insertBookData="+encodeURI(insertBookData)
+                      , true);
+        xhr.setRequestHeader('Accept','application/json');
+        xhr.send();
+        xhr.onreadystatechange = () => {
+            if(xhr.readyState == 4 && xhr.status == 200){
+                let txt = xhr.responseText;
+                txt = JSON.parse(txt);
+                alert("뚄꾠!!");
+            }
+        }
+    }
+
     function book(){
         if(sessionStatus==0){
             let xhr = new XMLHttpRequest();
@@ -345,11 +449,12 @@ function bookStatusRetrieve(){
                         let txt = xhr.responseText;
                         txt = JSON.parse(txt);
 
-                        신청한 월, 일 을 뒤로 넘기고 넘긴걸로 당일 데이터 찾아서 받아온다. 그리고 세팅해준다.
+                     //   신청한 월, 일 을 뒤로 넘기고 넘긴걸로 당일 데이터 찾아서 받아온다. 그리고 세팅해준다.
                     }
                 }
         }
     }
+
 <!--예약취소 onclick 안에 정말 취소하시겠습니까? sweetalert 마지막에 bookStatusRetrieve()-->
 
     <!--회원정보수정시 회원인증-->
@@ -539,78 +644,6 @@ function bookStatusRetrieve(){
              });
     });
 
-
-
-    <!--세미나실 예약확인 창 -->
-    function sendRoomId(roomId){
-                    swal({
-                          title : '세미나실 예약'
-                        , text : 'ヽ(✿ﾟ▽ﾟ)ノ \n'
-                                  +bookingDate.value+' '+bookingTime.value+'~'+bookingTime.value+1
-                                  +'\n 해당 일시에 '+roomId.value+'호 세미나실을 예약하시겠습니까?'
-                        , button : '확인'
-                        , buttonColor : 'tomato'
-                    }).then(function() {
-                        sendBookdata(roomId.value); <!--예약자, 예약방, 예약시간, 예약날짜 DB로 보내서 insert해주기-->
-                    });
-        }
-    <!--세미나실 예약-->
-    function sendBookdata(roomId){
-
-        let insertBookData ={"roomId":roomId,"bookingTime":bookingTime.value,"bookingDate":bookingDate.value};
-        insertBookData=JSON.stringify(insertBookData);
-
-        let xhr = new XMLHttpRequest();
-        xhr.open('Get'
-                  , "/book/roomBook?insertBookData="+encodeURI(insertBookData)
-                      , true);
-        xhr.setRequestHeader('Accept','application/json');
-        xhr.send();
-        xhr.onreadystatechange = () => {
-            if(xhr.readyState == 4 && xhr.status == 200){
-                let txt = xhr.responseText;
-                txt = JSON.parse(txt);
-                alert("뚄꾠!!");
-            }
-        }
-
-<!--달력-->
-const today = new Date();
-        let choiceMonth=today.getMonth();
-        let choiceYear=today.getFullYear();
-        let bookCalendar = document.querySelector("#bookCalendar");
-        const month=document.querySelector("#month");
-        const year=document.querySelector("#year");
-        alert(choiceMonth);
-        t();
-
-        function t(){
-        alert(choiceYear);
-            year.innerHTML=choiceYear;
-            month.innerHTML=choiceMonth;
-        }
-        function minusMonth(){
-            if(choiceYear>=today.getFullYear()){
-                if(choiceMonth<2){
-                    choiceMonth=12;
-                    choiceYear--;
-                }else{
-                    choiceMonth--;
-                }
-            }
-            t();
-        }
-        function plusMonth(){
-            if(choiceYear<=today.getFullYear()+1){
-                if(choiceMonth>11) {
-                    choiceMonth=1;
-                    choiceYear++;
-                } else choiceMonth++;
-                t();
-            }
-        }
-
-    }
     /*로그아웃*/
     function logoutButton(){
         let xhr = new XMLHttpRequest();

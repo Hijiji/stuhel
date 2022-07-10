@@ -85,6 +85,6 @@ public class MyPageController {
     public ArrayList<Integer> bookDateSearch(@RequestParam("id") String id){
         MemberTO member = gson.fromJson(id, MemberTO.class);
         myPageService.bookDateSearch(member);
-        return
+        return null;
     }
 }
