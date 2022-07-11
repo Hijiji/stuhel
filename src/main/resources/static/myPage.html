@@ -101,9 +101,9 @@
                 <hr class="divider" />
             </div>
         </div>
+
         <div class="row gx-4 gx-lg-5 justify-content-center mb-5">
             <div class="col-lg-6">
-                <form id="joinForm" data-sb-form-api-token="API_TOKEN">
 
                     <!-- Name input-->
                     <div class="form-floating mb-3">
@@ -153,7 +153,6 @@
                     <div class="d-grid">
                         <input type="button"class="btn btn-primary btn-xl" id="changeCancelButton"  style="display:none" value="수정취소" onClick="window.location.reload()"/>
                     </div>
-                </form>
             </div>
         </div>
     </div>
@@ -167,20 +166,26 @@
                 <h2 class="mt-0">예약현황</h2>
                 <hr class="divider" />
             </div>
-            <div>
-                <div>
+        </div>
+        <div class="row gx-4 gx-lg-5 justify-content-center"><!-- mb-5-->
+            <div class="container px-4 px-lg-5">
+                <div class="col-lg-8 col-xl-6 text-center justify-content-center">
                     <input type="button" onclick="minusMonth()" value="◀"> &nbsp;&nbsp;&nbsp;&nbsp;
                     <span id="year" style="font-size:xx-large;"> </span>년&nbsp;
                     <span id="month" style="font-size:xx-large;"> </span>월&nbsp;&nbsp;&nbsp;&nbsp;
                     <input type="button" onclick="plusMonth()" value="▶">
                 </div>
-                <div>
+            </div>
+            <div class="container px-4 px-lg-5 justify-content-center">
+                <div class="col-lg-8 col-xl-6 text-center">
                     <table id="tableTag">
-
                     </table>
                 </div>
+            </div>
+<!--
                 //달력 만들기 버튼화하기 + 예약있는 날짜에 빨간표시하기 + 날짜 누르면 예약현황 알려주기 + 예약현황에 예약취소버튼 !
                 //여기에 뒷단에서 내 아이디가 예약한 세미나실 데이터 가져오기 로직 짠다. javascript로 짠다. 예약 취소버튼 만든다.
+-->
             </div>
         </div>
     </div>
@@ -320,60 +325,61 @@
 
     function setDate(){
             year.innerHTML=choiceYear;
-            month.innerHTML=choiceMonth;
-            creatCalendar(choiceYear,choiceMonth);
+            month.innerHTML=choiceMonth+1;
+            createCalendar(choiceYear,choiceMonth);
     }
     function minusMonth(){
         if(choiceYear>=today.getFullYear()){
-            if(choiceMonth<2){
-                choiceMonth=12;
+            if(choiceMonth==0){
+                choiceMonth=11;
                 choiceYear--;
             }else
                 choiceMonth--;
+            setDate();
         }
-        setDate();
     }
     function plusMonth(){
-        if(choiceYear<=today.getFullYear()+1){
-            if(choiceMonth>11) {
-                choiceMonth=1;
+        if(new Date(choiceYear,choiceMonth) < new Date(today.getFullYear()+1,today.getMonth()-1)){
+            if(choiceMonth==11) {
+                choiceMonth=0;
                 choiceYear++;
             } else
                 choiceMonth++;
+            setDate();
         }
-        setDate();
     }
-    const dayArray=["일","월","화","수","목","금","토"];
-    function creatCalendar(choiceYear,choiceMonth){
-
-        let lastDate =new Date(choiceYear,choiceMonth+1,0).getDate();
-        console.log("마지막날 "+lastDate);
-        let dayNum=new Date(choiceYear,choiceMonth).getDay();
-        console.log("요일 "+dayNum);
-        let firstBlankNum=7-dayNum;
-        console.log("공백갯수 "+firstBlankNum);
+    function createCalendar(choiceYear,choiceMonth){
+        tableTag.innerHTML="";
+        const dayArray=["일","월","화","수","목","금","토"];
+        let lastDate =new Date(choiceYear,choiceMonth,0).getDate();
+        let firstBlankNum=new Date(choiceYear,choiceMonth).getDay();
+        let firstLineDayNum=7-firstBlankNum;
         let lineNum=5;
-        if(dayNum+lastDate > 35) lineNum=6;
+        let firstDay=1;
+        if(firstBlankNum+lastDate > 35) lineNum=6;
 
-        for(var line=0;line<lineNum+1;line++){
-            const trTag=document.createElement("tr");
+        for(var line=0;line<=lineNum;line++){
+            let trTag=document.createElement("tr");
             for(var j=0;j<7;j++){
-                const tdTag=document.createElement("td");
+                let tdTag=document.createElement("td");
                 if(line==0){
-                    tdTag.innterHTML = dayArray[j];
+                    tdTag.innerHTML = dayArray[j];
                 }else if(line==1){
-                    for(var b=1;b<dayNum; b++)
-                        tdTag.innterHTML = "&nbsp";
-                    for(var fLine=1; fLine<firstBlankNum; fLine++)
-                        tdTag.innterHTML = fLine;
+                    if(j<firstBlankNum) tdTag.innerHTML ="&nbsp";
+                    else{
+                        tdTag.innerHTML = firstDay++;
+                    }
                 }else{
-                    for(var aLine=1; aLine<8;aLine++){
-                        tdTag.innerHTML=++firstBlankNum;
-                        if(firstBlankNum>lastDate)
-                            tdTag.innerHTML="$nbsp;";
+                    if(firstDay>lastDate)
+                        tdTag.innerHTML="&nbsp;";
+                    else{
+                        tdTag.innerHTML=firstDay++;
                     }
                 }
-                trTag.appendChild(tdTag);
+            tdTag.style.height="60px";
+            tdTag.style.width="80px";
+            tdTag.style.textAlign="center";
+            trTag.appendChild(tdTag);
             }
             tableTag.appendChild(trTag);
         }
