@@ -327,6 +327,8 @@
             year.innerHTML=choiceYear;
             month.innerHTML=choiceMonth+1;
             createCalendar(choiceYear,choiceMonth);
+            bookStatusRetrieve();
+
     }
     function minusMonth(){
         if(choiceYear>=today.getFullYear()){
@@ -348,6 +350,7 @@
             setDate();
         }
     }
+
     function createCalendar(choiceYear,choiceMonth){
         tableTag.innerHTML="";
         const dayArray=["일","월","화","수","목","금","토"];
@@ -358,6 +361,7 @@
         let firstDay=1;
         if(firstBlankNum+lastDate > 35) lineNum=6;
 
+
         for(var line=0;line<=lineNum;line++){
             let trTag=document.createElement("tr");
             for(var j=0;j<7;j++){
@@ -367,13 +371,18 @@
                 }else if(line==1){
                     if(j<firstBlankNum) tdTag.innerHTML ="&nbsp";
                     else{
+                        tdTag.id="date"+firstDay;
                         tdTag.innerHTML = firstDay++;
+                        tdTag.onclick = () =>{tdDateClick(tdTag.id);}
                     }
                 }else{
                     if(firstDay>lastDate)
                         tdTag.innerHTML="&nbsp;";
                     else{
+                    if(firstDay<10) firstDay="0"+firstDay
+                        tdTag.id="date"+firstDay;
                         tdTag.innerHTML=firstDay++;
+                        tdTag.onclick = () =>{tdDateClick(tdTag.id);}
                     }
                 }
             tdTag.style.height="60px";
@@ -385,10 +394,21 @@
         }
     }
 
+    function tdDateClick(tdInfo){
+        alert(tdInfo);
+    }
+
     function bookStatusRetrieve(){
+    let cMonth= month.innerHTML;
+    let cYear= year.innerHTML;
+    if(cMonth<10)cMonth="0"+cMonth;
+    let retrieveYM=cYear+"-"+cMonth;
+            console.log("조회연월"+retrieveYM);
+    let bookStatusData={"bookingDate":retrieveYM};
+    bookStatusData = JSON.stringify(bookStatusData);
         if(sessionStatus==0){
             let xhr = new XMLHttpRequest();
-                xhr.open('POST', "/myPage/bookStatusRetrieve?"
+                xhr.open('POST', "/myPage/bookStatusRetrieve?bookStatusData="+encodeURI(bookStatusData)
                         ,true);
                 xhr.setRequestHeader('Accept', 'application/json');
                 xhr.send();
@@ -397,12 +417,15 @@
                         // 데이터 확인
                         let txt = xhr.responseText;
                         txt = JSON.parse(txt);
-
-                        //달력포멧에 현재 월을 담은 날짜세팅
-                        //월변수 만들어서 데이터가 없으면 현재월
-                        //데이터가 있으면(달 변경시 입력) 입력된 날짜를 뒷단으로보낸다. //뒷단으로 안보내도 될듯. 안보내고 자바스크립트로 만든다음에
-
-                        //서버에 선택된 월을 보내면 서버에서 예약현황 데이터 들고와서 맞는 날자에 빨간점을 세팅한다. !!! 굿굿
+                        console.log(txt);
+                        if(txt.length>0){
+                            for(var i=0;i<txt.length;i++){
+                                console.log(txt.bookingDate.subStr(7,2));
+                                console.log(tdTag.id.subStr(3,2));
+                                if(txt.bookingDate.subStr(7,2)==tdTag.id.subStr(3,2)) tdTag.innerHTML="뉴";
+                            }
+                        }
+                        //서버에 선택 월을 보내면 서버에서 예약현황 데이터 들고와서 맞는 날자에 빨간점을 세팅한다. !!! 굿굿
                     }
                 }
         }

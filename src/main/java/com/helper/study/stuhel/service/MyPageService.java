@@ -1,5 +1,6 @@
 package com.helper.study.stuhel.service;
 
+import com.helper.study.stuhel.to.BookTO;
 import com.helper.study.stuhel.to.MemberTO;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -13,6 +14,8 @@ public interface MyPageService {
     HashMap<String, Integer> changeInfo(MemberTO memberTO, HttpSession session);
 
     MemberTO bookInfo(MemberTO MemberTO);
+
+    ArrayList<BookTO> bookStatusRetrieve(BookTO bookTO);
 
     public ArrayList<Integer> bookDateSearch(MemberTO member);
 }

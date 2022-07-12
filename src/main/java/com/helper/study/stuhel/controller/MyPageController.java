@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.helper.study.stuhel.service.BookServiceImpl;
 import com.helper.study.stuhel.service.MyPageService;
+import com.helper.study.stuhel.to.BookTO;
 import com.helper.study.stuhel.to.MemberTO;
 import org.apache.catalina.session.StandardSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,6 +83,17 @@ public class MyPageController {
 
         return map;
     }
+    @PostMapping("/bookStatusRetrieve")
+    public String bookStatusRetrieve(HttpServletRequest request,@RequestParam("bookStatusData") String bookStatusData){
+        HttpSession session = request.getSession();
+        BookTO book = gson.fromJson(bookStatusData, BookTO.class);
+        book.setUserId((String)session.getAttribute("memberId"));
+        System.out.println("------------------------MyPageController.bookStatusRetrieve--------------------------------");
+        System.out.println("book.getBookingDate() = " + book.getBookingDate());
+        System.out.println("book.getUserId() = " + book.getUserId());
+        return gson.toJson(myPageService.bookStatusRetrieve(book));
+    }
+
     public ArrayList<Integer> bookDateSearch(@RequestParam("id") String id){
         MemberTO member = gson.fromJson(id, MemberTO.class);
         myPageService.bookDateSearch(member);

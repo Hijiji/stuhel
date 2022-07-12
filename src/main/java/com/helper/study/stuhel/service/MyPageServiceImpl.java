@@ -1,6 +1,7 @@
 package com.helper.study.stuhel.service;
 
 import com.helper.study.stuhel.mapper.MyPageDAO;
+import com.helper.study.stuhel.to.BookTO;
 import com.helper.study.stuhel.to.MemberTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,6 +45,21 @@ public class MyPageServiceImpl implements MyPageService{
         myPageDAO.changeInfo(memberTO);
         map.put("errorCode", 1);
         return map;
+    }
+
+    @Override
+    public ArrayList<BookTO> bookStatusRetrieve(BookTO bookTO) {
+        System.out.println("----------------------------------MyPageServiceImpl.bookStatusRetrieve--------------------------");
+        System.out.println("book.getBookingDate() = " + bookTO.getBookingDate());
+        System.out.println("book.getUserId() = " + bookTO.getUserId());
+        ArrayList<BookTO> a=myPageDAO.bookStatusRetrieve(bookTO);
+        System.out.println("222222222222222222222222MyPageServiceImpl.bookStatusRetrieve2222222222222222222222222222222222222");
+        for(BookTO b:a) {
+            System.out.println("b.getBookingDate() = " + b.getBookingDate());
+            System.out.println("b.getBookingTime() = " + b.getBookingTime());
+            System.out.println("b.getBookingTime() = " + b.getBookingTime());
+        }
+        return a;
     }
 
     @Override
