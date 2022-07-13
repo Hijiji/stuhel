@@ -267,6 +267,8 @@
 
     const idCheckResultMsg = document.querySelector("#idCheckResultMsg");
 
+    let tdTagIdArr=[];
+
     <!--세션체크-->
     let sessionStatus = null;
         (function(){
@@ -326,8 +328,7 @@
     function setDate(){
             year.innerHTML=choiceYear;
             month.innerHTML=choiceMonth+1;
-            createCalendar(choiceYear,choiceMonth);
-            bookStatusRetrieve();
+            bookStatusRetrieve(choiceYear,choiceMonth);
 
     }
     function minusMonth(){
@@ -351,7 +352,7 @@
         }
     }
 
-    function createCalendar(choiceYear,choiceMonth){
+    function createCalendar(choiceYear,choiceMonth,tdTagIdArr){
         tableTag.innerHTML="";
         const dayArray=["일","월","화","수","목","금","토"];
         let lastDate =new Date(choiceYear,choiceMonth,0).getDate();
@@ -360,7 +361,6 @@
         let lineNum=5;
         let firstDay=1;
         if(firstBlankNum+lastDate > 35) lineNum=6;
-
 
         for(var line=0;line<=lineNum;line++){
             let trTag=document.createElement("tr");
@@ -379,16 +379,18 @@
                     if(firstDay>lastDate)
                         tdTag.innerHTML="&nbsp;";
                     else{
-                    if(firstDay<10) firstDay="0"+firstDay
                         tdTag.id="date"+firstDay;
                         tdTag.innerHTML=firstDay++;
                         tdTag.onclick = () =>{tdDateClick(tdTag.id);}
                     }
                 }
-            tdTag.style.height="60px";
-            tdTag.style.width="80px";
-            tdTag.style.textAlign="center";
-            trTag.appendChild(tdTag);
+                for(let i=0;i<tdTagIdArr.length;i++){
+                    if(tdTag.id == tdTagIdArr[i]) tdTag.style.color="tomato";
+                }
+                tdTag.style.height="60px";
+                tdTag.style.width="80px";
+                tdTag.style.textAlign="center";
+                trTag.appendChild(tdTag);
             }
             tableTag.appendChild(trTag);
         }
@@ -398,7 +400,7 @@
         alert(tdInfo);
     }
 
-    function bookStatusRetrieve(){
+    function bookStatusRetrieve(choiceYear,choiceMonth){
     let cMonth= month.innerHTML;
     let cYear= year.innerHTML;
     if(cMonth<10)cMonth="0"+cMonth;
@@ -420,12 +422,17 @@
                         console.log(txt);
                         if(txt.length>0){
                             for(var i=0;i<txt.length;i++){
-                                console.log(txt.bookingDate.subStr(7,2));
-                                console.log(tdTag.id.subStr(3,2));
-                                if(txt.bookingDate.subStr(7,2)==tdTag.id.subStr(3,2)) tdTag.innerHTML="뉴";
+                                let bookDate;
+                                if(txt[i].bookingDate.substr(8,1)!="0")   bookDate=txt[i].bookingDate.substr(8,2);
+                                else   bookDate=txt[i].bookingDate.substr(9,1);
+                                tdTagId = "date"+bookDate;
+                                tdTagIdArr.push(tdTagId);
+                                console.log(txt[i].bookingDate);
+
                             }
+
                         }
-                        //서버에 선택 월을 보내면 서버에서 예약현황 데이터 들고와서 맞는 날자에 빨간점을 세팅한다. !!! 굿굿
+                        createCalendar(choiceYear,choiceMonth,tdTagIdArr);
                     }
                 }
         }
