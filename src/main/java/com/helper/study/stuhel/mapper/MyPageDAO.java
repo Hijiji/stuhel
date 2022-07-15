@@ -7,12 +7,12 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 @Mapper
 public interface MyPageDAO {
     MemberTO retrieve(MemberTO memberTO);
     void changeInfo(MemberTO memberTO);
     ArrayList<BookTO> bookStatusRetrieve(BookTO bookTO);
-    MemberTO bookInfo(MemberTO MemberTO);
-    ArrayList<Integer> bookDateSearch(MemberTO member);
+    void bookCancel(BookTO bookTO);
 }

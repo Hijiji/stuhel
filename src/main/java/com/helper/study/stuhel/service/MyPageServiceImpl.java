@@ -62,13 +62,15 @@ public class MyPageServiceImpl implements MyPageService{
         return a;
     }
 
-    @Override
-    public MemberTO bookInfo(MemberTO memberTO) {
-        return null;
-    }
+    public HashMap<String,String> bookCancel(BookTO bookTO){
+        try{
+            myPageDAO.bookCancel(bookTO);
+        }catch (Exception e){
+            System.out.println("------------------------------------MyPageServiceImpl.bookCancel-------------------------------------");
+            e.printStackTrace();
+        }finally {
 
-    @Override
-    public ArrayList<Integer> bookDateSearch(MemberTO member) {
-        return myPageDAO.bookDateSearch(member);
+        }
+        return null;
     }
 }

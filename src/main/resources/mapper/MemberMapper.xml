@@ -15,7 +15,6 @@
                  AND PASSWORD = #{password}
     </select>
 
-
     <resultMap type="com.helper.study.stuhel.to.MemberTO" id="MemberIdResult">
         <result property="id" column="ID" />
     </resultMap>

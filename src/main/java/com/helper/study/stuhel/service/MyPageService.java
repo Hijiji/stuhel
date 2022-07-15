@@ -13,9 +13,8 @@ public interface MyPageService {
 
     HashMap<String, Integer> changeInfo(MemberTO memberTO, HttpSession session);
 
-    MemberTO bookInfo(MemberTO MemberTO);
-
     ArrayList<BookTO> bookStatusRetrieve(BookTO bookTO);
 
-    public ArrayList<Integer> bookDateSearch(MemberTO member);
+    HashMap<String,String> bookCancel(BookTO bookTO);
+
 }

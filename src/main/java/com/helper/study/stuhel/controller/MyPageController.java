@@ -94,9 +94,13 @@ public class MyPageController {
         return gson.toJson(myPageService.bookStatusRetrieve(book));
     }
 
-    public ArrayList<Integer> bookDateSearch(@RequestParam("id") String id){
-        MemberTO member = gson.fromJson(id, MemberTO.class);
-        myPageService.bookDateSearch(member);
+    @PostMapping("/bookCancelData")
+    public HashMap<String, String> bookCancel(@RequestParam("bookCancelData") String bookCancelData){
+        BookTO bookTO = gson.fromJson(bookCancelData, BookTO.class);
+        /*1. JSON OBJECT 로 변경한다. 2.Object별로 담겨있는 배열 value를 for문을 이용해 TO에 담아준다.
+        ?? 이게 맞나 싶은데 학원 코드 찾아봐야겠다. TO의 arrayList에 담고 DB에 넘기는 걸로. */
+        System.out.println("------------------------------------MyPageController.bookCancel------------------------------------");
+        myPageService.bookCancel(bookTO);
         return null;
     }
 }

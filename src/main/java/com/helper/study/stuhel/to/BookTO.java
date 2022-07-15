@@ -5,15 +5,21 @@ import lombok.Data;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import java.util.ArrayList;
 
 @Data
 @Entity
 public class BookTO {
-
-    private int bookingId;
-    private String userId;
     @Id
     private int roomId;
     private String bookingDate;
     private int bookingTime;
+    private int bookingId;
+    private String userId;
+
+/*    private ArrayList<Integer> bookingIdList;
+    private ArrayList<String> userIdList;
+    private ArrayList<Integer> roomIdList;
+    private ArrayList<String> bookingDateList;
+    private ArrayList<Integer> bookingTimeList;*/
 }
