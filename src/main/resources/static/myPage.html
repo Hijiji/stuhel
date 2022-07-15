@@ -42,15 +42,17 @@
   padding: 24px 16px;
   border-radius: 4px;
   width: 320px;
+  align: center;
 }
 
 .modal-title {
-  font-size: 24px;
+  font-size: 30px;
   font-weight: bold;
+  text-align: center;
 }
 
-.modal p {
-  font-size: 16px;
+.modal-p {
+  font-size: 20px;
 }
 
 .close-wrapper {
@@ -143,7 +145,7 @@
 
                     <!--수정창 오픈-->
                     <div class="d-grid">
-                        <input type="button"class="btn btn-primary btn-xl" id="changeButton" value="정보수정"/>
+                        <input type="button" class="btn btn-primary btn-xl" id="changeButton" onclick="userInfoChange()" value="정보수정"/>
                     </div>
                     <!--수정저장-->
                     <div class="d-grid">
@@ -170,10 +172,10 @@
         <div class="row gx-4 gx-lg-5 justify-content-center"><!-- mb-5-->
             <div class="container px-4 px-lg-5">
                 <div class="col-lg-8 col-xl-6 text-center justify-content-center">
-                    <input type="button" onclick="minusMonth()" value="◀"> &nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="button" class="btn btn-light btn-xl" onclick="minusMonth()" value="◀"> &nbsp;&nbsp;&nbsp;&nbsp;
                     <span id="year" style="font-size:xx-large;"> </span>년&nbsp;
                     <span id="month" style="font-size:xx-large;"> </span>월&nbsp;&nbsp;&nbsp;&nbsp;
-                    <input type="button" onclick="plusMonth()" value="▶">
+                    <input type="button" class="btn btn-light btn-xl" onclick="plusMonth()" value="▶">
                 </div>
             </div>
             <div class="container px-4 px-lg-5 justify-content-center">
@@ -191,29 +193,11 @@
     </div>
 </section>
 
-<!--예약현황 모달-->
-<div class="modal-wrapper" style="display: none;">
-    <div class="modal-new">
-        <div class="modal-title">예약현황</div>
-        <div>
-            년월  <input class="form-control" type="text" id="y"/>
-            일시  <input class="form-control" type="text" id="d"/>
-            방번호 <input class="form-control" type="text" id="r"/>
-        </div>
-        </br>
-        <div class="fw-bolder" id="bookMsg" style="color:#1a1e21;"></div>
-        </br>
-        <div class="close-wrapper">
-            예약취소 <input class="form-control" type="button" id=""/>
-        </div>
-    </div>
-</div>
-
-
-<!--회원조회 모달-->
-<div class="modal-wrapper" style="display: none;">
+<!--회원정보수정 사용자확인 모달-->
+<div class="modal-wrapper" id="userCheckModal"  style="display: none;">
     <div class="modal-new">
         <div class="modal-title">사용자 확인</div>
+        <hr class="divider" />
         <div>
             I  D  <input class="form-control" type="text" id="checkId"/>
             P W  <input class="form-control" type="password" id="checkPw"/>
@@ -222,11 +206,31 @@
         <div class="fw-bolder" id="checkMsg" style="color:#1a1e21;"></div>
         </br>
         <div class="close-wrapper">
-            <button class="btn btn-light btn-xl" id="IdPwConfirm" onclick="IdPwConfirm()">확인</button>&nbsp&nbsp
-            <button class="btn btn-light btn-xl" id="close">취소</button>
+            <button class="btn btn-light btn-xl" id="IdPwConfirm" onclick="IdPwConfirm()">확인</button>&nbsp;&nbsp;
+            <button class="btn btn-light btn-xl" value="userCheckModalClose" onclick="modalClose(this)" >닫기</button>
         </div>
     </div>
 </div>
+
+
+<!--회의실 예약현황 모달-->
+<div class="modal-wrapper" id="bookConditionModal" style="display: none;">
+    <div class="modal-new">
+        <div class="modal-title">세미나실 예약현황</div>
+        <hr class="divider" />
+        <div class="modal-p" style="text-align:center;">
+            <span id="bookCModalYear"></span> 년 &nbsp;&nbsp;
+            <span id="bookCModalMonth"></span> 월 &nbsp;&nbsp;
+            <span id="bookCModalDate"></span> 일 <br/><br/>
+            <span id="bookCModalRoomNum"></span> 호&nbsp;&nbsp;-&nbsp;&nbsp;<span id="bookCModalTime"></span>
+        </div><br/>
+        <div class="close-wrapper">
+            <button class="btn btn-light btn-xl" value="bookCondiModalClose" onclick="bookCancel(this)" >예약취소</button>&nbsp;&nbsp;
+            <button class="btn btn-light btn-xl" value="bookCondiModalClose" onclick="modalClose(this)" >닫기</button>
+        </div>
+    </div>
+</div>
+
 
 <!-- Footer-->
 <footer class="bg-light py-5">
@@ -259,15 +263,18 @@
     const pwDiv = document.querySelector("#pwDiv");
     const pwConfirmDiv = document.querySelector("#pwConfirmDiv");
     const changeCancelButton = document.querySelector("#changeCancelButton");
-    const close = document.getElementById("close");
-    const modal = document.querySelector(".modal-wrapper");
+
+    const userCheckModal = document.querySelector("#userCheckModal");
     const checkId = document.querySelector("#checkId");
     const checkPw = document.querySelector("#checkPw");
     const checkMsg = document.querySelector("#checkMsg");
-
     const idCheckResultMsg = document.querySelector("#idCheckResultMsg");
 
+    const bookConditionModal = document.querySelector("#bookConditionModal");
+
+
     let tdTagIdArr=[];
+    let monthBookDataArr=[];
 
     <!--세션체크-->
     let sessionStatus = null;
@@ -396,18 +403,15 @@
         }
     }
 
-    function tdDateClick(tdInfo){
-        alert(tdInfo);
-    }
-
+    <!--달력에 띄울 세미나실 예약현황 조회-->
     function bookStatusRetrieve(choiceYear,choiceMonth){
-    let cMonth= month.innerHTML;
-    let cYear= year.innerHTML;
-    if(cMonth<10)cMonth="0"+cMonth;
-    let retrieveYM=cYear+"-"+cMonth;
+        let cMonth= month.innerHTML;
+        let cYear= year.innerHTML;
+        if(cMonth<10)cMonth="0"+cMonth;
+        let retrieveYM=cYear+"-"+cMonth;
             console.log("조회연월"+retrieveYM);
-    let bookStatusData={"bookingDate":retrieveYM};
-    bookStatusData = JSON.stringify(bookStatusData);
+        let bookStatusData={"bookingDate":retrieveYM};
+        bookStatusData = JSON.stringify(bookStatusData);
         if(sessionStatus==0){
             let xhr = new XMLHttpRequest();
                 xhr.open('POST', "/myPage/bookStatusRetrieve?bookStatusData="+encodeURI(bookStatusData)
@@ -418,57 +422,22 @@
                     if (xhr.readyState == 4 && xhr.status == 200) {
                         // 데이터 확인
                         let txt = xhr.responseText;
-                        txt = JSON.parse(txt);
-                        console.log(txt);
-                        if(txt.length>0){
-                            for(var i=0;i<txt.length;i++){
+                        monthBookDataArr = JSON.parse(txt);
+                        console.log(monthBookDataArr);
+                        if(monthBookDataArr.length>0){
+                            tdTagIdArr=[];
+                            for(var i=0;i<monthBookDataArr.length;i++){
                                 let bookDate;
-                                if(txt[i].bookingDate.substr(8,1)!="0")   bookDate=txt[i].bookingDate.substr(8,2);
-                                else   bookDate=txt[i].bookingDate.substr(9,1);
+                                if(monthBookDataArr[i].bookingDate.substr(8,1)!="0") bookDate=monthBookDataArr[i].bookingDate.substr(8,2);
+                                else bookDate=monthBookDataArr[i].bookingDate.substr(9,1);
                                 tdTagId = "date"+bookDate;
                                 tdTagIdArr.push(tdTagId);
-                                console.log(txt[i].bookingDate);
-
                             }
 
                         }
                         createCalendar(choiceYear,choiceMonth,tdTagIdArr);
                     }
                 }
-        }
-    }
-    <!--세미나실 예약확인 창 -->
-    function sendRoomId(roomId){
-                    swal({
-                          title : '세미나실 예약'
-                        , text : 'ヽ(✿ﾟ▽ﾟ)ノ \n'
-                                  +bookingDate.value+' '+bookingTime.value+'~'+bookingTime.value+1
-                                  +'\n 해당 일시에 '+roomId.value+'호 세미나실을 예약하시겠습니까?'
-                        , button : '확인'
-                        , buttonColor : 'tomato'
-                    }).then(function() {
-                        sendBookdata(roomId.value); <!--예약자, 예약방, 예약시간, 예약날짜 DB로 보내서 insert해주기-->
-                    });
-        }
-
-    <!--세미나실 예약-->
-    function sendBookdata(roomId){
-
-        let insertBookData ={"roomId":roomId,"bookingTime":bookingTime.value,"bookingDate":bookingDate.value};
-        insertBookData=JSON.stringify(insertBookData);
-
-        let xhr = new XMLHttpRequest();
-        xhr.open('Get'
-                  , "/book/roomBook?insertBookData="+encodeURI(insertBookData)
-                      , true);
-        xhr.setRequestHeader('Accept','application/json');
-        xhr.send();
-        xhr.onreadystatechange = () => {
-            if(xhr.readyState == 4 && xhr.status == 200){
-                let txt = xhr.responseText;
-                txt = JSON.parse(txt);
-                alert("뚄꾠!!");
-            }
         }
     }
 
@@ -486,12 +455,59 @@
                         txt = JSON.parse(txt);
 
                      //   신청한 월, 일 을 뒤로 넘기고 넘긴걸로 당일 데이터 찾아서 받아온다. 그리고 세팅해준다.
+                     <!--예약취소 onclick 안에 정말 취소하시겠습니까? sweetalert 마지막에 bookStatusRetrieve()-->
                     }
                 }
         }
     }
 
-<!--예약취소 onclick 안에 정말 취소하시겠습니까? sweetalert 마지막에 bookStatusRetrieve()-->
+    <!--달력모달 onclick-->
+    function tdDateClick(clickedTdId){
+        bookTimeArr=[];
+        bookRoomIdArr=[];
+        for(let i=0; i<monthBookDataArr.length; i++){
+            if(parseInt(monthBookDataArr[i].bookingDate.slice(8))==parseInt(clickedTdId.slice(4))){
+                bookTimeArr.push(monthBookDataArr[i].bookingTime);
+                bookRoomIdArr.push(monthBookDataArr[i].roomId);
+            }
+        }
+        for(let i=0; i<monthBookDataArr.length; i++){
+           //console.log(monthBookDataArr[i]);console.log(bookRoomIdArr[i]);
+        }
+        for(let i=0;i<tdTagIdArr.length;i++){
+            if(tdTagIdArr[i]==clickedTdId){
+                let clickedDate = clickedTdId.slice(4);
+                if(clickedDate.length==1) clickedDate="0"+clickedDate;
+
+                bookConditionModal.style.display="flex";
+                bookCModalYear.innerHTML=choiceYear;
+                bookCModalMonth.innerHTML=choiceMonth;
+                bookCModalDate.innerHTML=clickedDate;
+
+                for(let j=0; j<bookTimeArr.length;j++){
+                    let firstBookTime = parseInt(bookTimeArr[j]);
+                    let lastBookTime = firstBookTime+1;
+                    let bookTime = firstBookTime+":00 ~ "+lastBookTime+":00";
+                    console.log("firstBookTime "+firstBookTime);
+                    console.log("lastBookTime "+lastBookTime);
+                    console.log("bookTime "+bookTime);
+                    console.log("bookRoomIdArr"+j+" "+bookRoomIdArr[j]);
+
+                    if(firstBookTime<10)  bookTime="0"+firstBookTime+":00 ~ "+lastBookTime+":00";
+                    if(lastBookTime<10)  bookTime=firstBookTime+":00 ~ 0"+lastBookTime+":00";
+
+                    bookCModalTime.innerHTML+=bookTime+"<br/>";
+                    bookCModalRoomNum.innerHTML+=bookRoomIdArr[j]+"<br/>";
+                }
+                return;
+            }
+        }
+    }
+
+    <!--회원정보수정 modal onclick-->
+    function userInfoChange(){
+        userCheckModal.style.display="flex";
+    }
 
     <!--회원정보수정시 회원인증-->
     function IdPwConfirm(){
@@ -519,7 +535,7 @@
                       checkMsg.innerHTML = "※ " + txt.errorMsg;
                        return;
                    } else {
-                      modal.style.display = "none";
+                      userCheckModal.style.display = "none";
                       name.disabled=false;
                       identity.disabled=false;
                       birth.disabled=false;
@@ -543,19 +559,26 @@
         }
     }
 
-    <!--회원인증창 닫기-->
-    close.onclick = () => {
-        modal.style.display = "none";
-        checkPw.value="";
-        checkId.value="";
-        checkMsg.innerHTML="";
-    };
+    <!--모달 닫기-->
+    function modalClose(modalType){
+        if(modalType.value=="userCheckModalClose"){
+            userCheckModal.style.display = "none";
+            checkPw.value="";
+            checkId.value="";
+            checkMsg.innerHTML="";
+            return;
+            }
+        if(modalType.value=="bookCondiModalClose"){
+            bookConditionModal.style.display = "none";
+            bookCModalYear.innerHTML="";
+            bookCModalMonth.innerHTML="";
+            bookCModalDate.innerHTML="";
+            bookCModalTime.innerHTML="";
+            bookCModalRoomNum.innerHTML="";
+            return;
+        }
 
-    <!--회원정보 수정 -->
-    changeButton.addEventListener('click',()=>{
-        modal.style.display = "flex";
-    <!--클릭하면 ID PW 체크 하게 만들기 그 다음에 아래 로직 수행-->
-    });
+    };
 
     <!--아이디 더블체크-->
     idDoubleCheck.addEventListener('click', () => {
