@@ -62,15 +62,20 @@ public class MyPageServiceImpl implements MyPageService{
         return a;
     }
 
-    public HashMap<String,String> bookCancel(BookTO bookTO){
+    public HashMap<String,String> bookCancel(ArrayList<BookTO> bookTOList){
+        HashMap<String, String> map = new HashMap<>();
         try{
-            myPageDAO.bookCancel(bookTO);
-        }catch (Exception e){
             System.out.println("------------------------------------MyPageServiceImpl.bookCancel-------------------------------------");
+            for(BookTO bookTO:bookTOList) {
+                myPageDAO.bookCancel(bookTO);
+            }
+            map.put("errorCode","Y");
+            System.out.println("map.get(\"errorCode\") = " + map.get("errorCode"));
+        }catch (Exception e) {
+            map.put("errorCode", "N");
+            System.out.println("map.get(\"errorCode\") = " + map.get("errorCode"));
             e.printStackTrace();
-        }finally {
-
         }
-        return null;
+        return map;
     }
 }

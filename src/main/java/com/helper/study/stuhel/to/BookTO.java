@@ -17,9 +17,4 @@ public class BookTO {
     private int bookingId;
     private String userId;
 
-/*    private ArrayList<Integer> bookingIdList;
-    private ArrayList<String> userIdList;
-    private ArrayList<Integer> roomIdList;
-    private ArrayList<String> bookingDateList;
-    private ArrayList<Integer> bookingTimeList;*/
 }

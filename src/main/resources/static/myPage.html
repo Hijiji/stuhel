@@ -245,7 +245,6 @@
     let dbIdentity = "";
     let dbBirth = "";
 
-
     const changeButton = document.querySelector("#changeButton");
     const submitButton = document.querySelector("#submitButton");
     const name = document.querySelector("#name");
@@ -267,9 +266,9 @@
 
     const bookConditionModal = document.querySelector("#bookConditionModal");
 
-
     let tdTagIdArr=[];
     let monthBookDataArr=[];
+    let clickedBookData=[];
 
     <!--세션체크-->
     let sessionStatus = null;
@@ -353,7 +352,6 @@
             setDate();
         }
     }
-
     function createCalendar(choiceYear,choiceMonth,tdTagIdArr){
         tableTag.innerHTML="";
         const dayArray=["일","월","화","수","목","금","토"];
@@ -419,8 +417,8 @@
                         let txt = xhr.responseText;
                         monthBookDataArr = JSON.parse(txt);
                         console.log(monthBookDataArr);
+                        tdTagIdArr=[];
                         if(monthBookDataArr.length>0){
-                            tdTagIdArr=[];
                             for(var i=0;i<monthBookDataArr.length;i++){
                                 let bookDate;
                                 if(monthBookDataArr[i].bookingDate.substr(8,1)!="0") bookDate=monthBookDataArr[i].bookingDate.substr(8,2);
@@ -435,29 +433,28 @@
                 }
         }
     }
-    let clickedBookData=new Object();
     <!--달력모달 onclick-->
     function tdDateClick(clickedTdId){
         bookTimeArr=[];
         bookRoomIdArr=[];
-        clickedBookData.roomIdList=[];
-        clickedBookData.bookingTimeList=[];
-        clickedBookData.bookingDateList=[];
-        clickedBookData.userIdList=[];
-        clickedBookData.bookingIdList=[];
+        clickedBookData=[];
         for(let i=0; i<monthBookDataArr.length; i++){
             if(parseInt(monthBookDataArr[i].bookingDate.slice(8))==parseInt(clickedTdId.slice(4))){
                 bookTimeArr.push(monthBookDataArr[i].bookingTime);
                 bookRoomIdArr.push(monthBookDataArr[i].roomId);
             }
             if(parseInt(monthBookDataArr[i].bookingDate.slice(8))==parseInt(clickedTdId.slice(4))){
-                clickedBookData.roomIdList.push(monthBookDataArr[i].roomId);
-                clickedBookData.bookingTimeList.push(monthBookDataArr[i].bookingTime);
-                clickedBookData.bookingDateList.push(monthBookDataArr[i].bookingDate);
-                clickedBookData.userIdList.push(monthBookDataArr[i].userId);
-                clickedBookData.bookingIdList.push(monthBookDataArr[i].bookingId);
+            let dataInfo=new Object();
+                dataInfo.roomId=monthBookDataArr[i].roomId;
+                dataInfo.bookingTime=monthBookDataArr[i].bookingTime;
+                dataInfo.bookingDate=monthBookDataArr[i].bookingDate;
+                dataInfo.userId=monthBookDataArr[i].userId;
+                dataInfo.bookingId=monthBookDataArr[i].bookingId;
+                clickedBookData.push(dataInfo);
             }
         }
+        console.log("clickedBookData");
+        console.log(clickedBookData);
         for(let i=0;i<tdTagIdArr.length;i++){
             if(tdTagIdArr[i]==clickedTdId){
                 let clickedDate = clickedTdId.slice(4);
@@ -514,14 +511,13 @@
                             let txt = xhr.responseText;
                             txt = JSON.parse(txt);
                             console.log(txt.errorCode);
-                            console.log(txt.errorMsg);
-                            if (txt.errorCode == -1 || txt.errorCode == -2 ) {
-                                alert(errMsg);
+                            if (txt.errorCode == "N" ) {
+                                alert("예약취소를 실패하였습니다. 동일한 현상이 반복될 경우 소비자실로 연락바랍니다.");
                                 return;
                             } else {
-                                alert("예약취소가 완료되었습니다.");
+                                alert("예약취소가 성공적으로 완료되었습니다.");
                             }
-                            modalClose(bookCondiModalClose);
+                            modalClose("bookCondiModalClose");
                             bookStatusRetrieve(choiceYear,choiceMonth);
                         }
                     }
@@ -592,7 +588,7 @@
             checkMsg.innerHTML="";
             return;
             }
-        if(modalType.value=="bookCondiModalClose"){
+        if(modalType.value=="bookCondiModalClose" || modalType=="bookCondiModalClose"){
             bookConditionModal.style.display = "none";
             bookCModalYear.innerHTML="";
             bookCModalMonth.innerHTML="";

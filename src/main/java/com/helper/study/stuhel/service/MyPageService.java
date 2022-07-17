@@ -15,6 +15,6 @@ public interface MyPageService {
 
     ArrayList<BookTO> bookStatusRetrieve(BookTO bookTO);
 
-    HashMap<String,String> bookCancel(BookTO bookTO);
+    HashMap<String,String> bookCancel(ArrayList<BookTO> bookTOList);
 
 }

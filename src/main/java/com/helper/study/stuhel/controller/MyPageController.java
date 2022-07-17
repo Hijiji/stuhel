@@ -2,6 +2,7 @@ package com.helper.study.stuhel.controller;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import com.helper.study.stuhel.service.BookServiceImpl;
 import com.helper.study.stuhel.service.MyPageService;
 import com.helper.study.stuhel.to.BookTO;
@@ -94,13 +95,13 @@ public class MyPageController {
         return gson.toJson(myPageService.bookStatusRetrieve(book));
     }
 
-    @PostMapping("/bookCancelData")
+    @PostMapping("/bookCancel")
     public HashMap<String, String> bookCancel(@RequestParam("bookCancelData") String bookCancelData){
-        BookTO bookTO = gson.fromJson(bookCancelData, BookTO.class);
+        ArrayList<BookTO> bookTOList = gson.fromJson(bookCancelData, new TypeToken<ArrayList<BookTO>>() {}.getType());
         /*1. JSON OBJECT 로 변경한다. 2.Object별로 담겨있는 배열 value를 for문을 이용해 TO에 담아준다.
         ?? 이게 맞나 싶은데 학원 코드 찾아봐야겠다. TO의 arrayList에 담고 DB에 넘기는 걸로. */
         System.out.println("------------------------------------MyPageController.bookCancel------------------------------------");
-        myPageService.bookCancel(bookTO);
-        return null;
+        HashMap<String, String> map=myPageService.bookCancel(bookTOList);
+        return map;
     }
 }

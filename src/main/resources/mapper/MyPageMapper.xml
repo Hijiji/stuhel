@@ -48,11 +48,11 @@
         DELETE
         FROM ROOM_BOOK
         WHERE
-            USER_ID = #{userIdList}
-            AND BOOKING_DATE = #{bookingDateList}
-            AND BOOKING_TIME = #{bookingTimeList}
-            AND ROOM_ID = #{roomIdList}
-            AND BOOKING_ID = #{bookingIdList}
+            USER_ID = #{userId}
+            AND BOOKING_DATE = #{bookingDate}
+            AND BOOKING_TIME = #{bookingTime}
+            AND ROOM_ID = #{roomId}
+            AND BOOKING_ID = #{bookingId}
     </delete>
 
 </mapper>
