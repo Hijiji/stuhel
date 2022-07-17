@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.helper.study.stuhel.mapper.BookDAO">
+<mapper namespace="com.helper.study.stuhel.book.mapper.BookDAO">
 
     <resultMap id="RoomName" type="String">
         <result property="roomId" column="ROOM_ID"/>
     </resultMap>
 
-    <select id="bookSearch" parameterType="com.helper.study.stuhel.to.BookTO" resultMap="RoomName">
+    <select id="bookSearch" parameterType="com.helper.study.stuhel.book.to.BookTO" resultMap="RoomName">
         SELECT
             ROOM_ID FROM STUDY_ROOM S
         WHERE S.ROOM_ID NOT IN (select r.ROOM_ID
@@ -15,7 +15,7 @@
                                     and r.BOOKING_TIME = #{bookingTime})
     </select>
 
-    <insert id="roomBook" parameterType="com.helper.study.stuhel.to.BookTO">
+    <insert id="roomBook" parameterType="com.helper.study.stuhel.book.to.BookTO">
         INSERT INTO ROOM_BOOK (
             BOOKING_ID
             ,USER_ID

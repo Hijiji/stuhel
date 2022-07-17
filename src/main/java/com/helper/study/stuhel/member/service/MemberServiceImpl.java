@@ -1,9 +1,9 @@
-package com.helper.study.stuhel.service;
+package com.helper.study.stuhel.member.service;
 
-import com.helper.study.stuhel.to.MemberTO;
+import com.helper.study.stuhel.member.to.MemberTO;
 import com.helper.study.stuhel.exception.IdNotFoundException;
 import com.helper.study.stuhel.exception.PwMissMatchException;
-import com.helper.study.stuhel.mapper.MemberDAO;
+import com.helper.study.stuhel.member.mapper.MemberDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

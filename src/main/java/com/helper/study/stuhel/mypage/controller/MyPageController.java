@@ -1,13 +1,11 @@
-package com.helper.study.stuhel.controller;
+package com.helper.study.stuhel.mypage.controller;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import com.helper.study.stuhel.service.BookServiceImpl;
-import com.helper.study.stuhel.service.MyPageService;
-import com.helper.study.stuhel.to.BookTO;
-import com.helper.study.stuhel.to.MemberTO;
-import org.apache.catalina.session.StandardSession;
+import com.helper.study.stuhel.mypage.service.MyPageService;
+import com.helper.study.stuhel.book.to.BookTO;
+import com.helper.study.stuhel.member.to.MemberTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;

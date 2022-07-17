@@ -1,10 +1,10 @@
-package com.helper.study.stuhel.controller;
+package com.helper.study.stuhel.member.controller;
 
 import com.google.gson.GsonBuilder;
-import com.helper.study.stuhel.to.MemberTO;
+import com.helper.study.stuhel.member.to.MemberTO;
 import com.helper.study.stuhel.exception.IdNotFoundException;
 import com.helper.study.stuhel.exception.PwMissMatchException;
-import com.helper.study.stuhel.service.MemberService;
+import com.helper.study.stuhel.member.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;

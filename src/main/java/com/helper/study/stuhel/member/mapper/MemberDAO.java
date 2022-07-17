@@ -1,6 +1,6 @@
-package com.helper.study.stuhel.mapper;
+package com.helper.study.stuhel.member.mapper;
 
-import com.helper.study.stuhel.to.MemberTO;
+import com.helper.study.stuhel.member.to.MemberTO;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper

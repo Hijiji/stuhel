@@ -1,11 +1,10 @@
-package com.helper.study.stuhel.service;
+package com.helper.study.stuhel.mypage.service;
 
-import com.helper.study.stuhel.mapper.MyPageDAO;
-import com.helper.study.stuhel.to.BookTO;
-import com.helper.study.stuhel.to.MemberTO;
+import com.helper.study.stuhel.mypage.mapper.MyPageDAO;
+import com.helper.study.stuhel.book.to.BookTO;
+import com.helper.study.stuhel.member.to.MemberTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.helper.study.stuhel.mapper.MyPageDAO">
+<mapper namespace="com.helper.study.stuhel.mypage.mapper.MyPageDAO">
 
-    <resultMap type="com.helper.study.stuhel.to.MemberTO" id="myPageMember">
+    <resultMap type="com.helper.study.stuhel.member.to.MemberTO" id="myPageMember">
         <result property="id" column="ID" />
         <result property="password" column="PASSWORD" />
         <result property="name" column="NAME" />
@@ -10,7 +10,7 @@
         <result property="birthday" column="BIRTHDAY" />
     </resultMap>
 
-    <resultMap type="com.helper.study.stuhel.to.BookTO" id="myPageBook">
+    <resultMap type="com.helper.study.stuhel.book.to.BookTO" id="myPageBook">
         <result property="bookingId" column="BOOKING_ID" />
         <result property="userId" column="USER_ID" />
         <result property="roomId" column="ROOM_ID" />
@@ -18,12 +18,12 @@
         <result property="bookingTime" column="BOOKING_TIME" />
     </resultMap>
 
-    <select id="retrieve" parameterType="com.helper.study.stuhel.to.MemberTO" resultMap="myPageMember">
+    <select id="retrieve" parameterType="com.helper.study.stuhel.member.to.MemberTO" resultMap="myPageMember">
         select * from MEMBER_SECURITY
         where ID = #{id}
     </select>
 
-    <update id="changeInfo" parameterType="com.helper.study.stuhel.to.MemberTO">
+    <update id="changeInfo" parameterType="com.helper.study.stuhel.member.to.MemberTO">
         UPDATE MEMBER_SECURITY
         SET
         ID = #{id}
@@ -33,18 +33,18 @@
         WHERE ID = #{sessionId}  <!--TO에 sessionId 없어서 에러뜰 수도 있음 파라메터타입 ...바꾸든지 어쩌던지 해봐 ~-->
     </update>
 
-    <select id="bookStatusRetrieve" parameterType="com.helper.study.stuhel.to.BookTO" resultMap="myPageBook">
+    <select id="bookStatusRetrieve" parameterType="com.helper.study.stuhel.book.to.BookTO" resultMap="myPageBook">
         SELECT *
         FROM ROOM_BOOK
         WHERE USER_ID = #{userId}
             AND BOOKING_DATE LIKE #{bookingDate}||'%'
     </select>
-    <select id="bookDateSearch" parameterType="com.helper.study.stuhel.to.MemberTO" resultMap="myPageMember">
+    <select id="bookDateSearch" parameterType="com.helper.study.stuhel.member.to.MemberTO" resultMap="myPageMember">
         SELECT ROOM_ID, BOOKING_DATE,BOOKING_TIME
         FROM STUDY_ROOM
         WHERE ROOM_ID = #{id}
     </select>
-    <delete id="bookCancel" parameterType="com.helper.study.stuhel.to.BookTO">
+    <delete id="bookCancel" parameterType="com.helper.study.stuhel.book.to.BookTO">
         DELETE
         FROM ROOM_BOOK
         WHERE

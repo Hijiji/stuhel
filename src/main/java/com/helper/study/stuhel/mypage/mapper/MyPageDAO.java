@@ -1,13 +1,10 @@
-package com.helper.study.stuhel.mapper;
+package com.helper.study.stuhel.mypage.mapper;
 
-import com.helper.study.stuhel.to.BookTO;
-import com.helper.study.stuhel.to.MemberTO;
+import com.helper.study.stuhel.book.to.BookTO;
+import com.helper.study.stuhel.member.to.MemberTO;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 @Mapper
 public interface MyPageDAO {

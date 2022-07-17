@@ -18,9 +18,10 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/SimpleLightbox/2.1.0/simpleLightbox.min.css" rel="stylesheet" />
     <!-- Core theme CSS (includes Bootstrap)-->
     <link href="css/styles.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">    <!-- flatpicker css -->
-    <script src="https://npmcdn.com/flatpickr/dist/flatpickr.min.js"></script>    <!-- flatpicker min js -->
-    <script src="https://npmcdn.com/flatpickr/dist/l10n/ko.js"></script>          <!-- flatpicker ko -->
+    <!--datepicker-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" integrity="sha512-uto9mlQzrs59VwILcLiRYeLKPPbS/bT71da/OEBYEwcdNUk8jYIy+D176RYoop1Da+f9mvkYrmj5MCLZWEtQuA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" integrity="sha512-aOG0c6nPNzGk+5zjwyJaoRUgCdOrfSDhmMID2u4+OIslr0GjpLKo7Xm0Ao3xmpM4T8AmIouRkqwj1nrdVsLKEQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <!--sweet alert-->
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <style>
@@ -124,58 +125,58 @@
             <div class="col-lg-8 col-xl-6 text-center">
                 <h2 class="mt-0">Booking Zone</h2>
                 <hr class="divider" />
-                    <div class="mb-3"><!--class="text-center mb-3"-->
-                        <div><!--class="col-lg-3 col-md-6 text-center"-->
-                            <input type="button" id="date-time-picker">
-                        </div>
-                    </div>
-                <div class="mb-3"><!--class="text-center mb-3"-->
-                    <div><!--class="col-lg-3 col-md-6 text-center"-->
-                        <select id="bookingTime">
-                            <option value="9">09:00 - 10:00</option>
-                            <option value="10">10:00 - 11:00</option>
-                            <option value="11">11:00 - 12:00</option>
-                            <option value="12">12:00 - 13:00</option>
-                            <option value="13">13:00 - 14:00</option>
-                            <option value="14">14:00 - 15:00</option>
-                            <option value="15">15:00 - 16:00</option>
-                            <option value="16">16:00 - 17:00</option>
-                            <option value="17">17:00 - 18:00</option>
-                            <option value="18">18:00 - 19:00</option>
-                            <option value="19">19:00 - 20:00</option>
-                            <option value="20">20:00 - 21:00</option>
-                            <option value="21">21:00 - 22:00</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="mb-3"><!-- class="text-center mb-3"-->
-                    <div><!--class="col-lg-3 col-md-6 text-center"-->
-                        <input type="button" onclick="searchRoom()" value="강의실보기">
-                    </div>
-                </div>
-                <div class="mb-3">
-                    <form>
-                        <table>
-                            <tr>
-                                <td><input type="button" value="101" id="room101" disabled="true" onclick="sendRoomId(this)" class="btn btn-primary btn-xl"/></td>
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                <td><input type="button" value="102" id="room102" disabled="true" onclick="sendRoomId(this)" class="btn btn-primary btn-xl"/></td>
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                <td><input type="button" value="103" id="room103" disabled="true" onclick="sendRoomId(this)" class="btn btn-primary btn-xl"/></td>
-                            </tr>
-                            <tr>
-                                &nbsp;&nbsp;&nbsp;
-                            </tr>
-                            <tr>
-                                <td><input type="button" value="104" id="room104" disabled="true" onclick="sendRoomId(this)" class="btn btn-primary btn-xl" /></td>
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                <td><input type="button" value="105" id="room105" disabled="true" onclick="sendRoomId(this)" class="btn btn-primary btn-xl" /></td>
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                <td><input type="button" value="106" id="room106" disabled="true" onclick="sendRoomId(this)" class="btn btn-primary btn-xl" /></td>
-                            </tr>
-                        </table>
-                    </form>
-                </div>
+            </div>
+        </div>
+        <div class="row gx-4 gx-lg-5 justify-content-center" >
+            <div class="col-lg-8 col-xl-6 text-center">
+                    <input type="button" class="btn btn-light btn-xl" id="datepicker">
+            </div>
+        </div></br>
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-lg-8 col-xl-6 text-center">
+                <select id="bookingTime">
+                    <option value="9">09:00 - 10:00</option>
+                    <option value="10">10:00 - 11:00</option>
+                    <option value="11">11:00 - 12:00</option>
+                    <option value="12">12:00 - 13:00</option>
+                    <option value="13">13:00 - 14:00</option>
+                    <option value="14">14:00 - 15:00</option>
+                    <option value="15">15:00 - 16:00</option>
+                    <option value="16">16:00 - 17:00</option>
+                    <option value="17">17:00 - 18:00</option>
+                    <option value="18">18:00 - 19:00</option>
+                    <option value="19">19:00 - 20:00</option>
+                    <option value="20">20:00 - 21:00</option>
+                    <option value="21">21:00 - 22:00</option>
+                </select>
+            </div>
+        </div></br>
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-lg-8 col-xl-6 text-center">
+                <input type="button"  class="btn btn-light btn-xl" onclick="searchRoom()" value="강의실보기">
+            </div>
+        </div>
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-lg-8 col-xl-6 text-center">
+                <table>
+                    <tr>
+                        <td><input type="button" value="101" id="room101" disabled="true" onclick="sendRoomId(this)" class="btn btn-primary btn-xl"/></td>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <td><input type="button" value="102" id="room102" disabled="true" onclick="sendRoomId(this)" class="btn btn-primary btn-xl"/></td>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <td><input type="button" value="103" id="room103" disabled="true" onclick="sendRoomId(this)" class="btn btn-primary btn-xl"/></td>
+                    </tr>
+                    <tr>
+                        &nbsp;&nbsp;&nbsp;
+                    </tr>
+                    <tr>
+                        <td><input type="button" value="104" id="room104" disabled="true" onclick="sendRoomId(this)" class="btn btn-primary btn-xl" /></td>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <td><input type="button" value="105" id="room105" disabled="true" onclick="sendRoomId(this)" class="btn btn-primary btn-xl" /></td>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <td><input type="button" value="106" id="room106" disabled="true" onclick="sendRoomId(this)" class="btn btn-primary btn-xl" /></td>
+                    </tr>
+                </table>
             </div>
         </div>
     </div>
@@ -266,7 +267,7 @@
 <script>
     const bookingBtn = document.querySelector("#bookingBtn");
     const bookingTime = document.querySelector("#bookingTime");
-    const bookingDate = document.querySelector("#date-time-picker");
+    const bookingDate = document.querySelector("#datepicker");
     const room101 = document.querySelector("#room101");
     const room102 = document.querySelector("#room102");
     const room103 = document.querySelector("#room103");
@@ -274,19 +275,27 @@
     const room105 = document.querySelector("#room105");
     const room106 = document.querySelector("#room106");
 
+    let today=new Date();
+    todayMonth=today.getMonth()+1;
+    if(todayMonth<10) todayMonth="0"+todayMonth;
+    bookingDate.value=today.getFullYear()+"-"+todayMonth+"-"+today.getDate();
 
-    $("#date-time-picker").flatpickr({
-        //enableTime: true,            // 시간 선택 여부
-        altInput: true,              // 기존 입력을 숨기고 새 입력을 만듦
-        altFormat: 'Y-m-d',      // 날짜 선택 후 표시 형태
-        dateFormat: 'Y-m-d',     // date format 형식
-        defaultDate: new Date(),     // 기본 선택 시간
-        minDate: new Date(),         // 최소 선택 시간
-        locale: 'en',                // 한국어
-        //time_24hr: true,             // 24시간 형태
-        disableMobile: true          // 모바일 지원
-    });
-
+  $(function(){   //최소선택시간 최대선택시간 초기년월
+    $("#datepicker").datepicker({
+    dateFormat: 'yy-mm-dd',
+    prevText: '이전 달',
+    nextText: '다음 달',
+    monthNames: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
+    monthNamesShort: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
+    dayNames: ['일', '월', '화', '수', '목', '금', '토'],
+    dayNamesShort: ['일', '월', '화', '수', '목', '금', '토'],
+    dayNamesMin: ['일', '월', '화', '수', '목', '금', '토'],
+    showMonthAfterYear: true,
+    yearSuffix: '년',
+    minDate: 0,
+    maxDate: +60
+  })
+  })
 
     /*로그아웃*/
     function logoutButton(){

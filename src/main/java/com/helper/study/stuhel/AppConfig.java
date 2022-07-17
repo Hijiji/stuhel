@@ -1,11 +1,5 @@
 package com.helper.study.stuhel;
 
-import com.helper.study.stuhel.controller.MemberController;
-import com.helper.study.stuhel.repository.JpaMemberRepository;
-import com.helper.study.stuhel.service.MemberService;
-import com.helper.study.stuhel.service.MemberServiceImpl;
-import org.mybatis.spring.annotation.MapperScan;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 

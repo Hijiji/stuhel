@@ -1,4 +1,4 @@
-package com.helper.study.stuhel.to;
+package com.helper.study.stuhel.book.to;
 
 import lombok.Data;
 

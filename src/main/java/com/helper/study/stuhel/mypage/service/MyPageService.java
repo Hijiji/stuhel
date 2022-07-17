@@ -1,8 +1,7 @@
-package com.helper.study.stuhel.service;
+package com.helper.study.stuhel.mypage.service;
 
-import com.helper.study.stuhel.to.BookTO;
-import com.helper.study.stuhel.to.MemberTO;
-import org.springframework.web.bind.annotation.RequestParam;
+import com.helper.study.stuhel.book.to.BookTO;
+import com.helper.study.stuhel.member.to.MemberTO;
 
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;

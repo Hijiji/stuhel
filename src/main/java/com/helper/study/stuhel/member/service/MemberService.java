@@ -1,6 +1,6 @@
-package com.helper.study.stuhel.service;
+package com.helper.study.stuhel.member.service;
 
-import com.helper.study.stuhel.to.MemberTO;
+import com.helper.study.stuhel.member.to.MemberTO;
 import com.helper.study.stuhel.exception.IdNotFoundException;
 import com.helper.study.stuhel.exception.PwMissMatchException;
 

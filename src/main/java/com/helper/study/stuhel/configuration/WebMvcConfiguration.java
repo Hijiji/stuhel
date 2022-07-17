@@ -1,4 +1,4 @@
-package com.helper.study.stuhel.common.configuration;
+package com.helper.study.stuhel.configuration;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.CacheControl;
@@ -14,7 +14,7 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         WebMvcConfigurer.super.addResourceHandlers(registry);
         registry.addResourceHandler("/**")
-                .addResourceLocations("classpath:/templates/", "classpath:/static/")
+                .addResourceLocations("classpath:/static/")
                 .setCacheControl(CacheControl.maxAge(60, TimeUnit.MINUTES));
     } //  //  1. / 으로 시작되믄 모든 요청을 다룬다.  2.자료의 위치를 입력해준다.  3.캐시 60분으로 설정됨
 }

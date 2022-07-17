@@ -1,6 +1,6 @@
 package com.helper.study.stuhel.repository;
 
-import com.helper.study.stuhel.to.MemberTO;
+import com.helper.study.stuhel.member.to.MemberTO;
 
 import javax.persistence.EntityManager;
 import java.util.HashMap;

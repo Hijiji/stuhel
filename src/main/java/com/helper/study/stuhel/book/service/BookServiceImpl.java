@@ -1,8 +1,7 @@
-package com.helper.study.stuhel.service;
+package com.helper.study.stuhel.book.service;
 
-import com.helper.study.stuhel.mapper.BookDAO;
-import com.helper.study.stuhel.mapper.MemberDAO;
-import com.helper.study.stuhel.to.BookTO;
+import com.helper.study.stuhel.book.mapper.BookDAO;
+import com.helper.study.stuhel.book.to.BookTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
