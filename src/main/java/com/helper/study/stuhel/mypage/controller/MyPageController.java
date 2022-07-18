@@ -45,7 +45,7 @@ public class MyPageController {
             memberTO.setName((String)session.getAttribute("memberName"));
             memberTO=myPageService.retrieve(memberTO);  //뒷단돌려서 받아온 member 정보 gson으로 역직렬화 하는법 찾기
             session.setAttribute("memberName",memberTO.getName());
-            session.setAttribute("birthday",memberTO.getBirthday());
+            session.setAttribute("birthday",memberTO.getBirth());
             session.setAttribute("password",memberTO.getPassword());
             result =gson.toJson(memberTO);
         }
@@ -72,11 +72,11 @@ public class MyPageController {
         if(memberTO.getPassword().isEmpty()||memberTO.getPassword()==null){
             memberTO.setPassword((String)session.getAttribute("password"));
         }
-        System.out.println("memberTO.getBirthday() = " + memberTO.getBirthday());
-        if(memberTO.getBirthday()==0){
-            memberTO.setBirthday((int)session.getAttribute("birthday"));
+        System.out.println("memberTO.getBirthday() = " + memberTO.getBirth());
+        if(memberTO.getBirth()==0){
+            memberTO.setBirth((int)session.getAttribute("birthday"));
         }
-        System.out.println("memberTO.getBirthday() = " + memberTO.getBirthday());
+        System.out.println("memberTO.getBirthday() = " + memberTO.getBirth());
 
         map=myPageService.changeInfo(memberTO,session);
 

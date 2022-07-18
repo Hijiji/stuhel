@@ -138,14 +138,14 @@
 
                     <!-- Password confirm input-->
                     <div class="form-floating mb-3">
-                        <input class="form-control" id="confirm-password" type="password"  placeholder="Password-Check" onkeyup="enterkeyEvent(cn)" data-sb-validations="required" />
+                        <input class="form-control" id="confirm-password" type="password"  placeholder="Password-Check" onkeyup="enterkeyEvent(birth)" data-sb-validations="required" />
                         <label for="confirm-password">Password-Check</label>
                     </div>
 
                     <!-- Credit Number-->
                     <div class="form-floating mb-3">
-                        <input class="form-control" id="cn" type="cn" placeholder="Credit Number" data-sb-validations="required" />
-                        <label for="cn">Credit Number</label>
+                        <input class="form-control" id="birth" type="birth" placeholder="Birth" data-sb-validations="required" />
+                        <label for="birth">Birth</label>
                     </div>
 
                     <!---->
@@ -193,7 +193,7 @@
 
     const name = document.querySelector("#name");
     const password = document.querySelector("#password");
-    const creditNumber = document.querySelector("#cn");
+    const birth = document.querySelector("#birth");
     const confirmPassword = document.querySelector("#confirm-password");
     const joinResultMsg = document.querySelector("#joinResultMessage");
 
@@ -285,7 +285,7 @@
         if (identity.value.trim()==""||identity.value==null
                 ||name.value.trim()==""||name.value==null
                 ||password.value.trim()==""||password.value==null
-                ||creditNumber.value.trim()==""||creditNumber.value==null){
+                ||birth.value.trim()==""||birth.value==null){
 
             joinResultMsg.innerHTML = "※ 빈칸이 있습니다. </br>모든 정보를 기입하세요.";
             return;
@@ -295,9 +295,12 @@
         } else if (password.value != confirmPassword.value) {
             joinResultMsg.innerHTML = "※ 비밀번호를 다시 확인해주세요";
             return;
+        }else if(isNaN(birth.value)||birth.value.length != 8){
+            joinResultMsg.innerHTML="※ 8자리 숫자만 입력가능합니다. ex) 19450815";
+            return;
         }else {
 
-            let joinData ={"id" : identity.value, "name" : name.value, "password" : password.value, "creditNumber" : creditNumber.value};
+            let joinData ={"id" : identity.value, "name" : name.value, "password" : password.value, "birth" : birth.value};
             joinData = JSON.stringify(joinData);
 
             let xhr = new XMLHttpRequest();
@@ -320,7 +323,7 @@
                     identity.value=null;
                     name.value=null;
                     password.value=null;
-                    creditNumber.value=null;
+                    birth.value=null;
                     confirmPassword.value=null;
 
                     swal({

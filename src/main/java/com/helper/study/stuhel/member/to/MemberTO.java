@@ -13,7 +13,7 @@ public class MemberTO {
     private String name;
     private int creditNumber;
     private String password;
-    private int birthday;
+    private int birth;
     private String sessionId;
 
 }

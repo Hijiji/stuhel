@@ -37,8 +37,8 @@ public class MyPageServiceImpl implements MyPageService{
         if(memberTO.getPassword()==null){
             memberTO.setPassword((String)session.getAttribute("memberPassword"));
         }
-        if(memberTO.getBirthday()==0){
-            memberTO.setBirthday(0);
+        if(memberTO.getBirth()==0){
+            memberTO.setBirth(0);
         }
 
         myPageDAO.changeInfo(memberTO);
