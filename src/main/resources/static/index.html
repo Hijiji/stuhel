@@ -70,11 +70,11 @@
                 <hr class="divider divider-light"/>
                         <form>
                             <div class="form-floating mb-3">
-                                <input class="form-control" id="inputIdentity" type="identity" placeholder="ID" />
+                                <input class="form-control" id="inputIdentity" type="identity" onkeyup="enterkeyEvent(inputPassword)" placeholder="ID" />
                                 <label for="inputIdentity">ID</label>
                             </div>
                             <div class="form-floating mb-3">
-                                <input class="form-control" id="inputPassword" type="password" placeholder="Password" />
+                                <input class="form-control" id="inputPassword" type="password" onkeyup="enterkeyEvent(loginButton)" placeholder="Password" />
                                 <label for="inputPassword">Password</label>
                             </div>
                     <!--             <div class="form-check mb-3">
@@ -85,7 +85,7 @@
                                      <a class="small" href="password.html">Forgot Password?</a>
                                  </div>
                     -->
-                             <div >
+                             <div>
                                 <div class="text-center mb-3">
                                     <div class="fw-bolder" id="loginMsg" style="color:#1a1e21; font-size:18px;"></div>
                                 </div>
@@ -116,13 +116,14 @@
 
                     <!-- Name input-->
                     <div class="form-floating mb-3">
-                        <input class="form-control" id="name" type="text" placeholder="Enter your name..." data-sb-validations="required" />
+                        <input class="form-control" id="name" type="text" onkeyup="enterkeyEvent(identity)"
+                               maxlength="20" placeholder="Enter your name..." data-sb-validations="required" />
                         <label for="name">Full name</label>
                     </div>
 
                     <!-- ID input-->
                     <div class="form-floating mb-3">
-                        <input class="form-control" id="identity" type="identity" placeholder="ID" data-sb-validations="required" />
+                        <input class="form-control" id="identity" type="identity" onkeyup="enterkeyEvent(idDoubleCheck)" placeholder="ID" data-sb-validations="required" />
                         <label for="identity">ID</label>
                     </div>
                     <div class="form-floating mb-3">
@@ -131,13 +132,13 @@
 
                     <!-- Password input-->
                     <div class="form-floating mb-3">
-                        <input class="form-control" id="password" type="password" placeholder="Password" data-sb-validations="required"/>
+                        <input class="form-control" id="password" type="password" onkeyup="enterkeyEvent(confirmPassword)" placeholder="Password" data-sb-validations="required"/>
                         <label for="password">Password</label>
                     </div>
 
                     <!-- Password confirm input-->
                     <div class="form-floating mb-3">
-                        <input class="form-control" id="confirm-password" type="password" placeholder="Password-Check" data-sb-validations="required" />
+                        <input class="form-control" id="confirm-password" type="password"  placeholder="Password-Check" onkeyup="enterkeyEvent(cn)" data-sb-validations="required" />
                         <label for="confirm-password">Password-Check</label>
                     </div>
 
@@ -148,7 +149,7 @@
                     </div>
 
                     <!---->
-                    <div >
+                    <div>
                         <div class="text-center mb-3">
                             <div class="fw-bolder" id="joinResultMessage" style="color:tomato; font-size:18px;"></div>
                         </div>
@@ -196,6 +197,11 @@
     const confirmPassword = document.querySelector("#confirm-password");
     const joinResultMsg = document.querySelector("#joinResultMessage");
 
+    function enterkeyEvent(next){
+        if(event.keyCode == 13){
+            next.focus();
+        }
+    }
 
     /*로그인*/
     loginButton.addEventListener('click',() =>{
@@ -235,8 +241,17 @@
 
     /*아이디 중복체크*/
     idDoubleCheck.addEventListener('click', () => {
+        var regExp=/^[a-z0-9]*$/;
+
         if(identity.value.trim()==""||identity.value.trim()==null){
             joinResultMsg.innerHTML="ID를 입력해주세요";
+            idDoubleCheck.value="ID중복확인";
+            identity.focus();
+            return;
+        }else if( !regExp.test(identity.value.trim()) || identity.value.trim().length < 5 ||identity.value.trim().length > 20){
+            joinResultMsg.innerHTML = "※ 아이디는 5~20자 영문 소문자와 숫자만으로 구성되어야합니다.";
+            idDoubleCheck.value="ID중복확인";
+            identity.focus();
             return;
         }
         let xhr = new XMLHttpRequest();
@@ -253,10 +268,12 @@
                 if (txt.errorCode < 0) {
                     joinResultMsg.innerHTML="※ 이미 사용중인 아이디입니다.";
                     idDoubleCheck.value="ID중복확인";
+                    identity.focus();
                     return;
                 }
                 joinResultMsg.innerHTML="※ 사용 가능한 아이디입니다.";
                 idDoubleCheck.value="사용가능";
+                password.focus();
             }
         }
     });
@@ -278,7 +295,6 @@
         } else if (password.value != confirmPassword.value) {
             joinResultMsg.innerHTML = "※ 비밀번호를 다시 확인해주세요";
             return;
-
         }else {
 
             let joinData ={"id" : identity.value, "name" : name.value, "password" : password.value, "creditNumber" : creditNumber.value};

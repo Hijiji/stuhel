@@ -109,12 +109,17 @@
 
                     <!-- Name input-->
                     <div class="form-floating mb-3">
-                        <h6 class="mt-0"> NAME </h6> <input class="form-control" id="name" type="text" disabled/>
+                        <h6 class="mt-0"> NAME </h6> <input class="form-control" id="name" type="text" onkeyup="enterkeyEvent(identity)" disabled/>
                     </div>
 
-                    <!-- ID input-->
+                <!-- ID input-->
                     <div class="form-floating mb-3">
-                        <h6 class="mt-0"> I D </h6><input class="form-control" id="identity" type="text" disabled/><!--placeholder="ID" data-sb-validations="required" -->
+                        <h6 class="mt-0"> I D </h6><input class="form-control" id="identity" type="text" onkeyup="enterkeyEvent(birth)" disabled/><!--placeholder="ID" data-sb-validations="required" -->
+                    </div>
+                    <div>
+                        <div class="text-center mb-3">
+                            <div class="fw-bolder" id="idCheckResultMsg" style="color:tomato; font-size:18px;"></div>
+                        </div>
                     </div>
 
                     <!-- ID DoubleCheck input-->
@@ -124,22 +129,32 @@
 
                     <!-- birth input-->
                     <div class="form-floating mb-3">
-                        <h6 class="mt-0"> BIRTH </h6><input class="form-control" id="birth"  disabled/><!--placeholder="ID" data-sb-validations="required" -->
+                        <h6 class="mt-0"> BIRTH </h6><input class="form-control" id="birth" onkeyup="enterkeyEvent(password)" disabled/><!--placeholder="ID" data-sb-validations="required" -->
+                    </div>
+                    <div>
+                        <div class="text-center mb-3">
+                            <div class="fw-bolder" id="birthCheckResultMsg" style="color:tomato; font-size:18px;"></div>
+                        </div>
                     </div>
 
-                    <!-- Password input-->
+                <!-- Password input-->
                     <div class="form-floating mb-3" id="pwDiv" style="display:none" >
-                        <h6 class="mt-0"> NEW PW </h6><input class="form-control" id="password" type="password" placeholder="Password" data-sb-validations="required"/>
+                        <h6 class="mt-0"> NEW PW </h6><input class="form-control" id="password" type="password" onkeyup="enterkeyEvent(confirmPassword)" placeholder="Password" data-sb-validations="required"/>
+                    </div>
+                    <div>
+                        <div class="text-center mb-3">
+                            <div class="fw-bolder" id="pwCheckResultMsg" style="color:tomato; font-size:18px;"></div>
+                        </div>
                     </div>
 
-                    <!-- Password confirm input-->
+                <!-- Password confirm input-->
                     <div class="form-floating mb-3" id="pwConfirmDiv" style="display:none" >
                         <h6 class="mt-0"> PW CONFIRM</h6><input class="form-control" id="confirmPassword" type="password" /><!--placeholder="Password-Check" data-sb-validations="required" -->
                     </div>
 
-                    <div >
+                    <div>
                         <div class="text-center mb-3">
-                            <div class="fw-bolder" id="idCheckResultMsg" style="color:tomato; font-size:18px;"></div>
+                            <div class="fw-bolder" id="confirmBeforeCheckMsg" style="color:tomato; font-size:18px;"></div>
                         </div>
                     </div>
 
@@ -194,14 +209,14 @@
         <div class="modal-title">사용자 확인</div>
         <hr class="divider" />
         <div>
-            I  D  <input class="form-control" type="text" id="checkId"/>
-            P W  <input class="form-control" type="password" id="checkPw"/>
+            I  D  <input class="form-control" type="text" onkeyup="enterkeyEvent(checkPw)" id="checkId"/>
+            P W  <input class="form-control" type="password" onkeyup="enterkeyEvent(idPwConfirm)" id="checkPw"/>
         </div>
         </br>
         <div class="fw-bolder" id="checkMsg" style="color:#1a1e21;"></div>
         </br>
         <div class="close-wrapper">
-            <button class="btn btn-light btn-xl" id="IdPwConfirm" onclick="IdPwConfirm()">확인</button>&nbsp;&nbsp;
+            <button class="btn btn-light btn-xl" id="idPwConfirm" onclick="idPwConfirmFunc()">확인</button>&nbsp;&nbsp;
             <button class="btn btn-light btn-xl" value="userCheckModalClose" onclick="modalClose(this)" >닫기</button>
         </div>
     </div>
@@ -263,6 +278,7 @@
     const checkPw = document.querySelector("#checkPw");
     const checkMsg = document.querySelector("#checkMsg");
     const idCheckResultMsg = document.querySelector("#idCheckResultMsg");
+    const idPwConfirm = document.querySelector("#idPwConfirm");
 
     const bookConditionModal = document.querySelector("#bookConditionModal");
 
@@ -315,6 +331,12 @@
                     }
                 }
                 setDate();
+        }
+    }
+
+    function enterkeyEvent(next){
+        if(event.keyCode == 13){
+            next.focus();
         }
     }
 
@@ -491,7 +513,7 @@
                 , text : 'ヽ(✿ﾟ▽ﾟ)ノ \n'
                         +'세미나실 예약을 취소합니다.'
                 , buttons : ["닫기","확인"]
-                , buttonColor : 'tomato'
+                , confirmButtonColor : 'tomato'
         }).then(function(result){
                 console.log(result);
                 if(result==null) return;
@@ -528,14 +550,18 @@
     <!--회원정보수정 modal onclick-->
     function userInfoChange(){
         userCheckModal.style.display="flex";
+        checkId.focus();
     }
 
     <!--회원정보수정시 회원인증-->
-    function IdPwConfirm(){
+    function idPwConfirmFunc(){
         if(checkPw.value.trim()==null||checkPw.value.trim()=="" ||
            checkId.value.trim()==null||checkId.value.trim()==""
         ){
            checkMsg.innerHTML = "※ ID 혹은 비밀번호를 입력해주세요";
+           return;
+        }else if(dbIdentity!=checkId.value.trim()){
+           checkMsg.innerHTML = "※ 잘못된 ID를 입력하셨습니다.";
            return;
         }else{
            let loginData = {"password":checkPw.value, "id":checkId.value}
@@ -600,8 +626,15 @@
 
     <!--아이디 더블체크-->
     idDoubleCheck.addEventListener('click', () => {
+        var regExp=/^[a-z0-9]*$/;
         if(identity.value.trim()==""||identity.value.trim()==null){
             idCheckResultMsg.innerHTML="ID를 입력해주세요";
+            idDoubleCheck.value="ID중복확인";
+            return;
+        }else if( !regExp.test(identity.value.trim()) || identity.value.trim().length < 5 ||identity.value.trim().length > 20){
+            idCheckResultMsg.innerHTML = "※ 아이디는 5~20자 영문 소문자와 숫자만으로 구성되어야합니다.";
+            idDoubleCheck.value="ID중복확인";
+            identity.focus();
             return;
         }
         let xhr = new XMLHttpRequest();
@@ -629,47 +662,49 @@
     let changeIdentity="";
     let changeBirth="";
     let changePassword="";
-    let changeConfirmTxt="회원님의 ";
 
     submitButton.addEventListener('click',()=>{
+    idCheckResultMsg.innerHTML=""; idCheckResultMsg.innerHTML="";birthCheckResultMsg.innerHTML="";pwCheckResultMsg.innerHTML="";
+        if (identity.value.trim()==""||identity.value==null
+            ||name.value.trim()==""||name.value==null
+            ||birth.value.trim()==""||birth.value==null
+            ){
+           idCheckResultMsg.innerHTML ="※ ID, 이름, 생년월일은 비워둘 수 없습니다.";
+        }
         if(name.value.trim()!=dbName){
             changeName=name.value.trim();
-            changeConfirmTxt+="이름 ";
         }if(identity.value.trim()!=dbIdentity){
             if(idDoubleCheck.value=="사용가능"){
                 changeIdentity=identity.value.trim();
-                changeConfirmTxt+="아이디 ";
+
             }else{
-                alert("변경 아이디 중복체크가 필요합니다.");
+                idCheckResultMsg.innerHTML="※ 변경 아이디 중복체크가 필요합니다.";
                 return;
             }
         }if(birth.value.trim()!=dbBirth){
-            if(isNaN(birth.value)){
-                alert("숫자만 입력가능합니다.");
+            if(isNaN(birth.value)||birth.value.length != 8){
+                birthCheckResultMsg.innerHTML="※ 8자리 숫자만 입력가능합니다. ex) 19450815";
                 return;
             }else {
                 changeBirth=birth.value.trim();
-                alert(changeBirth);
-                changeConfirmTxt+="생일 ";
+
             }
         }else changeBirth=dbBirth;
         if(password.value!=null || password.value.trim()!="" && confirmPassword.value!=null || confirmPassword.value.trim()!=""){
             if(password.value==confirmPassword.value){
                 changePassword=password.value.trim();
-                changeConfirmTxt+="비밀번호 ";
+
             }else{
-                alert("입력한 비밀번호를 확인해주세요.");
+                pwCheckResultMsg.innerHTML="입력한 비밀번호를 확인해주세요.";
                 return;
             }
         }
         swal({
                   title : '회원정보 변경'
                 , text : 'ヽ(✿ﾟ▽ﾟ)ノ \n'
-                        +'회원님의 정보 \n'+
-                        +changeConfirmTxt
-                        +'를 변경하시겠습니까?'
+                        +'변경된 정보를 저장하시겠습니까?'
                 , buttons : ["취소","확인"]
-                , buttonColor : 'tomato'
+                , confirmButtonColor : 'tomato'
         }).then(function(result){
                 console.log(result);
                 if(result==null) return;
@@ -713,6 +748,9 @@
                             password.value="";
                             confirmPassword.value="";
                             idCheckResultMsg.innerHTML="";
+                            pwCheckResultMsg.innerHTML="";
+                            birthCheckResultMsg.innerHTML="";
+                            confirmBeforeCheckMsg.innerHTML="";
                             retrieve();
                         }
                     }
