@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import com.google.gson.Gson;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 
@@ -73,11 +74,14 @@ public class MemberController {
 
     /*로그아웃*/
     @GetMapping("/logout")
-    public String logout(HttpServletRequest request){
+    public String logout(HttpServletRequest request, HttpServletResponse response){
         HttpSession session = request.getSession();
         System.out.println(session.getAttribute("memberId"));
         session.invalidate();
-
+        response.setHeader("Expires", "Sat, 6 May 1995 12:00:00 GMT");
+        response.setHeader("Cache-Control","no-cache, no-store, must-revalidate");
+        response.setHeader("Pragma","no-cache");
+        response.setDateHeader("Expires",0);
         return "index.html";
     }
 

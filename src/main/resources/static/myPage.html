@@ -323,7 +323,7 @@
 
                         dbName=txt.name;
                         dbIdentity=txt.id;
-                        dbBirth=txt.birthday;
+                        dbBirth=txt.birth;
 
                         name.value=dbName;
                         identity.value=dbIdentity;
@@ -708,7 +708,7 @@
                 console.log(result);
                 if(result==null) return;
                 else {
-                    let changeInfo = {"birthday":changeBirth,"password":changePassword,"id":changeIdentity,"name":changeName} //데이터 추가하기
+                    let changeInfo = {"birth":changeBirth,"password":changePassword,"id":changeIdentity,"name":changeName} //데이터 추가하기
                     changeInfo = JSON.stringify(changeInfo);
 
                     let xhr = new XMLHttpRequest();

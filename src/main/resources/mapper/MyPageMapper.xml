@@ -7,7 +7,7 @@
         <result property="password" column="PASSWORD" />
         <result property="name" column="NAME" />
         <result property="creditNumber" column="CREDITNUMBER" />
-        <result property="birthday" column="BIRTHDAY" />
+        <result property="birth" column="BIRTH" />
     </resultMap>
 
     <resultMap type="com.helper.study.stuhel.book.to.BookTO" id="myPageBook">
@@ -29,7 +29,7 @@
         ID = #{id}
         ,NAME = #{name}
         ,PASSWORD = #{password}
-        ,BIRTHDAY = #{birthday}
+        ,BIRTH = #{birth}
         WHERE ID = #{sessionId}  <!--TO에 sessionId 없어서 에러뜰 수도 있음 파라메터타입 ...바꾸든지 어쩌던지 해봐 ~-->
     </update>
 
