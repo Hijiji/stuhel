@@ -264,6 +264,8 @@
             if (xhr.readyState == 4 && xhr.status == 200) {
                 // 데이터 확인
                 let txt = xhr.responseText;
+                console.log("txt");
+                console.log(txt);
                 txt = JSON.parse(txt);
                 if (txt.errorCode < 0) {
                     joinResultMsg.innerHTML="※ 이미 사용중인 아이디입니다.";

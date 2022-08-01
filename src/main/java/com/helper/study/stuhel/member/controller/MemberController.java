@@ -73,7 +73,7 @@ public class MemberController {
     }
 
     /*로그아웃*/
-    @GetMapping("/logout")
+    @PostMapping("/logout")
     public String logout(HttpServletRequest request, HttpServletResponse response){
         HttpSession session = request.getSession();
         System.out.println(session.getAttribute("memberId"));
@@ -81,8 +81,9 @@ public class MemberController {
         response.setHeader("Expires", "Sat, 6 May 1995 12:00:00 GMT");
         response.setHeader("Cache-Control","no-cache, no-store, must-revalidate");
         response.setHeader("Pragma","no-cache");
-        response.setDateHeader("Expires",0);
-        return "index.html";
+        response.addHeader("Cache-Control", "post-check=0, pre-check=0");
+        response.setDateHeader("Expires",-1);
+        return "/";
     }
 
 
@@ -90,7 +91,7 @@ public class MemberController {
     @GetMapping("/idDoubleCheck")
     public HashMap<String,Integer> idDoubleCheck (@RequestParam("identity") String identity) {
         HashMap<String, Integer> map = new HashMap<>();
-
+        System.out.println("MemberController.idDoubleCheck 시바 왜안되는데 갑자기 쉬바");
         return memberService.idDoubleCheck(identity);
     }
 

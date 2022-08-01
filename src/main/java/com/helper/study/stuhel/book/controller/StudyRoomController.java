@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 @Controller
-@RequestMapping("/book")
+@RequestMapping("/stuhel/book")
 @ResponseBody
 public class StudyRoomController {
 

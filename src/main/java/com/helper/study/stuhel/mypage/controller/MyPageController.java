@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 @Controller
-@RequestMapping("/myPage")
+@RequestMapping("/stuhel/myPage")
 @ResponseBody
 public class MyPageController {
     private static Gson gson = new GsonBuilder().serializeNulls().create(); // 속성값이 null 인 속성도 json 변환

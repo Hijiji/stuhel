@@ -311,7 +311,7 @@
     function retrieve(){
         if(sessionStatus==0){
             let xhr = new XMLHttpRequest();
-                xhr.open('POST', "/myPage/retrieve?"
+                xhr.open('POST', "/stuhel/myPage/retrieve?"
                         ,true);
                 xhr.setRequestHeader('Accept', 'application/json');
                 xhr.send();
@@ -429,7 +429,7 @@
         bookStatusData = JSON.stringify(bookStatusData);
         if(sessionStatus==0){
             let xhr = new XMLHttpRequest();
-                xhr.open('POST', "/myPage/bookStatusRetrieve?bookStatusData="+encodeURI(bookStatusData)
+                xhr.open('POST', "/stuhel/myPage/bookStatusRetrieve?bookStatusData="+encodeURI(bookStatusData)
                         ,true);
                 xhr.setRequestHeader('Accept', 'application/json');
                 xhr.send();
@@ -522,7 +522,7 @@
                         console.log("bookCancelData");
                         console.log(bookCancelData);
                     let xhr = new XMLHttpRequest();
-                    xhr.open('POST',  "/myPage/bookCancel?"
+                    xhr.open('POST',  "/stuhel/myPage/bookCancel?"
                                         + "bookCancelData=" + encodeURI(bookCancelData)
                             ,true);
                     xhr.setRequestHeader('Accept', 'application/json');
@@ -712,7 +712,7 @@
                     changeInfo = JSON.stringify(changeInfo);
 
                     let xhr = new XMLHttpRequest();
-                    xhr.open('POST',  "/myPage/changeInfo?"
+                    xhr.open('POST',  "/stuhel/myPage/changeInfo?"
                                         + "changeInfo=" + encodeURI(changeInfo)
                             ,true);
                     xhr.setRequestHeader('Accept', 'application/json');
@@ -760,7 +760,7 @@
     /*로그아웃*/
     function logoutButton(){
         let xhr = new XMLHttpRequest();
-        xhr.open('Get', "/member/logout"
+        xhr.open('Post', "/member/logout"
             ,true);
         xhr.setRequestHeader('Accept', 'application/json');
         xhr.send();

@@ -15,7 +15,7 @@ public class AppConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry){
         System.out.println("registry = " + registry);
         registry.addInterceptor(sessionInterceptor)
-                .addPathPatterns("/**")
-                .excludePathPatterns("/");
+                .addPathPatterns("/stuhel/**")
+                .excludePathPatterns("/stuhel").excludePathPatterns("/member/**").excludePathPatterns("/");
     }
 }
