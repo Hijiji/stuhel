@@ -1,10 +1,116 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+    <title>Stuhel Board List</title>
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+    <!-- Bootstrap Icons-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+    <!-- Google fonts-->
+    <link href="https://fonts.googleapis.com/css?family=Merriweather+Sans:400,700" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic" rel="stylesheet" type="text/css" />
+    <!-- SimpleLightbox plugin CSS-->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/SimpleLightbox/2.1.0/simpleLightbox.min.css" rel="stylesheet" />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="css/styles.css" rel="stylesheet" />
+    <!--sweet alert-->
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <style>
 
+    </style>
+</head>
+<body id="page-top">
+
+<!-- Navigation-->
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top py-3" id="mainNav">
+    <div class="container px-4 px-lg-5">
+        <a class="navbar-brand" href="#page-top" style="color:#495057">Board Write</a>
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ms-auto my-2 my-lg-0">
+                <li class="nav-item"><a class="nav-link" href="/home.html" style="color:#495057">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="/boardList.html" style="color:#495057">목록</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<section style="padding-top: 10rem; padding-bottom: 10rem;resize: none;">
+    <div align="center">
+        <div>
+            <textarea required id="title" placeholder="제목을 입력하세요" onkeypress="enterkeyEvent()" style="outline: none;height:60px; width:60%; resize: none; font-size:2rem;border: none;"></textarea>
+        </div>
+        <div align="right">
+            <span id="dateBox" style="padding-right : 15rem;"></span>
+        </div>
+        <hr style="width:60%">
+        <div>
+            <textarea required id="wContents" onkeydown="resize(this)"style="outline: none;height:700px; resize: none; width:60%;border: none;font-size:1rem;"></textarea>
+        </div>
+    </div>
+</section>
+<!-- Footer-->
+<nav class="navbar navbar-expand-lg navbar-dark fixed-bottom py-3" id="buttomNav" style="background-color:#f8f9fa">
+    <div class="container px-4 px-lg-5">
+        <div class="collapse navbar-collapse" id="buttomResponsive">
+            <div class="navbar-nav ms-auto my-2 my-lg-0">
+                <input type="button" id="writeSaveBtn" value="저장" onclick="writeSaveFunc()" class="btn btn-light btn-xl" style="height:12px;color:white;background-color:gray">
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- Bootstrap core JS-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- SimpleLightbox plugin JS-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/SimpleLightbox/2.1.0/simpleLightbox.min.js"></script>
+<!-- Core theme JS-->
+<script src="js/scripts.js"></script>
+<script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
+
+<script>
+    const dateDiv = document.querySelector("#dateBox");
+    const wContents = document.querySelector("#wContents");
+    const title = document.querySelector("#title");
+
+    let date = new Date();
+    dateBox.innerHTML = date.getFullYear()+"년 "+(date.getMonth()+1)+"월 "+date.getDate()+"일"
+
+    function resize(obj) {
+        obj.style.height = "700px";
+        if(event.keyCode == 13){
+            if(obj.scrollHeight>700){
+                obj.style.height = (obj.scrollHeight)+"px";
+            }
+        }
+    }
+
+    function enterkeyEvent(){
+        if(event.keyCode == 13){
+            event.returnValue=false;
+        }
+    }
+
+    function writeSaveFunc(){
+        let xhr = new XMLHttpRequest();
+	    xhr.open('POST', 'stuhel/board/writeSave?title='+title.value+";wContents"+wContents.value
+	        ,true)
+	    xhr.setRequestHeader('Accept', 'application/json');
+	    xhr.send();
+	    xhr.onreadystatechange = () => {
+	        if (xhr.readyState == 4 && xhr.status == 200) {
+	            let txt = xhr.responseText;
+	            //txt = JSON.parse(txt);
+	            console.log(txt);
+	            boardListGridOptions.api.setRowData(txt.gridRowJson);
+	        }
+	    }
+    }
+    }
+</script>
 </body>
 </html>

@@ -1,10 +1,183 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+    <title>Stuhel Board List</title>
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+    <!-- Bootstrap Icons-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+    <!-- Google fonts-->
+    <link href="https://fonts.googleapis.com/css?family=Merriweather+Sans:400,700" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic" rel="stylesheet" type="text/css" />
+    <!-- SimpleLightbox plugin CSS-->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/SimpleLightbox/2.1.0/simpleLightbox.min.css" rel="stylesheet" />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="css/styles.css" rel="stylesheet" />
+    <!--sweet alert-->
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <!--ag-grid-->
+    <script src="https://unpkg.com/ag-grid-community/dist/ag-grid-community.min.noStyle.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/ag-grid-community/dist/styles/ag-grid.css">
+    <link rel="stylesheet" href="https://unpkg.com/ag-grid-community/dist/styles/ag-theme-balham.css">
+    <style>
 
+    </style>
+</head>
+<body id="page-top">
+
+<!-- Navigation-->
+<nav class="navbar navbar-expand-lg navbar-light fixed-top py-3" id="mainNav">
+    <div class="container px-4 px-lg-5">
+        <a class="navbar-brand" href="#page-top">Board List</a>
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ms-auto my-2 my-lg-0">
+                <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+                <li class="nav-item"><a class="nav-link" href="/home.html">home</a></li>
+                <li class="nav-item"><a class="nav-link" href="/myPage.html">my page</a></li>
+                <li class="nav-item"><a class="nav-link" onclick="logoutButton()">logout</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<!-- Masthead-->
+<header class="masthead" id="about">
+    <div class="container px-4 px-lg-5 h-100">
+        <div class="row gx-4 gx-lg-5 h-100 align-items-center justify-content-center text-center">
+            <div class="col-lg-8 align-self-center">
+                <h1 class="text-white font-weight-bold">게시판</h1>
+                <hr class="divider" />
+                <div align="center">
+                    <input type="text" id="boardSearchTxt" class="form-control" placeholder="키워드를 입력하세요" style="width:40%;display:inline; ">
+                    <input type="button" id="boardSearchBtn" value="검색" class="btn btn-primary btn-xl" style="width:10px;height:10px;text-align:center">
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<section>
+    <div align="right"></hr>
+        <input type="button" id="boardWriterBtn" value="글쓰기" onclick="location.href='/boardList.html'" class="btn btn-light btn-xl"  style="background-color:#FAE0D4;width:15px;height:10px;text-align:center">
+        </hr>
+    </div></hr>
+    <div align="center">
+        <div id="boardListGrid" class="ag-theme-balham" style="height:70vh; width:auto; text-align: center;"></div>
+    </div>
+</section>
+<!-- Footer-->
+<footer class="bg-light py-5">
+    <div class="container px-4 px-lg-5"><div class="small text-center text-muted">Copyright &copy; 2022 - isjiji</div></div>
+</footer>
+
+<!-- Bootstrap core JS-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- SimpleLightbox plugin JS-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/SimpleLightbox/2.1.0/simpleLightbox.min.js"></script>
+<!-- Core theme JS-->
+<script src="js/scripts.js"></script>
+<script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
+
+<script>
+    const boardListGrid = document.querySelector("#boardListGrid");
+    const boardSearchTxt =  document.querySelector("#boardSearchTxt");
+    const boardSearchBtn =  document.querySelector("#boardSearchBtn");
+
+    const boardListColumn = [
+        {headerName: "제목", field: "boardTitle", width :"200", align: "center", resizable: false, editable: false },
+        {headerName: "작성자", field: "boardWriter", width :"50", align: "center", resizable: false, editable: false },
+        {headerName: '작성일', field: "boardDate", width :"50", align: "center", resizable: false, editable: false },
+        {headerName: '주제', field: 'boardTopicClassification', width :"50", align: "center", resizable: false, editable: false },
+        {headerName: '조회', field: 'clickAmount', width :"50", align: "center", resizable: false, editable: false },
+    ];
+    let boardListRowData = [];
+    const boardListGridOptions = {
+        defaultColDef: {
+            flex: 1,
+            minWidth: 100,
+            resizable: true,
+        },
+        columnDefs: boardListColumn,
+        rowSelection: 'multiple',
+        rowData: boardListRowData,
+        getRowNodeId: function(data) {
+            return data.itemCode;
+        },
+        defaultColDef: {editable: false, resizable : true},
+        overlayNoRowsTemplate: "등록된 게시글이 없습니다.",
+        onGridReady: function(event) {// onload 이벤트와 유사 ready 이후 필요한 이벤트 삽입한다.
+            event.api.sizeColumnsToFit();
+        },
+        onRowSelected: function(event) { // checkbox
+            console.log(event);
+        },
+        onGridSizeChanged: function(event) {
+            event.api.sizeColumnsToFit();
+        },
+        getRowStyle: function(param) {
+            return {'text-align': 'center'};
+        },
+    }
+    const showBoardListGrid = () => {
+	    let xhr = new XMLHttpRequest();
+	    xhr.open('POST', 'stuhel/board/boardListRetrieve'
+	        ,true)
+	    xhr.setRequestHeader('Accept', 'application/json');
+	    xhr.send();
+	    xhr.onreadystatechange = () => {
+	        if (xhr.readyState == 4 && xhr.status == 200) {
+	            let txt = xhr.responseText;
+	            //txt = JSON.parse(txt);
+	            console.log(txt);
+	            boardListGridOptions.api.setRowData(txt.gridRowJson);
+	        }
+	    }
+	}
+
+    document.addEventListener('DOMContentLoaded', () => {
+        showBoardListGrid();
+        new agGrid.Grid(boardListGrid, boardListGridOptions);
+    });
+
+
+    function boardSearchClick(){
+	    let xhr = new XMLHttpRequest();
+	    xhr.open('POST', 'stuhel/board/boardKeywordSearch?keyword='+boardSearchTxt.value
+	        ,true)
+	    xhr.setRequestHeader('Accept', 'application/json');
+	    xhr.send();
+	    xhr.onreadystatechange = () => {
+	        if (xhr.readyState == 4 && xhr.status == 200) {
+	            let txt = xhr.responseText;
+	            //txt = JSON.parse(txt);
+	            console.log(txt);
+	            boardListGridOptions.api.setRowData(txt.gridRowJson);
+	        }
+	    }
+    }
+
+
+    /*로그아웃*/
+    function logoutButton(){
+        let xhr = new XMLHttpRequest();
+        xhr.open('Post', "/member/logout"
+            ,true);
+        xhr.setRequestHeader('Accept', 'application/json');
+        xhr.send();
+        xhr.onreadystatechange = () => {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                // 데이터 확인
+                let txt = xhr.responseText;
+                console.log("로그아웃되었습니다.");
+                location.href="/index.html";
+            }
+        }
+    }
+</script>
 </body>
 </html>
