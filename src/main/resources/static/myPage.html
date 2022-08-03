@@ -280,23 +280,23 @@
 
     <!--세션체크-->
     let sessionStatus = null;
-        (function(){
-            let xhr = new XMLHttpRequest();
-            xhr.open('Get', "/member/sessionCheck"
-                    ,true);
-            xhr.setRequestHeader('Accept', 'application/json');
-            xhr.send();
-            xhr.onreadystatechange = () => {
-                if (xhr.readyState == 4 && xhr.status == 200) {
-                    // 데이터 확인
-                    sessionStatus = xhr.responseText;
-                    if(sessionStatus==-1){
-                        location.href="/index.html";
-                    }else if(sessionStatus==0){
-                        retrieve();
-                    }
+    (function(){
+        let xhr = new XMLHttpRequest();
+        xhr.open('Get', "/member/sessionCheck"
+                 ,true);
+        xhr.setRequestHeader('Accept', 'application/json');
+        xhr.send();
+        xhr.onreadystatechange = () => {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                // 데이터 확인
+                sessionStatus = xhr.responseText;
+                if(sessionStatus==-1){
+                    location.href="/index.html";
+                }else if(sessionStatus==0){
+                    retrieve();
                 }
             }
+        }
     })();
 
     <!--초기회원정보화면-->
@@ -761,7 +761,7 @@
                 // 데이터 확인
                 let txt = xhr.responseText;
                 console.log("로그아웃되었습니다.");
-                location.href="/index.html";
+                location.replace("/index.html");
             }
         }
     }

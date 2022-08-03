@@ -2,8 +2,13 @@ package com.helper.study.stuhel.board.controller;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.helper.study.stuhel.board.servie.BoardService;
+import com.helper.study.stuhel.board.servie.BoardServiceImpl;
+import com.helper.study.stuhel.board.to.BoardTO;
 import com.helper.study.stuhel.book.service.BookServiceImpl;
 import com.helper.study.stuhel.book.to.BookTO;
+import com.helper.study.stuhel.exception.IdNotFoundException;
+import com.helper.study.stuhel.exception.PwMissMatchException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -19,12 +24,12 @@ import java.util.HashMap;
 public class BoardController {
     private static Gson gson = new GsonBuilder().serializeNulls().create(); // 속성값이 null 인 속성도 json 변환
 
-    /*private final BookServiceImpl bookService;
+    private final BoardServiceImpl boardService;
 
     @Autowired
-    public StudyRoomController(BookServiceImpl bookService) {
-        this.bookService = bookService;
-    }*/
+    public BoardController(BoardServiceImpl boardService) {
+        this.boardService = boardService;
+    }
 
     @PostMapping("/boardListRetrieve")
     HashMap<String, ArrayList> boardListRetrieve(HttpServletRequest request){
@@ -34,20 +39,31 @@ public class BoardController {
     }
 
     @PostMapping("/boardKeywordSearch")
-    HashMap<String,ArrayList> boardKeywordSearch(HttpServletRequest request,@RequestParam("keyword")String fullKeyword){
-
-        //요거는 서비스단에서 하자..! 앞단에서 받은것을 문자열로 서비스단에 넘겨준 다음, 서비스단에서 가공하여서 디비조사.
-        String[] keywordList = fullKeyword.split(" ");
-        for(String keyword:keywordList){
-            String k= "%"+keyword+"%";
-        }
-
-        return null;
+    HashMap<String,ArrayList> boardKeywordSearch(HttpServletRequest request,@RequestParam("fullKeyword")String fullKeyword){
+        boardService.boardKeywordSearch(fullKeyword);
+        return null; //리다이렉트 게시글 조회
     }
 
-    @PostMapping("/writeSave")
-    HashMap<String,String> writeSave(HttpServletRequest request,@RequestParam("title")String title, @RequestParam("wContents")String contents){
+    @GetMapping("/writeSave")
+    HashMap<String,Integer> writeSave(HttpServletRequest request
+                    ,@RequestParam("title")String title, @RequestParam("note")String note, @RequestParam("topicNm")String topicNm){
 
-        return null;
+        HashMap<String, Integer> map = new HashMap<>();
+        BoardTO boardTO=new BoardTO();
+        boardTO.setTitle(title); boardTO.setNote(note); boardTO.setTopicNm(topicNm); boardTO.setWriter((String)request.getSession().getAttribute("memberId"));
+        map.put("errorCode", 0);
+        try {
+            boardService.writeSave(boardTO);
+        }catch (Exception e) {
+            e.printStackTrace();
+            map.put("errorCode", -1);
+        }
+        return map;
+    }
+
+    @PostMapping("/topicRetrieve")
+    String topicRetrieve(){
+        ArrayList<BoardTO> topicList=boardService.topicRetrieve();
+        return gson.toJson(topicList);
     }
 }

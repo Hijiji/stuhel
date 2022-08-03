@@ -21,6 +21,20 @@
     <!--sweet alert-->
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <style>
+    #selectTopic {
+        width:200px;
+        padding:5px;
+        border:1px solid #999;
+        background:url('https://i.ibb.co/98Vbb8L/gnb-bg.gif') no-repeat 95% 50%;
+        border-radius:3px;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance : none;
+        outline: none;
+    }
+    #selectTopic::-ms-expand {
+        display: none;
+    }
 
     </style>
 </head>
@@ -39,17 +53,19 @@
         </div>
     </div>
 </nav>
-<section style="padding-top: 10rem; padding-bottom: 10rem;resize: none;">
+<section style="padding-top:10rem; padding-bottom: 10rem;resize: none;">
     <div align="center">
-        <div>
-            <textarea required id="title" placeholder="제목을 입력하세요" onkeypress="enterkeyEvent()" style="outline: none;height:60px; width:60%; resize: none; font-size:2rem;border: none;"></textarea>
+        <div align="right" style="padding-right:150px;">
+            <select id="topicSelect">
+                <option id="0">카테고리</option>
+            </select>
         </div>
-        <div align="right">
-            <span id="dateBox" style="padding-right : 15rem;"></span>
-        </div>
-        <hr style="width:60%">
         <div>
-            <textarea required id="wContents" onkeydown="resize(this)"style="outline: none;height:700px; resize: none; width:60%;border: none;font-size:1rem;"></textarea>
+            <textarea required id="title" placeholder="제목을 입력하세요" onkeypress="enterkeyEvent()" style="outline: none;height:60px; width:900px; resize: none; font-size:2rem;border: none;"></textarea>
+        </div>
+        <hr style="width:900px">
+        <div>
+            <textarea required id="note" onkeydown="resize(this)"style="outline: none;height:700px; resize: none; width:900px;border: none;font-size:1rem;"></textarea>
         </div>
     </div>
 </section>
@@ -58,7 +74,7 @@
     <div class="container px-4 px-lg-5">
         <div class="collapse navbar-collapse" id="buttomResponsive">
             <div class="navbar-nav ms-auto my-2 my-lg-0">
-                <input type="button" id="writeSaveBtn" value="저장" onclick="writeSaveFunc()" class="btn btn-light btn-xl" style="height:12px;color:white;background-color:gray">
+                <input type="button" id="writeSaveBtn" value="저장" onclick="writeSaveFunc()" class="btn btn-light btn-xl" style="font-size:15px;padding:11px 22px;color:white;background-color:gray">
             </div>
         </div>
     </div>
@@ -74,12 +90,32 @@
 
 <script>
     const dateDiv = document.querySelector("#dateBox");
-    const wContents = document.querySelector("#wContents");
+    const note = document.querySelector("#note");
     const title = document.querySelector("#title");
+    const selectTag = document.querySelector("#topicSelect");
 
-    let date = new Date();
-    dateBox.innerHTML = date.getFullYear()+"년 "+(date.getMonth()+1)+"월 "+date.getDate()+"일"
+    (function(){
+        let xhr = new XMLHttpRequest();
+        xhr.open('Post', "/stuhel/board/topicRetrieve?"
+                 ,true);
+        xhr.setRequestHeader('Accept', 'application/json');
+        xhr.send();
+        xhr.onreadystatechange = () => {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                // 데이터 확인
+                let topicList = xhr.responseText;
+                topicList = JSON.parse(topicList);
+                console.log(topicList);
 
+                for(let i=0; i<topicList.length; i++){
+                    let optionTag = document.createElement("option");
+                    optionTag.innerHTML=topicList[i].topicNm;
+                    optionTag.id=topicList[i].topicCd;
+                    selectTag.appendChild(optionTag);
+                }
+            }
+        }
+    })();
     function resize(obj) {
         obj.style.height = "700px";
         if(event.keyCode == 13){
@@ -88,7 +124,6 @@
             }
         }
     }
-
     function enterkeyEvent(){
         if(event.keyCode == 13){
             event.returnValue=false;
@@ -96,21 +131,35 @@
     }
 
     function writeSaveFunc(){
+        if(title.value.trim()==null || title.value.trim()==""){
+            alert("글의 제목을 입력해주세요.");
+            return;
+        }else if(title.value.trim()==null || title.value.trim()==""){
+            alert("글의 내용을 입력해주세요.");
+            return;
+        }
         let xhr = new XMLHttpRequest();
-	    xhr.open('POST', 'stuhel/board/writeSave?title='+title.value+";wContents"+wContents.value
+	    xhr.open('Get', 'stuhel/board/writeSave?title='+title.value+'&note='+note.value+'&topicNm='+selectTag.value
 	        ,true)
 	    xhr.setRequestHeader('Accept', 'application/json');
 	    xhr.send();
 	    xhr.onreadystatechange = () => {
 	        if (xhr.readyState == 4 && xhr.status == 200) {
-	            let txt = xhr.responseText;
-	            //txt = JSON.parse(txt);
-	            console.log(txt);
-	            boardListGridOptions.api.setRowData(txt.gridRowJson);
+	            let errorResult = xhr.responseText;
+	            errorResult=JSON.parse(errorResult);
+	            console.log(errorResult);
+	            if(errorResult.errorCode==0){
+	                alert("성공적으로 저장되었습니다.");
+                    location.reload();
+                    location.href="/board/boardList.html";
+	            }else{
+	                alert("서버오류로 저장에 실패하였습니다.");
+	                return;
+	            }
 	        }
 	    }
     }
-    }
+
 </script>
 </body>
 </html>

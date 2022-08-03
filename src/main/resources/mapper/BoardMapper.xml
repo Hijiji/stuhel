@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.helper.study.stuhel.board.mapper.BoardDAO">
+
+    <resultMap id="Board" type="com.helper.study.stuhel.board.to.BoardTO">
+        <result column="TITLE" property="title"/>
+        <result column="NOTE" property="note"/>
+        <result column="NOTE_SEQ" property="noteSeq"/>
+        <result column="WRITE_DATE" property="writeDate"/>
+        <result column="TOPIC_CD" property="topicCd"/>
+        <result column="TOPIC_NM" property="topicNm"/>
+        <result column="CLICK_AMOUNT" property="clickAmount"/>
+        <result column="WRITER" property="writer"/>
+    </resultMap>
+
+    <select id="selectTopic" resultMap="Board">
+        SELECT TOPIC_NM, TOPIC_CD
+        FROM BOARD_TOPIC
+    </select>
+    <insert id="insertNote" parameterType="com.helper.study.stuhel.board.to.BoardTO">
+        INSERT INTO BOARD
+        (
+            title
+            ,note
+            ,writer
+            ,note_SEQ
+            ,write_DATE
+            ,topic_cd
+        )VALUES
+        (
+            #{title}
+            ,#{note}
+            ,#{writer}
+            ,board_seq.nextval
+            ,sysdate
+            ,#{topicNm}
+        )
+    </insert>
+</mapper>

@@ -54,7 +54,7 @@
                 <hr class="divider" />
                 <div align="center">
                     <input type="text" id="boardSearchTxt" class="form-control" placeholder="키워드를 입력하세요" style="width:40%;display:inline; ">
-                    <input type="button" id="boardSearchBtn" value="검색" class="btn btn-primary btn-xl" style="width:10px;height:10px;text-align:center">
+                    <input type="button" id="boardSearchBtn" value="검색" onclick="boardKeywordSearch()" class="btn btn-primary btn-xl" style="font-size:15px;padding:11px 22px;text-align:center">
                 </div>
             </div>
         </div>
@@ -63,7 +63,7 @@
 
 <section>
     <div align="right"></hr>
-        <input type="button" id="boardWriterBtn" value="글쓰기" onclick="location.href='/boardList.html'" class="btn btn-light btn-xl"  style="background-color:#FAE0D4;width:15px;height:10px;text-align:center">
+        <input type="button" id="boardWriterBtn" value="글쓰기" onclick="location.href='/boardWrite.html'" class="btn btn-light btn-xl"  style="font-size:15px;padding:11px 22px;background-color:#FAE0D4;text-align:center">
         </hr>
     </div></hr>
     <div align="center">
@@ -89,10 +89,10 @@
     const boardSearchBtn =  document.querySelector("#boardSearchBtn");
 
     const boardListColumn = [
-        {headerName: "제목", field: "boardTitle", width :"200", align: "center", resizable: false, editable: false },
-        {headerName: "작성자", field: "boardWriter", width :"50", align: "center", resizable: false, editable: false },
-        {headerName: '작성일', field: "boardDate", width :"50", align: "center", resizable: false, editable: false },
-        {headerName: '주제', field: 'boardTopicClassification', width :"50", align: "center", resizable: false, editable: false },
+        {headerName: "제목", field: "title", width :"200", align: "center", resizable: false, editable: false },
+        {headerName: "작성자", field: "writer", width :"50", align: "center", resizable: false, editable: false },
+        {headerName: '작성일', field: "date", width :"50", align: "center", resizable: false, editable: false },
+        {headerName: '주제', field: 'topicNm', width :"50", align: "center", resizable: false, editable: false },
         {headerName: '조회', field: 'clickAmount', width :"50", align: "center", resizable: false, editable: false },
     ];
     let boardListRowData = [];
@@ -125,7 +125,7 @@
     }
     const showBoardListGrid = () => {
 	    let xhr = new XMLHttpRequest();
-	    xhr.open('POST', 'stuhel/board/boardListRetrieve'
+	    xhr.open('Post', 'stuhel/board/boardListRetrieve'
 	        ,true)
 	    xhr.setRequestHeader('Accept', 'application/json');
 	    xhr.send();
@@ -161,6 +161,19 @@
 	    }
     }
 
+    function boardKeywordSearch(){
+        let xhr = new XMLHttpRequest();
+        xhr.open('Post', "/board/boardKeywordSearch?fullKeyword="+boardSearchTxt.value
+            ,true);
+        xhr.setRequestHeader('Accept', 'application/json');
+        xhr.send();
+        xhr.onreadystatechange = () => {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                let txt = xhr.responseText;
+            }
+        }
+
+    }
 
     /*로그아웃*/
     function logoutButton(){

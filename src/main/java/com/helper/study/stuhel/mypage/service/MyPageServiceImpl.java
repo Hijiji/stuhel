@@ -48,11 +48,9 @@ public class MyPageServiceImpl implements MyPageService{
 
     @Override
     public ArrayList<BookTO> bookStatusRetrieve(BookTO bookTO) {
-        System.out.println("----------------------------------MyPageServiceImpl.bookStatusRetrieve--------------------------");
         System.out.println("book.getBookingDate() = " + bookTO.getBookingDate());
         System.out.println("book.getUserId() = " + bookTO.getUserId());
-        ArrayList<BookTO> a=myPageDAO.bookStatusRetrieve(bookTO);
-        System.out.println("222222222222222222222222MyPageServiceImpl.bookStatusRetrieve2222222222222222222222222222222222222");
+        ArrayList<BookTO> a= myPageDAO.bookStatusRetrieve(bookTO);
         for(BookTO b:a) {
             System.out.println("b.getBookingDate() = " + b.getBookingDate());
             System.out.println("b.getBookingTime() = " + b.getBookingTime());
@@ -64,7 +62,7 @@ public class MyPageServiceImpl implements MyPageService{
     public HashMap<String,String> bookCancel(ArrayList<BookTO> bookTOList){
         HashMap<String, String> map = new HashMap<>();
         try{
-            System.out.println("------------------------------------MyPageServiceImpl.bookCancel-------------------------------------");
+
             for(BookTO bookTO:bookTOList) {
                 myPageDAO.bookCancel(bookTO);
             }
@@ -72,7 +70,6 @@ public class MyPageServiceImpl implements MyPageService{
             System.out.println("map.get(\"errorCode\") = " + map.get("errorCode"));
         }catch (Exception e) {
             map.put("errorCode", "N");
-            System.out.println("map.get(\"errorCode\") = " + map.get("errorCode"));
             e.printStackTrace();
         }
         return map;
