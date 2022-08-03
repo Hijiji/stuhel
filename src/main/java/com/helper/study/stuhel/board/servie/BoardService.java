@@ -7,5 +7,5 @@ import java.util.ArrayList;
 public interface BoardService {
     ArrayList<BoardTO> topicRetrieve();
     void writeSave(BoardTO boardTO);
-    void boardKeywordSearch(String fullKeyword);
+    ArrayList<BoardTO> boardKeywordSearch(String fullKeyword);
 }

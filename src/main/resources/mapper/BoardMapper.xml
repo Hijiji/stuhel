@@ -17,6 +17,22 @@
         SELECT TOPIC_NM, TOPIC_CD
         FROM BOARD_TOPIC
     </select>
+    <select id="selectKeyword" parameterType="map" resultMap="Board">
+        SELECT *
+        FROM BOARD
+        WHERE TITLE LIKE
+            <foreach collection="keywordList" item="keyword" separator=" OR TITLE LIKE ">
+                '%'||#{keyword}||'%'
+            </foreach>
+        OR NOTE LIKE
+            <foreach collection="keywordList" item="keyword" separator=" OR NOTE LIKE ">
+                '%'||#{keyword}||'%'
+            </foreach>
+        OR WRITER LIKE
+            <foreach collection="keywordList" item="keyword" separator=" OR WRITER LIKE ">
+                '%'||#{keyword}||'%'
+            </foreach>
+    </select>
     <insert id="insertNote" parameterType="com.helper.study.stuhel.board.to.BoardTO">
         INSERT INTO BOARD
         (

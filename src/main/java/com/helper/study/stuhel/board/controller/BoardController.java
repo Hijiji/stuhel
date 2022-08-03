@@ -40,8 +40,10 @@ public class BoardController {
 
     @PostMapping("/boardKeywordSearch")
     HashMap<String,ArrayList> boardKeywordSearch(HttpServletRequest request,@RequestParam("fullKeyword")String fullKeyword){
-        boardService.boardKeywordSearch(fullKeyword);
-        return null; //리다이렉트 게시글 조회
+        HashMap<String, ArrayList> map = new HashMap<>();
+        ArrayList<BoardTO> board = boardService.boardKeywordSearch(fullKeyword);
+        map.put("writeList", board);
+        return map; //리다이렉트 게시글 조회
     }
 
     @GetMapping("/writeSave")

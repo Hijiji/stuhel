@@ -147,7 +147,7 @@
 
     function boardSearchClick(){
 	    let xhr = new XMLHttpRequest();
-	    xhr.open('POST', 'stuhel/board/boardKeywordSearch?keyword='+boardSearchTxt.value
+	    xhr.open('Post', 'stuhel/board/boardKeywordSearch?keyword='+boardSearchTxt.value
 	        ,true)
 	    xhr.setRequestHeader('Accept', 'application/json');
 	    xhr.send();
@@ -163,13 +163,15 @@
 
     function boardKeywordSearch(){
         let xhr = new XMLHttpRequest();
-        xhr.open('Post', "/board/boardKeywordSearch?fullKeyword="+boardSearchTxt.value
+        xhr.open('Post', "/stuhel/board/boardKeywordSearch?fullKeyword="+boardSearchTxt.value
             ,true);
         xhr.setRequestHeader('Accept', 'application/json');
         xhr.send();
         xhr.onreadystatechange = () => {
             if (xhr.readyState == 4 && xhr.status == 200) {
                 let txt = xhr.responseText;
+                txt = JSON.parse(txt);
+                console.log(txt);
             }
         }
 
