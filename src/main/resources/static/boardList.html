@@ -62,14 +62,18 @@
 </header>
 
 <section>
-    <div align="right"></hr>
-        <input type="button" id="boardWriterBtn" value="글쓰기" onclick="location.href='/boardWrite.html'" class="btn btn-light btn-xl"  style="font-size:15px;padding:11px 22px;background-color:#FAE0D4;text-align:center">
-        </hr>
-    </div></hr>
-    <div align="center">
-        <div id="boardListGrid" class="ag-theme-balham" style="height:70vh; width:auto; text-align: center;"></div>
+    <div style="display: flex; justify-content: center;">
+    <div style="width:1200px;position:relative" >
+        <div align="right">
+            <input type="button" id="boardWriterBtn" value="글쓰기" onclick="location.href='/boardWrite.html'" class="btn btn-light btn-xl"  style="margin:7px;font-size:15px;padding:11px 22px;text-align:center">
+        </div>
+        <div align="center">
+            <div id="boardListGrid" class="ag-theme-balham" style="height:70vh; width:auto; text-align: center;"></div>
+        </div>
+    </div>
     </div>
 </section>
+
 <!-- Footer-->
 <footer class="bg-light py-5">
     <div class="container px-4 px-lg-5"><div class="small text-center text-muted">Copyright &copy; 2022 - isjiji</div></div>
@@ -84,82 +88,84 @@
 <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
 
 <script>
+    <!--세션체크-->
+    let sessionStatus = null;
+    (function(){
+        let xhr = new XMLHttpRequest();
+        xhr.open('Get', "/session/sessionCheck"
+                 ,true);
+        xhr.setRequestHeader('Accept', 'application/json');
+        xhr.send();
+        xhr.onreadystatechange = () => {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                // 데이터 확인
+                sessionStatus = xhr.responseText;
+                if(sessionStatus==-1){
+                    location.href="/index.html";
+                }else if(sessionStatus==0){
+                    retrieveBoardList();
+                    new agGrid.Grid(boardListGrid, boardListGridOptions);
+                }
+            }
+        }
+    })();
+
     const boardListGrid = document.querySelector("#boardListGrid");
     const boardSearchTxt =  document.querySelector("#boardSearchTxt");
     const boardSearchBtn =  document.querySelector("#boardSearchBtn");
+    let userSelectedRowData;
 
     const boardListColumn = [
-        {headerName: "제목", field: "title", width :"200", align: "center", resizable: false, editable: false },
-        {headerName: "작성자", field: "writer", width :"50", align: "center", resizable: false, editable: false },
-        {headerName: '작성일', field: "date", width :"50", align: "center", resizable: false, editable: false },
-        {headerName: '주제', field: 'topicNm', width :"50", align: "center", resizable: false, editable: false },
-        {headerName: '조회', field: 'clickAmount', width :"50", align: "center", resizable: false, editable: false },
+        {headerName: "seq", field: "noteSeq", hide:true, sort:"asc", width :20},
+        {headerName: "제목", field: "title", width :200},
+        {headerName: "작성자", field: "writer", width :50},
+        {headerName: '작성일', field: "writeDate", width :50},
+        {headerName: '주제', field: 'topicNm', width :50},
+        {headerName: '조회', field: 'clickAmount', width :50},
     ];
     let boardListRowData = [];
     const boardListGridOptions = {
         defaultColDef: {
             flex: 1,
-            minWidth: 100,
-            resizable: true,
+            editable: false,
+            resizable : false,
+            minWidth: 50,
         },
         columnDefs: boardListColumn,
-        rowSelection: 'multiple',
+        rowSelection: 'single',
         rowData: boardListRowData,
-        getRowNodeId: function(data) {
-            return data.itemCode;
-        },
-        defaultColDef: {editable: false, resizable : true},
         overlayNoRowsTemplate: "등록된 게시글이 없습니다.",
+        onRowSelected: function(selectedRow) {
+        },
+        onRowClicked : function(selectedRow){
+            console.log("클릭이벤트");
+            console.log(selectedRow);
+            userSelectedRowData = selectedRow.data;
+            boardReadOpen();
+        },
         onGridReady: function(event) {// onload 이벤트와 유사 ready 이후 필요한 이벤트 삽입한다.
-            event.api.sizeColumnsToFit();
-        },
-        onRowSelected: function(event) { // checkbox
-            console.log(event);
-        },
-        onGridSizeChanged: function(event) {
             event.api.sizeColumnsToFit();
         },
         getRowStyle: function(param) {
             return {'text-align': 'center'};
         },
     }
-    const showBoardListGrid = () => {
+
+    function retrieveBoardList(){
 	    let xhr = new XMLHttpRequest();
-	    xhr.open('Post', 'stuhel/board/boardListRetrieve'
+	    xhr.open('Post', 'stuhel/board/retrieveBoardList'
 	        ,true)
 	    xhr.setRequestHeader('Accept', 'application/json');
 	    xhr.send();
 	    xhr.onreadystatechange = () => {
 	        if (xhr.readyState == 4 && xhr.status == 200) {
 	            let txt = xhr.responseText;
-	            //txt = JSON.parse(txt);
+	            txt = JSON.parse(txt);
 	            console.log(txt);
-	            boardListGridOptions.api.setRowData(txt.gridRowJson);
+	            boardListGridOptions.api.setRowData(txt);
 	        }
 	    }
 	}
-
-    document.addEventListener('DOMContentLoaded', () => {
-        showBoardListGrid();
-        new agGrid.Grid(boardListGrid, boardListGridOptions);
-    });
-
-
-    function boardSearchClick(){
-	    let xhr = new XMLHttpRequest();
-	    xhr.open('Post', 'stuhel/board/boardKeywordSearch?keyword='+boardSearchTxt.value
-	        ,true)
-	    xhr.setRequestHeader('Accept', 'application/json');
-	    xhr.send();
-	    xhr.onreadystatechange = () => {
-	        if (xhr.readyState == 4 && xhr.status == 200) {
-	            let txt = xhr.responseText;
-	            //txt = JSON.parse(txt);
-	            console.log(txt);
-	            boardListGridOptions.api.setRowData(txt.gridRowJson);
-	        }
-	    }
-    }
 
     function boardKeywordSearch(){
         let xhr = new XMLHttpRequest();
@@ -174,24 +180,34 @@
                 console.log(txt);
             }
         }
-
     }
 
-    /*로그아웃*/
-    function logoutButton(){
+    function boardReadOpen(){
+        if(userSelectedRowData==null||userSelectedRowData==""){
+            return;
+        }
+        console.log(userSelectedRowData);
+        userSelectedRowData = JSON.stringify(userSelectedRowData);
         let xhr = new XMLHttpRequest();
-        xhr.open('Post', "/member/logout"
+        xhr.open('Post', "/stuhel/board/boardRead?boardData="+encodeURI(userSelectedRowData)
             ,true);
         xhr.setRequestHeader('Accept', 'application/json');
         xhr.send();
         xhr.onreadystatechange = () => {
             if (xhr.readyState == 4 && xhr.status == 200) {
-                // 데이터 확인
                 let txt = xhr.responseText;
-                console.log("로그아웃되었습니다.");
-                location.href="/index.html";
+                location.href="/boardRead.html?boardReadData="+encodeURI(txt);
             }
         }
+    }
+
+    /*로그아웃*/
+    function logoutButton(){
+        let xhr = new XMLHttpRequest();
+        xhr.open('Post', "/session/logout"
+            ,true);
+        xhr.setRequestHeader('Accept', 'application/json');
+        xhr.send();
     }
 </script>
 </body>

@@ -54,18 +54,20 @@
     </div>
 </nav>
 <section style="padding-top:10rem; padding-bottom: 10rem;resize: none;">
-    <div align="center">
-        <div align="right" style="padding-right:150px;">
-            <select id="topicSelect">
-                <option id="0">카테고리</option>
-            </select>
-        </div>
-        <div>
-            <textarea required id="title" placeholder="제목을 입력하세요" onkeypress="enterkeyEvent()" style="outline: none;height:60px; width:900px; resize: none; font-size:2rem;border: none;"></textarea>
-        </div>
-        <hr style="width:900px">
-        <div>
-            <textarea required id="note" onkeydown="resize(this)"style="outline: none;height:700px; resize: none; width:900px;border: none;font-size:1rem;"></textarea>
+    <div style="display: flex; justify-content: center;">
+        <div style="width:900px;position:relative" >
+            <div align="right" ><!--style="padding-right:150px;"-->
+                <select id="topicSelect" style="width:150px">
+                    <option id="0">카테고리</option>
+                </select>
+            </div>
+            <div align="center">
+                <textarea required id="title" placeholder="제목을 입력하세요" onkeypress="enterkeyEvent()" style="outline: none;height:60px; width:900px; resize: none; font-size:2rem;border: none;"></textarea>
+            </div>
+            <hr>
+            <div align="center">
+                <textarea required id="note" onkeydown="resize(this)"style="outline: none;height:700px; resize: none; width:900px;border: none;font-size:1rem;"></textarea>
+            </div>
         </div>
     </div>
 </section>
@@ -89,12 +91,34 @@
 <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
 
 <script>
+
+    <!--세션체크-->
+    let sessionStatus = null;
+    (function(){
+        let xhr = new XMLHttpRequest();
+        xhr.open('Get', "/session/sessionCheck"
+                 ,true);
+        xhr.setRequestHeader('Accept', 'application/json');
+        xhr.send();
+        xhr.onreadystatechange = () => {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                // 데이터 확인
+                sessionStatus = xhr.responseText;
+                if(sessionStatus==-1){
+                    location.href="/index.html";
+                }else if(sessionStatus==0){
+                    topicRetrieve();
+                }
+            }
+        }
+    })();
+
     const dateDiv = document.querySelector("#dateBox");
     const note = document.querySelector("#note");
     const title = document.querySelector("#title");
     const selectTag = document.querySelector("#topicSelect");
 
-    (function(){
+    function topicRetrieve(){
         let xhr = new XMLHttpRequest();
         xhr.open('Post', "/stuhel/board/topicRetrieve?"
                  ,true);
@@ -115,7 +139,8 @@
                 }
             }
         }
-    })();
+    }
+
     function resize(obj) {
         obj.style.height = "700px";
         if(event.keyCode == 13){

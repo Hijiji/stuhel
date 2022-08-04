@@ -8,4 +8,6 @@ public interface BoardService {
     ArrayList<BoardTO> topicRetrieve();
     void writeSave(BoardTO boardTO);
     ArrayList<BoardTO> boardKeywordSearch(String fullKeyword);
+    ArrayList<BoardTO> retrieveBoardList();
+    BoardTO boardRead(BoardTO boardTO);
 }

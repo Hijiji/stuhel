@@ -9,6 +9,6 @@ import java.util.HashMap;
 public interface MemberService {
 
     HashMap<String, Integer> idDoubleCheck(String identity);
-    HashMap<String, Integer> memberJoinData(MemberTO memberTO);
+    HashMap<String, Integer> memberJoin(MemberTO memberTO);
     MemberTO login(MemberTO memberTO)throws IdNotFoundException, PwMissMatchException;
 }

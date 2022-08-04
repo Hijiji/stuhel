@@ -54,11 +54,9 @@ public class MyPageController {
 
     @PostMapping("/changeInfo")
     HashMap<String, Integer> changeInfo(HttpServletRequest request, @RequestParam("changeInfo") String changeInfo){
-        System.out.println("MyPageController - changeInfo");
         HttpSession session = request.getSession();
         String sessionMemberId=(String)session.getAttribute("memberId");
         String sessionName=(String)session.getAttribute("memberName");
-        System.out.println("changeInfo = " + changeInfo);
         MemberTO memberTO = gson.fromJson(changeInfo, MemberTO.class);
 
         HashMap<String, Integer> map = new HashMap<>();
@@ -72,11 +70,9 @@ public class MyPageController {
         if(memberTO.getPassword().isEmpty()||memberTO.getPassword()==null){
             memberTO.setPassword((String)session.getAttribute("password"));
         }
-        System.out.println("memberTO.getBirthday() = " + memberTO.getBirth());
         if(memberTO.getBirth()==0){
             memberTO.setBirth((int)session.getAttribute("birthday"));
         }
-        System.out.println("memberTO.getBirthday() = " + memberTO.getBirth());
 
         map=myPageService.changeInfo(memberTO,session);
 

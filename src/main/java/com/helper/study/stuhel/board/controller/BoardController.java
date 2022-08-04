@@ -2,13 +2,8 @@ package com.helper.study.stuhel.board.controller;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.helper.study.stuhel.board.servie.BoardService;
 import com.helper.study.stuhel.board.servie.BoardServiceImpl;
 import com.helper.study.stuhel.board.to.BoardTO;
-import com.helper.study.stuhel.book.service.BookServiceImpl;
-import com.helper.study.stuhel.book.to.BookTO;
-import com.helper.study.stuhel.exception.IdNotFoundException;
-import com.helper.study.stuhel.exception.PwMissMatchException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -31,11 +26,12 @@ public class BoardController {
         this.boardService = boardService;
     }
 
-    @PostMapping("/boardListRetrieve")
-    HashMap<String, ArrayList> boardListRetrieve(HttpServletRequest request){
+    @PostMapping("/retrieveBoardList")
+    ArrayList<BoardTO> retrieveBoardList(HttpServletRequest request){
         HttpSession session = request.getSession();
         String sessionId = (String)session.getAttribute("memberId");
-        return null;
+        ArrayList<BoardTO> board=boardService.retrieveBoardList();
+        return board;
     }
 
     @PostMapping("/boardKeywordSearch")
@@ -67,5 +63,12 @@ public class BoardController {
     String topicRetrieve(){
         ArrayList<BoardTO> topicList=boardService.topicRetrieve();
         return gson.toJson(topicList);
+    }
+
+    @PostMapping("/boardRead")
+    String boardRead(@RequestParam("boardData")String boardData){
+        BoardTO board = gson.fromJson(boardData, BoardTO.class);
+        gson.toJson(boardService.boardRead(board));
+        return gson.toJson(boardService.boardRead(board));
     }
 }

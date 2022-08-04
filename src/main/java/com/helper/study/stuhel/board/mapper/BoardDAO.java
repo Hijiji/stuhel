@@ -11,4 +11,6 @@ public interface BoardDAO {
     ArrayList<BoardTO> selectTopic();
     void insertNote(BoardTO boardTO);
     ArrayList<BoardTO> selectKeyword(HashMap<String, String[]> map);
+    ArrayList<BoardTO> selectBoardList();
+    BoardTO selectBoard(BoardTO boardTO);
 }

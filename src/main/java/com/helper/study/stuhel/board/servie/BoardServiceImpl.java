@@ -43,4 +43,16 @@ public class BoardServiceImpl implements BoardService{
         */
         return board;
     }
+
+    @Override
+    public ArrayList<BoardTO> retrieveBoardList() {
+        ArrayList<BoardTO>board=boardDAO.selectBoardList();
+        return board;
+    }
+
+    @Override
+    public BoardTO boardRead(BoardTO boardTO) {
+        BoardTO board=boardDAO.selectBoard(boardTO);
+        return board;
+    }
 }

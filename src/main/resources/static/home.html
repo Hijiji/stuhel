@@ -123,7 +123,7 @@
                 </div>
             </div>
             <div class="col-lg-3 col-md-6 text-center">
-                <div class="mt-5" onclick="location.href=/stuhel/myPage.html">
+                <div class="mt-5" onclick="location.href=/myPage.html">
                     <a href="/stuhel/myPage.html" style="text-decoration-line:none">
                         <div class="mb-2"><i class="bi-heart fs-1 text-primary"></i></div>
                         <h3 class="h4 mb-2" >My page</h3>
@@ -369,18 +369,11 @@
     /*로그아웃*/
     function logoutButton(){
         let xhr = new XMLHttpRequest();
-        xhr.open('Post', "/member/logout"
+        xhr.open('Post', "/session/logout"
             ,true);
         xhr.setRequestHeader('Accept', 'application/json');
         xhr.send();
-        xhr.onreadystatechange = () => {
-            if (xhr.readyState == 4 && xhr.status == 200) {
-                // 데이터 확인
-                let txt = xhr.responseText;
-                console.log("로그아웃되었습니다.");
-                location.href="/index.html";
-            }
-        }
+
     }
 
     <!--사용가능한 세미나실 -->

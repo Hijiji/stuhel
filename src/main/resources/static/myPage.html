@@ -282,7 +282,7 @@
     let sessionStatus = null;
     (function(){
         let xhr = new XMLHttpRequest();
-        xhr.open('Get', "/member/sessionCheck"
+        xhr.open('Get', "/session/sessionCheck"
                  ,true);
         xhr.setRequestHeader('Accept', 'application/json');
         xhr.send();
@@ -752,18 +752,10 @@
     /*로그아웃*/
     function logoutButton(){
         let xhr = new XMLHttpRequest();
-        xhr.open('Post', "/member/logout"
+        xhr.open('Post', "/session/logout"
             ,true);
         xhr.setRequestHeader('Accept', 'application/json');
         xhr.send();
-        xhr.onreadystatechange = () => {
-            if (xhr.readyState == 4 && xhr.status == 200) {
-                // 데이터 확인
-                let txt = xhr.responseText;
-                console.log("로그아웃되었습니다.");
-                location.replace("/index.html");
-            }
-        }
     }
 </script>
 </body>

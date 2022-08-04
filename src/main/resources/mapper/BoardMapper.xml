@@ -17,6 +17,19 @@
         SELECT TOPIC_NM, TOPIC_CD
         FROM BOARD_TOPIC
     </select>
+
+    <select id="selectBoardList" resultMap="Board" parameterType="com.helper.study.stuhel.board.to.BoardTO">
+        SELECT
+            TITLE, NOTE_SEQ, WRITE_DATE, NOTE, TOPIC_NM, TOPIC_CD, CLICK_AMOUNT, WRITER
+        FROM BOARD
+    </select>
+    <select id="selectBoard" resultMap="Board" parameterType="map">
+        SELECT * FROM BOARD
+        WHERE NOTE_SEQ = #{noteSeq}
+        AND WRITER = #{writer}
+        AND TITLE = #{title}
+        AND TOPIC_CD = #{topicCd}
+    </select>
     <select id="selectKeyword" parameterType="map" resultMap="Board">
         SELECT *
         FROM BOARD
