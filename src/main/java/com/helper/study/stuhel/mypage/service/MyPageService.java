@@ -8,12 +8,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public interface MyPageService {
-    MemberTO retrieve(MemberTO memberTO);
+    MemberTO retrieveMemberInfo(MemberTO memberTO);
 
-    HashMap<String, Integer> changeInfo(MemberTO memberTO, HttpSession session);
+    HashMap<String, Integer> changeMemberInfo(MemberTO memberTO, HttpSession session);
 
-    ArrayList<BookTO> bookStatusRetrieve(BookTO bookTO);
+    ArrayList<BookTO> retrieveBookStatus(BookTO bookTO);
 
-    HashMap<String,String> bookCancel(ArrayList<BookTO> bookTOList);
+    HashMap<String,String> cancelBook(ArrayList<BookTO> bookTOList);
 
 }

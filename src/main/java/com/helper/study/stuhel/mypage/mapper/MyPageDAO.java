@@ -8,8 +8,8 @@ import java.util.ArrayList;
 
 @Mapper
 public interface MyPageDAO {
-    MemberTO retrieve(MemberTO memberTO);
-    void changeInfo(MemberTO memberTO);
-    ArrayList<BookTO> bookStatusRetrieve(BookTO bookTO);
-    void bookCancel(BookTO bookTO);
+    MemberTO selectMemberInfo(MemberTO memberTO);
+    void updateMemberInfo(MemberTO memberTO);
+    ArrayList<BookTO> selectBookStatus(BookTO bookTO);
+    void deleteBook(BookTO bookTO);
 }

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 @Mapper
 public interface BookDAO {
-   ArrayList<Integer> bookSearch(BookTO bookTO);
-   void roomBook(BookTO bookTO);
+   ArrayList<Integer> selectBookableRoom(BookTO bookTO);
+   void insertRoomBook(BookTO bookTO);
 
    }

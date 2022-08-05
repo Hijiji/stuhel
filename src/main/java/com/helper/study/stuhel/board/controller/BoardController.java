@@ -18,9 +18,7 @@ import java.util.HashMap;
 @ResponseBody
 public class BoardController {
     private static Gson gson = new GsonBuilder().serializeNulls().create(); // 속성값이 null 인 속성도 json 변환
-
     private final BoardServiceImpl boardService;
-
     @Autowired
     public BoardController(BoardServiceImpl boardService) {
         this.boardService = boardService;
@@ -34,16 +32,16 @@ public class BoardController {
         return board;
     }
 
-    @PostMapping("/boardKeywordSearch")
-    HashMap<String,ArrayList> boardKeywordSearch(HttpServletRequest request,@RequestParam("fullKeyword")String fullKeyword){
+    @PostMapping("/retrieveBoardKeyword")
+    HashMap<String,ArrayList> retrieveBoardKeyword(HttpServletRequest request,@RequestParam("fullKeyword")String fullKeyword){
         HashMap<String, ArrayList> map = new HashMap<>();
-        ArrayList<BoardTO> board = boardService.boardKeywordSearch(fullKeyword);
+        ArrayList<BoardTO> board = boardService.retrieveBoardKeyword(fullKeyword);
         map.put("writeList", board);
         return map; //리다이렉트 게시글 조회
     }
 
-    @GetMapping("/writeSave")
-    HashMap<String,Integer> writeSave(HttpServletRequest request
+    @GetMapping("/saveWrite")
+    HashMap<String,Integer> saveWrite(HttpServletRequest request
                     ,@RequestParam("title")String title, @RequestParam("note")String note, @RequestParam("topicNm")String topicNm){
 
         HashMap<String, Integer> map = new HashMap<>();
@@ -51,7 +49,7 @@ public class BoardController {
         boardTO.setTitle(title); boardTO.setNote(note); boardTO.setTopicNm(topicNm); boardTO.setWriter((String)request.getSession().getAttribute("memberId"));
         map.put("errorCode", 0);
         try {
-            boardService.writeSave(boardTO);
+            boardService.saveWrite(boardTO);
         }catch (Exception e) {
             e.printStackTrace();
             map.put("errorCode", -1);
@@ -59,16 +57,15 @@ public class BoardController {
         return map;
     }
 
-    @PostMapping("/topicRetrieve")
-    String topicRetrieve(){
-        ArrayList<BoardTO> topicList=boardService.topicRetrieve();
+    @PostMapping("/retrieveTopicList")
+    String retrieveTopicList(){
+        ArrayList<BoardTO> topicList=boardService.retrieveTopicList();
         return gson.toJson(topicList);
     }
 
-    @PostMapping("/boardRead")
-    String boardRead(@RequestParam("boardData")String boardData){
+    @PostMapping("/retrieveBoardRead")
+    String retrieveBoardRead(@RequestParam("boardData")String boardData){
         BoardTO board = gson.fromJson(boardData, BoardTO.class);
-        gson.toJson(boardService.boardRead(board));
-        return gson.toJson(boardService.boardRead(board));
+        return gson.toJson(boardService.retrieveBoardRead(board));
     }
 }

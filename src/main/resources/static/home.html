@@ -76,10 +76,10 @@
             <ul class="navbar-nav ms-auto my-2 my-lg-0">
                 <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
                 <li class="nav-item"><a class="nav-link" href="#services">Services</a></li>
-                <li class="nav-item"><a class="nav-link" href="/boardList.html">Board</a></li>
-                <li class="nav-item"><a class="nav-link" href="#booking">Booking</a></li>
+                <li class="nav-item"><a class="nav-link" href="#book">스터디룸예약</a></li>
+                <li class="nav-item"><a class="nav-link" href="/boardList.html">게시판</a></li>
                 <li class="nav-item"><a class="nav-link" href="/myPage.html">MyPage</a></li>
-                <li class="nav-item"><a class="nav-link" onclick="logoutButton()">logout</a></li>
+                <li class="nav-item"><a class="nav-link" onclick="logoutButton()">Logout</a></li>
             </ul>
         </div>
     </div>
@@ -104,9 +104,9 @@
         <div class="row gx-4 gx-lg-5">
             <div class="col-lg-3 col-md-6 text-center">
                 <div class="mt-5">
-                    <a href="#booking" style="text-decoration-line:none">
+                    <a href="#book" style="text-decoration-line:none">
                         <div class="mb-2"><i class="bi-laptop fs-1 text-primary"> </i></div>
-                        <h3 class="h4 mb-2">Booking</h3>
+                        <h3 class="h4 mb-2">Reservation</h3>
                     </a>
                 </div>
             </div>
@@ -124,7 +124,7 @@
             </div>
             <div class="col-lg-3 col-md-6 text-center">
                 <div class="mt-5" onclick="location.href=/myPage.html">
-                    <a href="/stuhel/myPage.html" style="text-decoration-line:none">
+                    <a href="/myPage.html" style="text-decoration-line:none">
                         <div class="mb-2"><i class="bi-heart fs-1 text-primary"></i></div>
                         <h3 class="h4 mb-2" >My page</h3>
                     </a>
@@ -134,12 +134,12 @@
         </div>
     </div>
 </section>
-<!-- booking -->
-<section class="page-section" id="booking">
+<!-- book -->
+<section  class="page-section" id="book">
     <div class="container px-4 px-lg-5">
         <div class="row gx-4 gx-lg-5 justify-content-center">
             <div class="col-lg-8 col-xl-6 text-center">
-                <h2 class="mt-0">Booking Study Room</h2>
+                <h2 class="mt-0">Study Room Reservation</h2>
                 <hr class="divider" />
             </div>
         </div></br>
@@ -150,7 +150,7 @@
         </div></br>
         <div class="row gx-4 gx-lg-5 justify-content-center">
             <div class="col-lg-8 col-xl-6 text-center">
-                <select id="bookingTime">
+                <select id="bookTime">
                     <option value="9">09:00 - 10:00</option>
                     <option value="10">10:00 - 11:00</option>
                     <option value="11">11:00 - 12:00</option>
@@ -169,7 +169,7 @@
         </div></br>
         <div class="row gx-4 gx-lg-5 justify-content-center">
             <div class="col-lg-8 col-xl-6 text-center">
-                <input type="button" style="background-color:#FFFF8FF;" class="btn btn-light btn-xl" onclick="searchRoom()" value="예약 가능한 세미나실">
+                <input type="button" style="background-color:#FFFF8FF;" class="btn btn-light btn-xl" onclick="bookableRoomRetrieve()" value="예약 가능한 세미나실">
             </div>
         </div>
         <div class="row gx-4 gx-lg-5 justify-content-center">
@@ -204,7 +204,7 @@
     <div>
         <div class="row gx-4 gx-lg-5 justify-content-center">
             <div class="col-lg-8 col-xl-6 text-center">
-                <h2 class="mt-0">Good Place</h2>
+                <h2 class="mt-0">맛집 추천</h2>
                 <hr class="divider" />
             </div>
         </div></br>
@@ -316,7 +316,7 @@
 <!--세션체크-->
     (function(){
         let xhr = new XMLHttpRequest();
-        xhr.open('Get', "/member/sessionCheck"
+        xhr.open('Get', "/session/sessionCheck"
             ,true);
         xhr.setRequestHeader('Accept', 'application/json');
         xhr.send();
@@ -332,9 +332,9 @@
             }
         }
     })();
-    const bookingBtn = document.querySelector("#bookingBtn");
-    const bookingTime = document.querySelector("#bookingTime");
-    const bookingDate = document.querySelector("#datepicker");
+    const bookBtn = document.querySelector("#bookBtn");
+    const bookTime = document.querySelector("#bookTime");
+    const bookDate = document.querySelector("#datepicker");
     const room101 = document.querySelector("#room101");
     const room102 = document.querySelector("#room102");
     const room103 = document.querySelector("#room103");
@@ -347,7 +347,7 @@
     let today=new Date();
     todayMonth=today.getMonth()+1;
     if(todayMonth<10) todayMonth="0"+todayMonth;
-    bookingDate.value=today.getFullYear()+"-"+todayMonth+"-"+today.getDate();
+    bookDate.value=today.getFullYear()+"-"+todayMonth+"-"+today.getDate();
 
   $(function(){   //최소선택시간 최대선택시간 초기년월
     $("#datepicker").datepicker({
@@ -373,15 +373,19 @@
             ,true);
         xhr.setRequestHeader('Accept', 'application/json');
         xhr.send();
-
+        xhr.onreadystatechange = () => {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                location.href="/index.html";
+            }
+        }
     }
 
     <!--사용가능한 세미나실 -->
-    function searchRoom(){
+    function bookableRoomRetrieve(){
 
         let xhr = new XMLHttpRequest();
         xhr.open('Get'
-                  , "/stuhel/book/roomSearch?bookingTime="+bookingTime.value+"&bookingDate="+bookingDate.value
+                  , "/stuhel/book/bookableRoomRetrieve?bookTime="+bookTime.value+"&bookDate="+bookDate.value
                       , true);
         xhr.setRequestHeader('Accept','application/json');
         xhr.send();
@@ -422,8 +426,8 @@
                     swal({
                           title : '세미나실 예약'
                         , text : 'ヽ(✿ﾟ▽ﾟ)ノ \n'
-                                  +bookingDate.value+'\n'
-                                  +bookingTime.value+'시 ~ '+(parseInt(bookingTime.value)+1) + '시 \n'
+                                  +bookDate.value+'\n'
+                                  +bookTime.value+'시 ~ '+(parseInt(bookTime.value)+1) + '시 \n'
                                   +'해당 일시에 '+roomId.value+'호 세미나실을 예약하시겠습니까?'
                         , buttons : ["취소","확인"]
                         , buttonColor : 'tomato'
@@ -436,7 +440,7 @@
     <!--세미나실 예약-->
     function sendBookdata(roomId){
 
-        let insertBookData ={"roomId":roomId,"bookingTime":bookingTime.value,"bookingDate":bookingDate.value};
+        let insertBookData ={"roomId":roomId,"bookTime":bookTime.value,"bookDate":bookDate.value};
         insertBookData=JSON.stringify(insertBookData);
 
         let xhr = new XMLHttpRequest();

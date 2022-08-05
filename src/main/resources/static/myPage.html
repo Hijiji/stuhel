@@ -68,8 +68,8 @@
                 <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
                 <li class="nav-item"><a class="nav-link" href="#myInfo">회원정보</a></li>
                 <li class="nav-item"><a class="nav-link" href="#bookStatus">예약현황</a></li>
-                <li class="nav-item"><a class="nav-link" href="/home.html">home</a></li>
-                <li class="nav-item"><a class="nav-link" onclick="logoutButton()">logout</a></li>
+                <li class="nav-item"><a class="nav-link" href="/home.html">Home</a></li>
+                <li class="nav-item"><a class="nav-link" onclick="logoutButton()">Logout</a></li>
             </ul>
         </div>
     </div>
@@ -227,7 +227,7 @@
             <div id="bookRoomAndTimeDiv"></div>
         </div><br/>
         <div class="close-wrapper">
-            <button class="btn btn-light btn-xl" value="bookCondiModalClose" style="color:tomato;"onclick="bookCancel()" >예약취소</button>&nbsp;
+            <button class="btn btn-light btn-xl" value="bookCondiModalClose" style="color:tomato;"onclick="cancelBook()" >예약취소</button>&nbsp;
             <button class="btn btn-light btn-xl" value="bookCondiModalClose" onclick="modalClose(this)" >닫기</button>
         </div>
     </div>
@@ -293,17 +293,17 @@
                 if(sessionStatus==-1){
                     location.href="/index.html";
                 }else if(sessionStatus==0){
-                    retrieve();
+                    retrieveMemberInfo();
                 }
             }
         }
     })();
 
     <!--초기회원정보화면-->
-    function retrieve(){
+    function retrieveMemberInfo(){
         if(sessionStatus==0){
             let xhr = new XMLHttpRequest();
-                xhr.open('POST', "/stuhel/myPage/retrieve?"
+                xhr.open('POST', "/stuhel/myPage/retrieveMemberInfo?"
                         ,true);
                 xhr.setRequestHeader('Accept', 'application/json');
                 xhr.send();
@@ -343,7 +343,7 @@
     function setDate(){
             year.innerHTML=choiceYear;
             month.innerHTML=choiceMonth+1;
-            bookStatusRetrieve(choiceYear,choiceMonth);
+            retrieveBookStatus(choiceYear,choiceMonth);
 
     }
     function minusMonth(){
@@ -411,17 +411,17 @@
     }
 
     <!--달력에 띄울 세미나실 예약현황 조회-->
-    function bookStatusRetrieve(choiceYear,choiceMonth){
+    function retrieveBookStatus(choiceYear,choiceMonth){
         let cMonth= month.innerHTML;
         let cYear= year.innerHTML;
         if(cMonth<10)cMonth="0"+cMonth;
         let retrieveYM=cYear+"-"+cMonth;
             console.log("조회연월"+retrieveYM);
-        let bookStatusData={"bookingDate":retrieveYM};
+        let bookStatusData={"bookDate":retrieveYM};
         bookStatusData = JSON.stringify(bookStatusData);
         if(sessionStatus==0){
             let xhr = new XMLHttpRequest();
-                xhr.open('POST', "/stuhel/myPage/bookStatusRetrieve?bookStatusData="+encodeURI(bookStatusData)
+                xhr.open('POST', "/stuhel/myPage/retrieveBookStatus?bookStatusData="+encodeURI(bookStatusData)
                         ,true);
                 xhr.setRequestHeader('Accept', 'application/json');
                 xhr.send();
@@ -435,8 +435,8 @@
                         if(monthBookDataArr.length>0){
                             for(var i=0;i<monthBookDataArr.length;i++){
                                 let bookDate;
-                                if(monthBookDataArr[i].bookingDate.substr(8,1)!="0") bookDate=monthBookDataArr[i].bookingDate.substr(8,2);
-                                else bookDate=monthBookDataArr[i].bookingDate.substr(9,1);
+                                if(monthBookDataArr[i].bookDate.substr(8,1)!="0") bookDate=monthBookDataArr[i].bookDate.substr(8,2);
+                                else bookDate=monthBookDataArr[i].bookDate.substr(9,1);
                                 tdTagId = "date"+bookDate;
                                 tdTagIdArr.push(tdTagId);
                             }
@@ -453,17 +453,17 @@
         bookRoomIdArr=[];
         clickedBookData=[];
         for(let i=0; i<monthBookDataArr.length; i++){
-            if(parseInt(monthBookDataArr[i].bookingDate.slice(8))==parseInt(clickedTdId.slice(4))){
-                bookTimeArr.push(monthBookDataArr[i].bookingTime);
+            if(parseInt(monthBookDataArr[i].bookDate.slice(8))==parseInt(clickedTdId.slice(4))){
+                bookTimeArr.push(monthBookDataArr[i].bookTime);
                 bookRoomIdArr.push(monthBookDataArr[i].roomId);
             }
-            if(parseInt(monthBookDataArr[i].bookingDate.slice(8))==parseInt(clickedTdId.slice(4))){
+            if(parseInt(monthBookDataArr[i].bookDate.slice(8))==parseInt(clickedTdId.slice(4))){
             let dataInfo=new Object();
                 dataInfo.roomId=monthBookDataArr[i].roomId;
-                dataInfo.bookingTime=monthBookDataArr[i].bookingTime;
-                dataInfo.bookingDate=monthBookDataArr[i].bookingDate;
+                dataInfo.bookTime=monthBookDataArr[i].bookTime;
+                dataInfo.bookDate=monthBookDataArr[i].bookDate;
                 dataInfo.userId=monthBookDataArr[i].userId;
-                dataInfo.bookingId=monthBookDataArr[i].bookingId;
+                dataInfo.bookId=monthBookDataArr[i].bookId;
                 clickedBookData.push(dataInfo);
             }
         }
@@ -499,7 +499,7 @@
         }
     }
     <!--예약취소-->
-    function bookCancel(){
+    function cancelBook(){
         swal({
                   title : '세미나실 예약 취소'
                 , text : 'ヽ(✿ﾟ▽ﾟ)ノ \n'
@@ -510,12 +510,12 @@
                 console.log(result);
                 if(result==null) return;
                 else {
-                    let bookCancelData = JSON.stringify(clickedBookData);
-                        console.log("bookCancelData");
-                        console.log(bookCancelData);
+                    let cancelBookData = JSON.stringify(clickedBookData);
+                        console.log("cancelBookData");
+                        console.log(cancelBookData);
                     let xhr = new XMLHttpRequest();
-                    xhr.open('POST',  "/stuhel/myPage/bookCancel?"
-                                        + "bookCancelData=" + encodeURI(bookCancelData)
+                    xhr.open('POST',  "/stuhel/myPage/cancelBook?"
+                                        + "bcancelBookData=" + encodeURI(cancelBookData)
                             ,true);
                     xhr.setRequestHeader('Accept', 'application/json');
                     xhr.send();
@@ -532,7 +532,7 @@
                                 alert("예약취소가 성공적으로 완료되었습니다.");
                             }
                             modalClose("bookCondiModalClose");
-                            bookStatusRetrieve(choiceYear,choiceMonth);
+                            retrieveBookStatus(choiceYear,choiceMonth);
                         }
                     }
                 }
@@ -700,12 +700,12 @@
                 console.log(result);
                 if(result==null) return;
                 else {
-                    let changeInfo = {"birth":changeBirth,"password":changePassword,"id":changeIdentity,"name":changeName} //데이터 추가하기
-                    changeInfo = JSON.stringify(changeInfo);
+                    let changeMemberInfo = {"birth":changeBirth,"password":changePassword,"id":changeIdentity,"name":changeName} //데이터 추가하기
+                    changeMemberInfo = JSON.stringify(changeMemberInfo);
 
                     let xhr = new XMLHttpRequest();
-                    xhr.open('POST',  "/stuhel/myPage/changeInfo?"
-                                        + "changeInfo=" + encodeURI(changeInfo)
+                    xhr.open('POST',  "/stuhel/myPage/changeMemberInfo?"
+                                        + "changeMemberInfo=" + encodeURI(changeMemberInfo)
                             ,true);
                     xhr.setRequestHeader('Accept', 'application/json');
                     xhr.send();
@@ -742,7 +742,7 @@
                             pwCheckResultMsg.innerHTML="";
                             birthCheckResultMsg.innerHTML="";
                             confirmBeforeCheckMsg.innerHTML="";
-                            retrieve();
+                            retrieveMemberInfo();
                         }
                     }
                 }
@@ -756,6 +756,11 @@
             ,true);
         xhr.setRequestHeader('Accept', 'application/json');
         xhr.send();
+        xhr.onreadystatechange = () => {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                location.href="/index.html";
+            }
+        }
     }
 </script>
 </body>

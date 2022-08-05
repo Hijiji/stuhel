@@ -22,29 +22,22 @@ import java.util.HashMap;
 public class StudyRoomController {
 
     private static Gson gson = new GsonBuilder().serializeNulls().create(); // 속성값이 null 인 속성도 json 변환
-
     private final BookServiceImpl bookService;
-
     @Autowired
     public StudyRoomController(BookServiceImpl bookService) {
         this.bookService = bookService;
     }
 
-    @GetMapping("/roomSearch")
-    HashMap<String,ArrayList> roomSearch(@RequestParam("bookingTime") int bookTime, @RequestParam("bookingDate") String bookDate){
-        System.out.println(bookTime);
-        System.out.println(bookDate);
+    @GetMapping("/bookableRoomRetrieve")
+    HashMap<String,ArrayList> bookableRoomRetrieve(@RequestParam("bookTime") int bookTime, @RequestParam("bookDate") String bookDate){
 
         BookTO bookTO=new BookTO();
+        bookTO.setBookDate(bookDate);
+        bookTO.setBookTime(bookTime);
 
-        bookTO.setBookingDate(bookDate);
-        bookTO.setBookingTime(bookTime);
-
-        ArrayList<Integer>  roomId = bookService.bookSearch(bookTO);
-
+        ArrayList<Integer>  roomId = bookService.bookableRoomRetrieve(bookTO);
         HashMap<String, ArrayList> map = new HashMap<>();
         map.put("roomId",roomId);
-
         return map;
     }
 

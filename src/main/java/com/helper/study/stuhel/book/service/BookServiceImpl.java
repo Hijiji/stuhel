@@ -20,15 +20,15 @@ public class BookServiceImpl implements BookService {
 
 
     @Override
-    public ArrayList<Integer> bookSearch(BookTO bookTO) {
-        ArrayList<Integer> roomName = bookDAO.bookSearch(bookTO);
+    public ArrayList<Integer> bookableRoomRetrieve(BookTO bookTO) {
+        ArrayList<Integer> roomName = bookDAO.selectBookableRoom(bookTO);
         return roomName;
     }
 
     @Override
     public HashMap<String, Integer> roomBook(BookTO bookTO) {
         HashMap<String,Integer> map =new HashMap<>();
-                bookDAO.roomBook(bookTO);
+                bookDAO.insertRoomBook(bookTO);
         return map;
     }
 }

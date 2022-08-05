@@ -13,25 +13,28 @@
         <result column="WRITER" property="writer"/>
     </resultMap>
 
-    <select id="selectTopic" resultMap="Board">
+    <select id="selectTopicList" resultMap="Board">
         SELECT TOPIC_NM, TOPIC_CD
         FROM BOARD_TOPIC
+        ORDER BY TOPIC_CD ASC
     </select>
 
     <select id="selectBoardList" resultMap="Board" parameterType="com.helper.study.stuhel.board.to.BoardTO">
         SELECT
-            TITLE, NOTE_SEQ, WRITE_DATE, NOTE, TOPIC_NM, TOPIC_CD, CLICK_AMOUNT, WRITER
+            TITLE, NOTE_SEQ, WRITE_DATE, TOPIC_NM, CLICK_AMOUNT, WRITER
         FROM BOARD
     </select>
-    <select id="selectBoard" resultMap="Board" parameterType="map">
-        SELECT * FROM BOARD
+    <select id="selectReadBoard" resultMap="Board" parameterType="map">
+        SELECT *
+        FROM BOARD
         WHERE NOTE_SEQ = #{noteSeq}
         AND WRITER = #{writer}
         AND TITLE = #{title}
         AND TOPIC_CD = #{topicCd}
     </select>
-    <select id="selectKeyword" parameterType="map" resultMap="Board">
-        SELECT *
+    <select id="selectBoardKeyword" parameterType="map" resultMap="Board">
+        SELECT
+            TITLE, NOTE_SEQ, WRITE_DATE, TOPIC_NM, CLICK_AMOUNT, WRITER
         FROM BOARD
         WHERE TITLE LIKE
             <foreach collection="keywordList" item="keyword" separator=" OR TITLE LIKE ">
@@ -46,7 +49,7 @@
                 '%'||#{keyword}||'%'
             </foreach>
     </select>
-    <insert id="insertNote" parameterType="com.helper.study.stuhel.board.to.BoardTO">
+    <insert id="insertWrite" parameterType="com.helper.study.stuhel.board.to.BoardTO">
         INSERT INTO BOARD
         (
             title
@@ -54,6 +57,7 @@
             ,writer
             ,note_SEQ
             ,write_DATE
+            ,topic_nm
             ,topic_cd
         )VALUES
         (
@@ -63,6 +67,7 @@
             ,board_seq.nextval
             ,sysdate
             ,#{topicNm}
+            ,(select topic_cd from BOARD_TOPIC where topic_nm=#{topicNm})
         )
     </insert>
 </mapper>

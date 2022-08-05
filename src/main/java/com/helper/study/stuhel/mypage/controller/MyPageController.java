@@ -30,9 +30,8 @@ public class MyPageController {
         this.myPageService = myPageService;
     }
 
-    @PostMapping("/retrieve")
-    String retrieve(HttpServletRequest request) {
-        System.out.println("MyPageController - retrieve");
+    @PostMapping("/retrieveMemberInfo")
+    String retrieveMemberInfo(HttpServletRequest request) {
         HttpSession session = request.getSession();
         HashMap<String, MemberTO> map=new HashMap<>();
         MemberTO memberTO=new MemberTO();
@@ -43,21 +42,22 @@ public class MyPageController {
         }else {
             memberTO.setId((String)session.getAttribute("memberId"));
             memberTO.setName((String)session.getAttribute("memberName"));
-            memberTO=myPageService.retrieve(memberTO);  //뒷단돌려서 받아온 member 정보 gson으로 역직렬화 하는법 찾기
-            session.setAttribute("memberName",memberTO.getName());
+            memberTO=myPageService.retrieveMemberInfo(memberTO);
+            /*아래 코드 없어도 session 잘 작동하는지 확인하기*/
+           /* session.setAttribute("memberName",memberTO.getName());
             session.setAttribute("birthday",memberTO.getBirth());
-            session.setAttribute("password",memberTO.getPassword());
+            session.setAttribute("password",memberTO.getPassword());*/
             result =gson.toJson(memberTO);
         }
         return result;
     }
 
-    @PostMapping("/changeInfo")
-    HashMap<String, Integer> changeInfo(HttpServletRequest request, @RequestParam("changeInfo") String changeInfo){
+    @PostMapping("/changeMemberInfo")
+    HashMap<String, Integer> changeMemberInfo(HttpServletRequest request, @RequestParam("changeMemberInfo") String changeMemberInfo){
         HttpSession session = request.getSession();
         String sessionMemberId=(String)session.getAttribute("memberId");
         String sessionName=(String)session.getAttribute("memberName");
-        MemberTO memberTO = gson.fromJson(changeInfo, MemberTO.class);
+        MemberTO memberTO = gson.fromJson(changeMemberInfo, MemberTO.class);
 
         HashMap<String, Integer> map = new HashMap<>();
         memberTO.setSessionId(sessionMemberId);
@@ -74,22 +74,22 @@ public class MyPageController {
             memberTO.setBirth((int)session.getAttribute("birthday"));
         }
 
-        map=myPageService.changeInfo(memberTO,session);
+        map=myPageService.changeMemberInfo(memberTO,session);
 
         return map;
     }
-    @PostMapping("/bookStatusRetrieve")
-    public String bookStatusRetrieve(HttpServletRequest request,@RequestParam("bookStatusData") String bookStatusData){
+    @PostMapping("/retrieveBookStatus")
+    public String retrieveBookStatus(HttpServletRequest request,@RequestParam("bookStatusData") String bookStatusData){
         HttpSession session = request.getSession();
         BookTO book = gson.fromJson(bookStatusData, BookTO.class);
         book.setUserId((String)session.getAttribute("memberId"));
-        return gson.toJson(myPageService.bookStatusRetrieve(book));
+        return gson.toJson(myPageService.retrieveBookStatus(book));
     }
 
-    @PostMapping("/bookCancel")
-    public HashMap<String, String> bookCancel(@RequestParam("bookCancelData") String bookCancelData){
+    @PostMapping("/cancelBook")
+    public HashMap<String, String> cancelBook(@RequestParam("bookCancelData") String bookCancelData){
         ArrayList<BookTO> bookTOList = gson.fromJson(bookCancelData, new TypeToken<ArrayList<BookTO>>() {}.getType());
-        HashMap<String, String> map=myPageService.bookCancel(bookTOList);
+        HashMap<String, String> map=myPageService.cancelBook(bookTOList);
         return map;
     }
 }

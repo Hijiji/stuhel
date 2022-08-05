@@ -6,28 +6,28 @@
         <result property="roomId" column="ROOM_ID"/>
     </resultMap>
 
-    <select id="bookSearch" parameterType="com.helper.study.stuhel.book.to.BookTO" resultMap="RoomName">
+    <select id="selectBookableRoom" parameterType="com.helper.study.stuhel.book.to.BookTO" resultMap="RoomName">
         SELECT
             ROOM_ID FROM STUDY_ROOM S
         WHERE S.ROOM_ID NOT IN (select r.ROOM_ID
                                   from ROOM_BOOK r
-                                  where r.BOOKING_DATE = #{bookingDate}
-                                    and r.BOOKING_TIME = #{bookingTime})
+                                  where r.BOOK_DATE = #{bookDate}
+                                    and r.BOOK_TIME = #{bookTime})
     </select>
 
-    <insert id="roomBook" parameterType="com.helper.study.stuhel.book.to.BookTO">
+    <insert id="insertRoomBook" parameterType="com.helper.study.stuhel.book.to.BookTO">
         INSERT INTO ROOM_BOOK (
-            BOOKING_ID
+            BOOK_ID
             ,USER_ID
             ,ROOM_ID
-            ,BOOKING_DATE
-            ,BOOKING_TIME
+            ,BOOK_DATE
+            ,BOOK_TIME
         )VALUES(
             ROOM_SEQ.NEXTVAL
             ,#{userId}
             ,#{roomId}
-            ,#{bookingDate}
-            ,#{bookingTime}
+            ,#{bookDate}
+            ,#{bookTime}
         )
     </insert>
 </mapper>

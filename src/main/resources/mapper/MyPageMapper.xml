@@ -11,19 +11,19 @@
     </resultMap>
 
     <resultMap type="com.helper.study.stuhel.book.to.BookTO" id="myPageBook">
-        <result property="bookingId" column="BOOKING_ID" />
+        <result property="bookId" column="BOOK_ID" />
         <result property="userId" column="USER_ID" />
         <result property="roomId" column="ROOM_ID" />
-        <result property="bookingDate" column="BOOKING_DATE" />
-        <result property="bookingTime" column="BOOKING_TIME" />
+        <result property="bookDate" column="BOOK_DATE" />
+        <result property="bookTime" column="BOOK_TIME" />
     </resultMap>
 
-    <select id="retrieve" parameterType="com.helper.study.stuhel.member.to.MemberTO" resultMap="myPageMember">
+    <select id="selectMemberInfo" parameterType="com.helper.study.stuhel.member.to.MemberTO" resultMap="myPageMember">
         select * from MEMBER_SECURITY
         where ID = #{id}
     </select>
 
-    <update id="changeInfo" parameterType="com.helper.study.stuhel.member.to.MemberTO">
+    <update id="updateMemberInfo" parameterType="com.helper.study.stuhel.member.to.MemberTO">
         UPDATE MEMBER_SECURITY
         SET
         ID = #{id}
@@ -33,26 +33,26 @@
         WHERE ID = #{sessionId}  <!--TO에 sessionId 없어서 에러뜰 수도 있음 파라메터타입 ...바꾸든지 어쩌던지 해봐 ~-->
     </update>
 
-    <select id="bookStatusRetrieve" parameterType="com.helper.study.stuhel.book.to.BookTO" resultMap="myPageBook">
+    <select id="selectBookStatus" parameterType="com.helper.study.stuhel.book.to.BookTO" resultMap="myPageBook">
         SELECT *
         FROM ROOM_BOOK
         WHERE USER_ID = #{userId}
-            AND BOOKING_DATE LIKE #{bookingDate}||'%'
+            AND BOOK_DATE LIKE #{bookDate}||'%'
     </select>
     <select id="bookDateSearch" parameterType="com.helper.study.stuhel.member.to.MemberTO" resultMap="myPageMember">
-        SELECT ROOM_ID, BOOKING_DATE,BOOKING_TIME
+        SELECT ROOM_ID, BOOK_DATE,BOOK_TIME
         FROM STUDY_ROOM
         WHERE ROOM_ID = #{id}
     </select>
-    <delete id="bookCancel" parameterType="com.helper.study.stuhel.book.to.BookTO">
+    <delete id="deleteBook" parameterType="com.helper.study.stuhel.book.to.BookTO">
         DELETE
         FROM ROOM_BOOK
         WHERE
             USER_ID = #{userId}
-            AND BOOKING_DATE = #{bookingDate}
-            AND BOOKING_TIME = #{bookingTime}
+            AND BOOK_DATE = #{bookDate}
+            AND BOOK_TIME = #{bookTime}
             AND ROOM_ID = #{roomId}
-            AND BOOKING_ID = #{bookingId}
+            AND BOOK_ID = #{bookId}
     </delete>
 
 </mapper>

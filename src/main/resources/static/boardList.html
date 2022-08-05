@@ -38,9 +38,9 @@
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ms-auto my-2 my-lg-0">
                 <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
-                <li class="nav-item"><a class="nav-link" href="/home.html">home</a></li>
+                <li class="nav-item"><a class="nav-link" href="/home.html">Home</a></li>
                 <li class="nav-item"><a class="nav-link" href="/myPage.html">my page</a></li>
-                <li class="nav-item"><a class="nav-link" onclick="logoutButton()">logout</a></li>
+                <li class="nav-item"><a class="nav-link" onclick="logoutButton()">Logout</a></li>
             </ul>
         </div>
     </div>
@@ -53,8 +53,8 @@
                 <h1 class="text-white font-weight-bold">게시판</h1>
                 <hr class="divider" />
                 <div align="center">
-                    <input type="text" id="boardSearchTxt" class="form-control" placeholder="키워드를 입력하세요" style="width:40%;display:inline; ">
-                    <input type="button" id="boardSearchBtn" value="검색" onclick="boardKeywordSearch()" class="btn btn-primary btn-xl" style="font-size:15px;padding:11px 22px;text-align:center">
+                    <input type="text" id="boardSearchTxt" class="form-control" placeholder="키워드를 입력하세요" onkeyup="enterkeyEvent()" style="width:40%;display:inline; ">
+                    <input type="button" id="boardSearchBtn" value="검색" onclick="retrieveBoardKeyword()" class="btn btn-primary btn-xl" style="font-size:15px;padding:11px 22px;text-align:center">
                 </div>
             </div>
         </div>
@@ -141,7 +141,7 @@
             console.log("클릭이벤트");
             console.log(selectedRow);
             userSelectedRowData = selectedRow.data;
-            boardReadOpen();
+            retrieveBoardRead();
         },
         onGridReady: function(event) {// onload 이벤트와 유사 ready 이후 필요한 이벤트 삽입한다.
             event.api.sizeColumnsToFit();
@@ -149,6 +149,12 @@
         getRowStyle: function(param) {
             return {'text-align': 'center'};
         },
+    }
+
+    function enterkeyEvent(){
+        if(event.keyCode == 13){
+            retrieveBoardKeyword();
+        }
     }
 
     function retrieveBoardList(){
@@ -167,9 +173,9 @@
 	    }
 	}
 
-    function boardKeywordSearch(){
+    function retrieveBoardKeyword(){
         let xhr = new XMLHttpRequest();
-        xhr.open('Post', "/stuhel/board/boardKeywordSearch?fullKeyword="+boardSearchTxt.value
+        xhr.open('Post', "/stuhel/board/retrieveBoardKeyword?fullKeyword="+boardSearchTxt.value
             ,true);
         xhr.setRequestHeader('Accept', 'application/json');
         xhr.send();
@@ -178,18 +184,19 @@
                 let txt = xhr.responseText;
                 txt = JSON.parse(txt);
                 console.log(txt);
+                boardListGridOptions.api.setRowData(txt.writeList);
             }
         }
     }
 
-    function boardReadOpen(){
+    function retrieveBoardRead(){
         if(userSelectedRowData==null||userSelectedRowData==""){
             return;
         }
         console.log(userSelectedRowData);
         userSelectedRowData = JSON.stringify(userSelectedRowData);
         let xhr = new XMLHttpRequest();
-        xhr.open('Post', "/stuhel/board/boardRead?boardData="+encodeURI(userSelectedRowData)
+        xhr.open('Post', "/stuhel/board/retrieveBoardRead?boardData="+encodeURI(userSelectedRowData)
             ,true);
         xhr.setRequestHeader('Accept', 'application/json');
         xhr.send();
@@ -208,6 +215,11 @@
             ,true);
         xhr.setRequestHeader('Accept', 'application/json');
         xhr.send();
+        xhr.onreadystatechange = () => {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                location.href="/index.html";
+            }
+        }
     }
 </script>
 </body>

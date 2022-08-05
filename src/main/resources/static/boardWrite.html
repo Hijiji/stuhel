@@ -58,7 +58,7 @@
         <div style="width:900px;position:relative" >
             <div align="right" ><!--style="padding-right:150px;"-->
                 <select id="topicSelect" style="width:150px">
-                    <option id="0">카테고리</option>
+                    <option id="0">구분없음</option>
                 </select>
             </div>
             <div align="center">
@@ -76,7 +76,7 @@
     <div class="container px-4 px-lg-5">
         <div class="collapse navbar-collapse" id="buttomResponsive">
             <div class="navbar-nav ms-auto my-2 my-lg-0">
-                <input type="button" id="writeSaveBtn" value="저장" onclick="writeSaveFunc()" class="btn btn-light btn-xl" style="font-size:15px;padding:11px 22px;color:white;background-color:gray">
+                <input type="button" id="saveWriteBtn" value="저장" onclick="saveWrite()" class="btn btn-light btn-xl" style="font-size:15px;padding:11px 22px;color:white;background-color:gray">
             </div>
         </div>
     </div>
@@ -107,7 +107,7 @@
                 if(sessionStatus==-1){
                     location.href="/index.html";
                 }else if(sessionStatus==0){
-                    topicRetrieve();
+                    retrieveTopicList();
                 }
             }
         }
@@ -118,9 +118,9 @@
     const title = document.querySelector("#title");
     const selectTag = document.querySelector("#topicSelect");
 
-    function topicRetrieve(){
+    function retrieveTopicList(){
         let xhr = new XMLHttpRequest();
-        xhr.open('Post', "/stuhel/board/topicRetrieve?"
+        xhr.open('Post', "/stuhel/board/retrieveTopicList?"
                  ,true);
         xhr.setRequestHeader('Accept', 'application/json');
         xhr.send();
@@ -155,7 +155,7 @@
         }
     }
 
-    function writeSaveFunc(){
+    function saveWrite(){
         if(title.value.trim()==null || title.value.trim()==""){
             alert("글의 제목을 입력해주세요.");
             return;
@@ -164,7 +164,7 @@
             return;
         }
         let xhr = new XMLHttpRequest();
-	    xhr.open('Get', 'stuhel/board/writeSave?title='+title.value+'&note='+note.value+'&topicNm='+selectTag.value
+	    xhr.open('Get', 'stuhel/board/saveWrite?title='+title.value+'&note='+note.value+'&topicNm='+selectTag.value
 	        ,true)
 	    xhr.setRequestHeader('Accept', 'application/json');
 	    xhr.send();
@@ -176,7 +176,7 @@
 	            if(errorResult.errorCode==0){
 	                alert("성공적으로 저장되었습니다.");
                     location.reload();
-                    location.href="/board/boardList.html";
+                    location.href="/boardList.html";
 	            }else{
 	                alert("서버오류로 저장에 실패하였습니다.");
 	                return;

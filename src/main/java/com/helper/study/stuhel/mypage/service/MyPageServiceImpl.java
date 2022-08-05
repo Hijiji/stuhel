@@ -20,11 +20,11 @@ public class MyPageServiceImpl implements MyPageService{
     }
 
     @Override
-    public MemberTO retrieve(MemberTO memberTO) {
-        return myPageDAO.retrieve(memberTO);
+    public MemberTO retrieveMemberInfo(MemberTO memberTO) {
+        return myPageDAO.selectMemberInfo(memberTO);
     }
 
-    public HashMap<String,Integer> changeInfo(MemberTO memberTO, HttpSession session){
+    public HashMap<String,Integer> changeMemberInfo(MemberTO memberTO, HttpSession session){
         HashMap<String, Integer> map = new HashMap<>();
         String sessionId=(String)session.getAttribute("memberId");
         memberTO.setSessionId(sessionId);
@@ -41,30 +41,30 @@ public class MyPageServiceImpl implements MyPageService{
             memberTO.setBirth(0);
         }
 
-        myPageDAO.changeInfo(memberTO);
+        myPageDAO.updateMemberInfo(memberTO);
         map.put("errorCode", 1);
         return map;
     }
 
     @Override
-    public ArrayList<BookTO> bookStatusRetrieve(BookTO bookTO) {
-        System.out.println("book.getBookingDate() = " + bookTO.getBookingDate());
+    public ArrayList<BookTO> retrieveBookStatus(BookTO bookTO) {
+        System.out.println("book.getBookingDate() = " + bookTO.getBookDate());
         System.out.println("book.getUserId() = " + bookTO.getUserId());
-        ArrayList<BookTO> a= myPageDAO.bookStatusRetrieve(bookTO);
+        ArrayList<BookTO> a= myPageDAO.selectBookStatus(bookTO);
         for(BookTO b:a) {
-            System.out.println("b.getBookingDate() = " + b.getBookingDate());
-            System.out.println("b.getBookingTime() = " + b.getBookingTime());
-            System.out.println("b.getBookingTime() = " + b.getBookingTime());
+            System.out.println("b.getBookingDate() = " + b.getBookDate());
+            System.out.println("b.getBookingTime() = " + b.getBookTime());
+            System.out.println("b.getBookingTime() = " + b.getBookTime());
         }
         return a;
     }
 
-    public HashMap<String,String> bookCancel(ArrayList<BookTO> bookTOList){
+    public HashMap<String,String> cancelBook(ArrayList<BookTO> bookTOList){
         HashMap<String, String> map = new HashMap<>();
         try{
 
             for(BookTO bookTO:bookTOList) {
-                myPageDAO.bookCancel(bookTO);
+                myPageDAO.deleteBook(bookTO);
             }
             map.put("errorCode","Y");
             System.out.println("map.get(\"errorCode\") = " + map.get("errorCode"));
