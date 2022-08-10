@@ -216,7 +216,7 @@
            loginData = JSON.stringify(loginData);
 
            let xhr = new XMLHttpRequest();
-           xhr.open('POST', "/member/login?"
+           xhr.open('GET', "/member/login?"
                + "loginData=" + encodeURI(loginData)
                ,true);
            xhr.setRequestHeader('Accept', 'application/json');

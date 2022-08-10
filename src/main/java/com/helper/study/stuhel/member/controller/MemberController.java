@@ -28,7 +28,7 @@ public class MemberController {
         this.memberService = memberService;
     }
 
-    @PostMapping("/login")/*로그인*/
+    @GetMapping("/login")/*로그인*/
     public HashMap<String, Object> login(@RequestParam("loginData") String loginData,HttpServletRequest request){
         HttpSession session = request.getSession();
         HashMap<String, Object> map = new HashMap<>();

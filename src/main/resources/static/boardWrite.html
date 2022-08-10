@@ -58,7 +58,6 @@
         <div style="width:900px;position:relative" >
             <div align="right" ><!--style="padding-right:150px;"-->
                 <select id="topicSelect" style="width:150px">
-                    <option id="0">구분없음</option>
                 </select>
             </div>
             <div align="center">
@@ -120,7 +119,7 @@
 
     function retrieveTopicList(){
         let xhr = new XMLHttpRequest();
-        xhr.open('Post', "/stuhel/board/retrieveTopicList?"
+        xhr.open('GET', "/stuhel/board/retrieveTopicList?"
                  ,true);
         xhr.setRequestHeader('Accept', 'application/json');
         xhr.send();
@@ -164,7 +163,7 @@
             return;
         }
         let xhr = new XMLHttpRequest();
-	    xhr.open('Get', 'stuhel/board/saveWrite?title='+title.value+'&note='+note.value+'&topicNm='+selectTag.value
+	    xhr.open('PATCH', 'stuhel/board/saveWrite?title='+title.value+'&note='+note.value+'&topicNm='+selectTag.value
 	        ,true)
 	    xhr.setRequestHeader('Accept', 'application/json');
 	    xhr.send();

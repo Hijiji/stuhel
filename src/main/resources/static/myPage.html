@@ -303,7 +303,7 @@
     function retrieveMemberInfo(){
         if(sessionStatus==0){
             let xhr = new XMLHttpRequest();
-                xhr.open('POST', "/stuhel/myPage/retrieveMemberInfo?"
+                xhr.open('GET', "/stuhel/myPage/retrieveMemberInfo?"
                         ,true);
                 xhr.setRequestHeader('Accept', 'application/json');
                 xhr.send();
@@ -421,7 +421,7 @@
         bookStatusData = JSON.stringify(bookStatusData);
         if(sessionStatus==0){
             let xhr = new XMLHttpRequest();
-                xhr.open('POST', "/stuhel/myPage/retrieveBookStatus?bookStatusData="+encodeURI(bookStatusData)
+                xhr.open('GET', "/stuhel/myPage/retrieveBookStatus?bookStatusData="+encodeURI(bookStatusData)
                         ,true);
                 xhr.setRequestHeader('Accept', 'application/json');
                 xhr.send();
@@ -476,7 +476,7 @@
 
                 bookConditionModal.style.display="flex";
                 bookCModalYear.innerHTML=choiceYear;
-                bookCModalMonth.innerHTML=choiceMonth;
+                bookCModalMonth.innerHTML=choiceMonth+1;
                 bookCModalDate.innerHTML=clickedDate;
 
                 for(let j=0; j<bookTimeArr.length;j++){
@@ -514,8 +514,8 @@
                         console.log("cancelBookData");
                         console.log(cancelBookData);
                     let xhr = new XMLHttpRequest();
-                    xhr.open('POST',  "/stuhel/myPage/cancelBook?"
-                                        + "bcancelBookData=" + encodeURI(cancelBookData)
+                    xhr.open('DELETE',  "/stuhel/myPage/cancelBook?"
+                                        + "cancelBookData=" + encodeURI(cancelBookData)
                             ,true);
                     xhr.setRequestHeader('Accept', 'application/json');
                     xhr.send();
@@ -560,7 +560,7 @@
            loginData = JSON.stringify(loginData);
 
            let xhr = new XMLHttpRequest();
-           xhr.open('POST', "/member/login?"
+           xhr.open('GET', "/member/login?"
                + "loginData=" + encodeURI(loginData)
                ,true);
            xhr.setRequestHeader('Accept', 'application/json');
@@ -704,7 +704,7 @@
                     changeMemberInfo = JSON.stringify(changeMemberInfo);
 
                     let xhr = new XMLHttpRequest();
-                    xhr.open('POST',  "/stuhel/myPage/changeMemberInfo?"
+                    xhr.open('PUT',  "/stuhel/myPage/changeMemberInfo?"
                                         + "changeMemberInfo=" + encodeURI(changeMemberInfo)
                             ,true);
                     xhr.setRequestHeader('Accept', 'application/json');
@@ -752,7 +752,7 @@
     /*로그아웃*/
     function logoutButton(){
         let xhr = new XMLHttpRequest();
-        xhr.open('Post', "/session/logout"
+        xhr.open('DELETE', "/session/logout"
             ,true);
         xhr.setRequestHeader('Accept', 'application/json');
         xhr.send();

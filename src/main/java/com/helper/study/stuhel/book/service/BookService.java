@@ -7,6 +7,6 @@ import java.util.HashMap;
 
 public interface BookService {
 
-    ArrayList<Integer> bookableRoomRetrieve(BookTO bookTO);
+    ArrayList<Integer> retrieveBookableRoom(BookTO bookTO);
     HashMap<String, Integer> roomBook(BookTO bookTO);
 }

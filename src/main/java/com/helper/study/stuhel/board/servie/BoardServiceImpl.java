@@ -45,6 +45,7 @@ public class BoardServiceImpl implements BoardService{
     @Override
     public BoardTO retrieveBoardRead(BoardTO boardTO) {
         BoardTO board=boardDAO.selectReadBoard(boardTO);
+        System.out.println("board = " + board);
         return board;
     }
 }

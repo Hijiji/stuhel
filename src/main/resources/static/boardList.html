@@ -39,7 +39,7 @@
             <ul class="navbar-nav ms-auto my-2 my-lg-0">
                 <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
                 <li class="nav-item"><a class="nav-link" href="/home.html">Home</a></li>
-                <li class="nav-item"><a class="nav-link" href="/myPage.html">my page</a></li>
+                <li class="nav-item"><a class="nav-link" href="/myPage.html">My page</a></li>
                 <li class="nav-item"><a class="nav-link" onclick="logoutButton()">Logout</a></li>
             </ul>
         </div>
@@ -117,8 +117,8 @@
 
     const boardListColumn = [
         {headerName: "seq", field: "noteSeq", hide:true, sort:"asc", width :20},
-        {headerName: "제목", field: "title", width :200},
         {headerName: "작성자", field: "writer", width :50},
+        {headerName: "제목", field: "title", width :200},
         {headerName: '작성일', field: "writeDate", width :50},
         {headerName: '주제', field: 'topicNm', width :50},
         {headerName: '조회', field: 'clickAmount', width :50},
@@ -159,7 +159,7 @@
 
     function retrieveBoardList(){
 	    let xhr = new XMLHttpRequest();
-	    xhr.open('Post', 'stuhel/board/retrieveBoardList'
+	    xhr.open('GET', 'stuhel/board/retrieveBoardList'
 	        ,true)
 	    xhr.setRequestHeader('Accept', 'application/json');
 	    xhr.send();
@@ -175,7 +175,7 @@
 
     function retrieveBoardKeyword(){
         let xhr = new XMLHttpRequest();
-        xhr.open('Post', "/stuhel/board/retrieveBoardKeyword?fullKeyword="+boardSearchTxt.value
+        xhr.open('GET', "/stuhel/board/retrieveBoardKeyword?fullKeyword="+boardSearchTxt.value
             ,true);
         xhr.setRequestHeader('Accept', 'application/json');
         xhr.send();
@@ -193,10 +193,11 @@
         if(userSelectedRowData==null||userSelectedRowData==""){
             return;
         }
+        console.log('userSelectedRowData');
         console.log(userSelectedRowData);
         userSelectedRowData = JSON.stringify(userSelectedRowData);
         let xhr = new XMLHttpRequest();
-        xhr.open('Post', "/stuhel/board/retrieveBoardRead?boardData="+encodeURI(userSelectedRowData)
+        xhr.open('GET', "/stuhel/board/retrieveBoardRead?boardData="+encodeURI(userSelectedRowData)
             ,true);
         xhr.setRequestHeader('Accept', 'application/json');
         xhr.send();
@@ -211,7 +212,7 @@
     /*로그아웃*/
     function logoutButton(){
         let xhr = new XMLHttpRequest();
-        xhr.open('Post', "/session/logout"
+        xhr.open('DELETE', "/session/logout"
             ,true);
         xhr.setRequestHeader('Accept', 'application/json');
         xhr.send();

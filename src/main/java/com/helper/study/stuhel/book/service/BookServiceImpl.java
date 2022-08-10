@@ -20,7 +20,7 @@ public class BookServiceImpl implements BookService {
 
 
     @Override
-    public ArrayList<Integer> bookableRoomRetrieve(BookTO bookTO) {
+    public ArrayList<Integer> retrieveBookableRoom(BookTO bookTO) {
         ArrayList<Integer> roomName = bookDAO.selectBookableRoom(bookTO);
         return roomName;
     }

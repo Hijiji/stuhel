@@ -30,7 +30,7 @@ public class MyPageController {
         this.myPageService = myPageService;
     }
 
-    @PostMapping("/retrieveMemberInfo")
+    @GetMapping("/retrieveMemberInfo")
     String retrieveMemberInfo(HttpServletRequest request) {
         HttpSession session = request.getSession();
         HashMap<String, MemberTO> map=new HashMap<>();
@@ -52,7 +52,7 @@ public class MyPageController {
         return result;
     }
 
-    @PostMapping("/changeMemberInfo")
+    @PutMapping("/changeMemberInfo")
     HashMap<String, Integer> changeMemberInfo(HttpServletRequest request, @RequestParam("changeMemberInfo") String changeMemberInfo){
         HttpSession session = request.getSession();
         String sessionMemberId=(String)session.getAttribute("memberId");
@@ -78,7 +78,7 @@ public class MyPageController {
 
         return map;
     }
-    @PostMapping("/retrieveBookStatus")
+    @GetMapping("/retrieveBookStatus")
     public String retrieveBookStatus(HttpServletRequest request,@RequestParam("bookStatusData") String bookStatusData){
         HttpSession session = request.getSession();
         BookTO book = gson.fromJson(bookStatusData, BookTO.class);
@@ -86,8 +86,8 @@ public class MyPageController {
         return gson.toJson(myPageService.retrieveBookStatus(book));
     }
 
-    @PostMapping("/cancelBook")
-    public HashMap<String, String> cancelBook(@RequestParam("bookCancelData") String bookCancelData){
+    @DeleteMapping("/cancelBook")
+    public HashMap<String, String> cancelBook(@RequestParam("cancelBookData") String bookCancelData){
         ArrayList<BookTO> bookTOList = gson.fromJson(bookCancelData, new TypeToken<ArrayList<BookTO>>() {}.getType());
         HashMap<String, String> map=myPageService.cancelBook(bookTOList);
         return map;

@@ -76,8 +76,8 @@
             <ul class="navbar-nav ms-auto my-2 my-lg-0">
                 <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
                 <li class="nav-item"><a class="nav-link" href="#services">Services</a></li>
-                <li class="nav-item"><a class="nav-link" href="#book">스터디룸예약</a></li>
-                <li class="nav-item"><a class="nav-link" href="/boardList.html">게시판</a></li>
+                <li class="nav-item"><a class="nav-link" href="#book">Reservation</a></li>
+                <li class="nav-item"><a class="nav-link" href="/boardList.html">Board</a></li>
                 <li class="nav-item"><a class="nav-link" href="/myPage.html">MyPage</a></li>
                 <li class="nav-item"><a class="nav-link" onclick="logoutButton()">Logout</a></li>
             </ul>
@@ -104,28 +104,32 @@
         <div class="row gx-4 gx-lg-5">
             <div class="col-lg-3 col-md-6 text-center">
                 <div class="mt-5">
-                    <a href="#book" style="text-decoration-line:none">
-                        <div class="mb-2"><i class="bi-laptop fs-1 text-primary"> </i></div>
+                    <a href="#book" style="text-decoration-line:none;color:black">
+                        <div class="mb-2"><i class="bi-pencil-square fs-1 text-primary"> </i></div>
                         <h3 class="h4 mb-2">Reservation</h3>
                     </a>
                 </div>
             </div>
             <div class="col-lg-3 col-md-6 text-center">
                 <div class="mt-5">
-                    <div class="mb-2"><i class="bi-globe fs-1 text-primary"></i></div>
-                    <h3 class="h4 mb-2">Data sharing</h3>
+                    <a href="/boardList.html" style="text-decoration-line:none;color:black">
+                        <div class="mb-2"><i class="bi-chat-left-text fs-1 text-primary"></i></div>
+                        <h3 class="h4 mb-2">Board</h3>
+                    </a>
                 </div>
             </div>
             <div class="col-lg-3 col-md-6 text-center">
                 <div class="mt-5">
-                    <div class="mb-2"><i class="bi-gem fs-1 text-primary"></i></div>
-                    <h3 class="h4 mb-2" >Monthly</br>Challenge</h3>
+                    <div class="mt-5">
+                        <div class="mb-2"><i class="bi-calendar-heart fs-1 text-primary"></i></div>
+                        <h3 class="h4 mb-2" >Monthly</br>Challenge</h3>
+                    </div>
                 </div>
             </div>
             <div class="col-lg-3 col-md-6 text-center">
-                <div class="mt-5" onclick="location.href=/myPage.html">
-                    <a href="/myPage.html" style="text-decoration-line:none">
-                        <div class="mb-2"><i class="bi-heart fs-1 text-primary"></i></div>
+                <div class="mt-5">
+                    <a href="/myPage.html" style="text-decoration-line:none;color:black">
+                        <div class="mb-2"><i class="bi-person fs-1 text-primary"></i></div>
                         <h3 class="h4 mb-2" >My page</h3>
                     </a>
                     <p class="text-muted mb-0"></p>
@@ -144,12 +148,12 @@
             </div>
         </div></br>
         <div class="row gx-4 gx-lg-5 justify-content-center" >
-            <div class="col-lg-8 col-xl-6 text-center">
+            <div class="col-lg-8 col-xl-6 text-center" style="margin:10px;">
                 <input type="button" class="btn btn-light btn-xl" id="datepicker">
             </div>
-        </div></br>
+        </div>
         <div class="row gx-4 gx-lg-5 justify-content-center">
-            <div class="col-lg-8 col-xl-6 text-center">
+            <div class="col-lg-8 col-xl-6 text-center"style="margin:10px;">
                 <select id="bookTime">
                     <option value="9">09:00 - 10:00</option>
                     <option value="10">10:00 - 11:00</option>
@@ -166,31 +170,26 @@
                     <option value="21">21:00 - 22:00</option>
                 </select>
             </div>
-        </div></br>
+        </div>
         <div class="row gx-4 gx-lg-5 justify-content-center">
             <div class="col-lg-8 col-xl-6 text-center">
-                <input type="button" style="background-color:#FFFF8FF;" class="btn btn-light btn-xl" onclick="bookableRoomRetrieve()" value="예약 가능한 세미나실">
+                <input type="button" style="background-color:#FFFF8FF;margin:10px;" class="btn btn-light btn-xl" onclick="retrieveBookableRoom()" value="예약 가능한 세미나실">
             </div>
         </div>
         <div class="row gx-4 gx-lg-5 justify-content-center">
             <div class="col-lg-8 col-xl-6 text-center">
                 <table id="studyRoomTable" style="display:none">
                     <tr>
-                        <td><input type="button" value="101" id="room101" disabled="true" onclick="sendRoomId(this)" class="btn btn-primary btn-xl"/></td>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <td><input type="button" value="102" id="room102" disabled="true" onclick="sendRoomId(this)" class="btn btn-primary btn-xl"/></td>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <td><input type="button" value="103" id="room103" disabled="true" onclick="sendRoomId(this)" class="btn btn-primary btn-xl"/></td>
+                        <td><input type="button" value="101" id="room101" disabled="true" onclick="sendRoomId(this)" class="btn btn-primary btn-xl" style="padding:30px 33px;margin:1px;"/></td>
+                        <td><input type="button" value="102" id="room102" disabled="true" onclick="sendRoomId(this)" class="btn btn-primary btn-xl" style="padding:30px 33px;margin:1px;"/></td>
+                        <td><input type="button" value="103" id="room103" disabled="true" onclick="sendRoomId(this)" class="btn btn-primary btn-xl" style="padding:30px 33px;margin:1px;"/></td>
                     </tr>
                     <tr>
-                        &nbsp;&nbsp;&nbsp;
                     </tr>
                     <tr>
-                        <td><input type="button" value="104" id="room104" disabled="true" onclick="sendRoomId(this)" class="btn btn-primary btn-xl" /></td>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <td><input type="button" value="105" id="room105" disabled="true" onclick="sendRoomId(this)" class="btn btn-primary btn-xl" /></td>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <td><input type="button" value="106" id="room106" disabled="true" onclick="sendRoomId(this)" class="btn btn-primary btn-xl" /></td>
+                        <td><input type="button" value="104" id="room104" disabled="true" onclick="sendRoomId(this)" class="btn btn-primary btn-xl"  style="padding:30px 33px;margin:1px;"/></td>
+                        <td><input type="button" value="105" id="room105" disabled="true" onclick="sendRoomId(this)" class="btn btn-primary btn-xl"  style="padding:30px 33px;margin:1px;"/></td>
+                        <td><input type="button" value="106" id="room106" disabled="true" onclick="sendRoomId(this)" class="btn btn-primary btn-xl"  style="padding:30px 33px;margin:1px;"/></td>
                     </tr>
                 </table>
             </div>
@@ -226,8 +225,6 @@
         </div>
     </div>
 </section>
-
-
 
 <!-- Portfolio-->
 <div id="portfolio">
@@ -369,7 +366,7 @@
     /*로그아웃*/
     function logoutButton(){
         let xhr = new XMLHttpRequest();
-        xhr.open('Post', "/session/logout"
+        xhr.open('DELETE', "/session/logout"
             ,true);
         xhr.setRequestHeader('Accept', 'application/json');
         xhr.send();
@@ -381,11 +378,13 @@
     }
 
     <!--사용가능한 세미나실 -->
-    function bookableRoomRetrieve(){
-
+    function retrieveBookableRoom(){
+        console.log(bookTime.value);
+        console.log(bookDate.value);
+        studyRoomTable.style.display="none";
         let xhr = new XMLHttpRequest();
         xhr.open('Get'
-                  , "/stuhel/book/bookableRoomRetrieve?bookTime="+bookTime.value+"&bookDate="+bookDate.value
+                  , "/stuhel/book/retrieveBookableRoom?bookTime="+bookTime.value+"&bookDate="+bookDate.value
                       , true);
         xhr.setRequestHeader('Accept','application/json');
         xhr.send();
@@ -395,24 +394,33 @@
                 txt = JSON.parse(txt);
                 console.log(txt.roomId);
                 if(txt.roomId.length <= 0){alert("예약가능한 세미나실이 없습니다."); return;}
+                //studyRoomTable.style="none";
+                room101.disabled=true;
+                room102.disabled=true;
+                room103.disabled=true;
+                room104.disabled=true;
+                room105.disabled=true;
+                room106.disabled=true;
+
                 studyRoomTable.style="flex";
+
                 for(let i of txt.roomId){
                     if(i==101){
                         room101.disabled=false;
                         room101.style.backgroundColor="tomato";
-                    }else if(i==102){
+                    }if(i==102){
                         room102.disabled=false;
                         room102.style.backgroundColor="tomato";
-                    }else if(i==103){
+                    }if(i==103){
                         room103.disabled=false;
                         room103.style.backgroundColor="tomato";
-                    }else if(i==104){
+                    }if(i==104){
                         room104.disabled=false;
                         room104.style.backgroundColor="tomato";
-                    }else if(i==105){
+                    }if(i==105){
                         room105.disabled=false;
                         room105.style.backgroundColor="tomato";
-                    }else if(i==106){
+                    } if(i==106){
                         room106.disabled=false;
                         room106.style.backgroundColor="tomato";
                     }
@@ -444,7 +452,7 @@
         insertBookData=JSON.stringify(insertBookData);
 
         let xhr = new XMLHttpRequest();
-        xhr.open('Get'
+        xhr.open('POST'
                   , "/stuhel/book/roomBook?insertBookData="+encodeURI(insertBookData)
                       , true);
         xhr.setRequestHeader('Accept','application/json');
@@ -453,7 +461,7 @@
             if(xhr.readyState == 4 && xhr.status == 200){
                 let txt = xhr.responseText;
                 txt = JSON.parse(txt);
-                alert("뚄꾠!!");
+                alert("선택하신 세미나실이 예약되었습니다.");
                 room101.disabled=true;
                 room102.disabled=true;
                 room103.disabled=true;

@@ -30,7 +30,7 @@
         WHERE NOTE_SEQ = #{noteSeq}
         AND WRITER = #{writer}
         AND TITLE = #{title}
-        AND TOPIC_CD = #{topicCd}
+        ORDER BY NOTE_SEQ ASC
     </select>
     <select id="selectBoardKeyword" parameterType="map" resultMap="Board">
         SELECT
@@ -46,6 +46,10 @@
             </foreach>
         OR WRITER LIKE
             <foreach collection="keywordList" item="keyword" separator=" OR WRITER LIKE ">
+                '%'||#{keyword}||'%'
+            </foreach>
+        OR TOPIC_NM LIKE
+            <foreach collection="keywordList" item="keyword" separator=" OR TOPIC_NM LIKE ">
                 '%'||#{keyword}||'%'
             </foreach>
     </select>

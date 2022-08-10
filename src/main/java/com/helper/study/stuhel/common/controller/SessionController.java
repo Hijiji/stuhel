@@ -2,10 +2,7 @@ package com.helper.study.stuhel.common.controller;
 
 import com.helper.study.stuhel.member.to.MemberTO;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -33,7 +30,7 @@ public class SessionController {
 
     }
 
-    @PostMapping("/logout")/*로그아웃*/
+    @DeleteMapping("/logout")/*로그아웃*/
     public String logout(HttpServletRequest request, HttpServletResponse response){
         HttpSession session = request.getSession();
         System.out.println(session.getAttribute("memberId"));
@@ -45,6 +42,4 @@ public class SessionController {
         response.setDateHeader("Expires",-1);
         return "/";
     }
-
-
 }

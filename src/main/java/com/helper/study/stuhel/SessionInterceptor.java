@@ -17,13 +17,11 @@ public class SessionInterceptor implements AsyncHandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        System.out.println("SessionInterceptor.preHandle 아니 왜 안되냐고 쉬봡바바바씨이바아차아아");
         if(session.getAttribute("memberId")==null){
             response.sendRedirect("/");
-            System.out.println("SessionInterceptor.preHandle 나라라라라라라라 false");
             return false;
         }
-        else {System.out.println("SessionInterceptor.preHandle 나라라라라라라라 true");
+        else {
             return true;
         }
                 //AsyncHandlerInterceptor.super.preHandle(request, response, handler);
@@ -37,6 +35,5 @@ public class SessionInterceptor implements AsyncHandlerInterceptor {
         response.addHeader("Cache-Control", "post-check=0, pre-check=0");
         response.setDateHeader("Expires",-1);
         AsyncHandlerInterceptor.super.postHandle(request, response, handler, modelAndView);
-
     }
 }

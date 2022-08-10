@@ -24,7 +24,7 @@ public class BoardController {
         this.boardService = boardService;
     }
 
-    @PostMapping("/retrieveBoardList")
+    @GetMapping("/retrieveBoardList")
     ArrayList<BoardTO> retrieveBoardList(HttpServletRequest request){
         HttpSession session = request.getSession();
         String sessionId = (String)session.getAttribute("memberId");
@@ -32,7 +32,7 @@ public class BoardController {
         return board;
     }
 
-    @PostMapping("/retrieveBoardKeyword")
+    @GetMapping("/retrieveBoardKeyword")
     HashMap<String,ArrayList> retrieveBoardKeyword(HttpServletRequest request,@RequestParam("fullKeyword")String fullKeyword){
         HashMap<String, ArrayList> map = new HashMap<>();
         ArrayList<BoardTO> board = boardService.retrieveBoardKeyword(fullKeyword);
@@ -40,7 +40,7 @@ public class BoardController {
         return map; //리다이렉트 게시글 조회
     }
 
-    @GetMapping("/saveWrite")
+    @PatchMapping("/saveWrite")
     HashMap<String,Integer> saveWrite(HttpServletRequest request
                     ,@RequestParam("title")String title, @RequestParam("note")String note, @RequestParam("topicNm")String topicNm){
 
@@ -57,13 +57,13 @@ public class BoardController {
         return map;
     }
 
-    @PostMapping("/retrieveTopicList")
+    @GetMapping("/retrieveTopicList")
     String retrieveTopicList(){
         ArrayList<BoardTO> topicList=boardService.retrieveTopicList();
         return gson.toJson(topicList);
     }
 
-    @PostMapping("/retrieveBoardRead")
+    @GetMapping("/retrieveBoardRead")
     String retrieveBoardRead(@RequestParam("boardData")String boardData){
         BoardTO board = gson.fromJson(boardData, BoardTO.class);
         return gson.toJson(boardService.retrieveBoardRead(board));
