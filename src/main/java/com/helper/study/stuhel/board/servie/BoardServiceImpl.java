@@ -45,7 +45,14 @@ public class BoardServiceImpl implements BoardService{
     @Override
     public BoardTO retrieveBoardRead(BoardTO boardTO) {
         BoardTO board=boardDAO.selectReadBoard(boardTO);
+        board.setNote(board.getNote().replaceAll("\n\r","</br>"));
         System.out.println("board = " + board);
         return board;
+    }
+
+    @Override
+    public int addViewCount(BoardTO board) {
+        boardDAO.updateViewCount(board);
+        return 0;
     }
 }

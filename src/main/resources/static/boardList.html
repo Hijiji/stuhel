@@ -61,7 +61,7 @@
     </div>
 </header>
 
-<section>
+<section id="list">
     <div style="display: flex; justify-content: center;">
     <div style="width:1200px;position:relative" >
         <div align="right">
@@ -100,9 +100,9 @@
             if (xhr.readyState == 4 && xhr.status == 200) {
                 // 데이터 확인
                 sessionStatus = xhr.responseText;
-                if(sessionStatus==-1){
+                if(sessionStatus==null||sessionStatus==''){
                     location.href="/index.html";
-                }else if(sessionStatus==0){
+                }else if(sessionStatus!=null){
                     retrieveBoardList();
                     new agGrid.Grid(boardListGrid, boardListGridOptions);
                 }
@@ -185,6 +185,7 @@
                 txt = JSON.parse(txt);
                 console.log(txt);
                 boardListGridOptions.api.setRowData(txt.writeList);
+                location.href="#list";
             }
         }
     }

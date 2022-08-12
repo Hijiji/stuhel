@@ -290,40 +290,36 @@
             if (xhr.readyState == 4 && xhr.status == 200) {
                 // 데이터 확인
                 sessionStatus = xhr.responseText;
-                if(sessionStatus==-1){
+                if(sessionStatus==null||sessionStatus==''){
                     location.href="/index.html";
-                }else if(sessionStatus==0){
-                    retrieveMemberInfo();
+                    return;
                 }
+                retrieveMemberInfo();
             }
         }
     })();
 
     <!--초기회원정보화면-->
     function retrieveMemberInfo(){
-        if(sessionStatus==0){
-            let xhr = new XMLHttpRequest();
-                xhr.open('GET', "/stuhel/myPage/retrieveMemberInfo?"
-                        ,true);
-                xhr.setRequestHeader('Accept', 'application/json');
-                xhr.send();
-                xhr.onreadystatechange = () => {
-                    if (xhr.readyState == 4 && xhr.status == 200) {
-                        // 데이터 확인
-                        let txt = xhr.responseText;
-                        txt = JSON.parse(txt);
-
-                        dbName=txt.name;
-                        dbIdentity=txt.id;
-                        dbBirth=txt.birth;
-
-                        name.value=dbName;
-                        identity.value=dbIdentity;
-                        birth.value=dbBirth;
-                    }
+        let xhr = new XMLHttpRequest();
+            xhr.open('GET', "/stuhel/myPage/retrieveMemberInfo?"
+                    ,true);
+            xhr.setRequestHeader('Accept', 'application/json');
+            xhr.send();
+            xhr.onreadystatechange = () => {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    // 데이터 확인
+                    let txt = xhr.responseText;
+                    txt = JSON.parse(txt);
+                    dbName=txt.name;
+                    dbIdentity=txt.id;
+                    dbBirth=txt.birth;
+                    name.value=dbName;
+                    identity.value=dbIdentity;
+                    birth.value=dbBirth;
                 }
-                setDate();
-        }
+            }
+            setDate();
     }
 
     function enterkeyEvent(next){
@@ -419,33 +415,30 @@
             console.log("조회연월"+retrieveYM);
         let bookStatusData={"bookDate":retrieveYM};
         bookStatusData = JSON.stringify(bookStatusData);
-        if(sessionStatus==0){
-            let xhr = new XMLHttpRequest();
-                xhr.open('GET', "/stuhel/myPage/retrieveBookStatus?bookStatusData="+encodeURI(bookStatusData)
-                        ,true);
-                xhr.setRequestHeader('Accept', 'application/json');
-                xhr.send();
-                xhr.onreadystatechange = () => {
-                    if (xhr.readyState == 4 && xhr.status == 200) {
-                        // 데이터 확인
-                        let txt = xhr.responseText;
-                        monthBookDataArr = JSON.parse(txt);
-                        console.log(monthBookDataArr);
-                        tdTagIdArr=[];
-                        if(monthBookDataArr.length>0){
-                            for(var i=0;i<monthBookDataArr.length;i++){
-                                let bookDate;
-                                if(monthBookDataArr[i].bookDate.substr(8,1)!="0") bookDate=monthBookDataArr[i].bookDate.substr(8,2);
-                                else bookDate=monthBookDataArr[i].bookDate.substr(9,1);
-                                tdTagId = "date"+bookDate;
-                                tdTagIdArr.push(tdTagId);
-                            }
-
+        let xhr = new XMLHttpRequest();
+            xhr.open('GET', "/stuhel/myPage/retrieveBookStatus?bookStatusData="+encodeURI(bookStatusData)
+                    ,true);
+            xhr.setRequestHeader('Accept', 'application/json');
+            xhr.send();
+            xhr.onreadystatechange = () => {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    // 데이터 확인
+                    let txt = xhr.responseText;
+                    monthBookDataArr = JSON.parse(txt);
+                    console.log(monthBookDataArr);
+                    tdTagIdArr=[];
+                    if(monthBookDataArr.length>0){
+                        for(var i=0;i<monthBookDataArr.length;i++){
+                            let bookDate;
+                            if(monthBookDataArr[i].bookDate.substr(8,1)!="0") bookDate=monthBookDataArr[i].bookDate.substr(8,2);
+                            else bookDate=monthBookDataArr[i].bookDate.substr(9,1);
+                            tdTagId = "date"+bookDate;
+                            tdTagIdArr.push(tdTagId);
                         }
-                        createCalendar(choiceYear,choiceMonth,tdTagIdArr);
                     }
+                    createCalendar(choiceYear,choiceMonth,tdTagIdArr);
                 }
-        }
+            }
     }
     <!--달력모달 onclick-->
     function tdDateClick(clickedTdId){

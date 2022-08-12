@@ -9,8 +9,9 @@ import java.util.HashMap;
 @Mapper
 public interface BoardDAO {
     ArrayList<BoardTO> selectTopicList();
-    void insertWrite(BoardTO boardTO);
+    void insertWrite(BoardTO board);
     ArrayList<BoardTO> selectBoardKeyword(HashMap<String, String[]> map);
     ArrayList<BoardTO> selectBoardList();
-    BoardTO selectReadBoard(BoardTO boardTO);
+    BoardTO selectReadBoard(BoardTO board);
+    int updateViewCount(BoardTO board);
 }

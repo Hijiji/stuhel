@@ -63,6 +63,7 @@
             ,write_DATE
             ,topic_nm
             ,topic_cd
+            ,CLICK_AMOUNT
         )VALUES
         (
             #{title}
@@ -72,6 +73,15 @@
             ,sysdate
             ,#{topicNm}
             ,(select topic_cd from BOARD_TOPIC where topic_nm=#{topicNm})
+            ,0
         )
     </insert>
+    <update id="updateViewCount" parameterType="com.helper.study.stuhel.board.to.BoardTO">
+        UPDATE BOARD
+        SET CLICK_AMOUNT = CLICK_AMOUNT+1
+        WHERE
+            NOTE_SEQ=#{noteSeq}
+            AND TITLE=#{title}
+            AND WRITER=#{writer}
+    </update>
 </mapper>

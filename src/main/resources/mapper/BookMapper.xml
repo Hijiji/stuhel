@@ -7,8 +7,8 @@
     </resultMap>
 
     <select id="selectBookableRoom" parameterType="com.helper.study.stuhel.book.to.BookTO" resultMap="RoomName">
-        SELECT
-            ROOM_ID FROM STUDY_ROOM S
+        SELECT ROOM_ID
+        FROM STUDY_ROOM S
         WHERE S.ROOM_ID NOT IN (select r.ROOM_ID
                                   from ROOM_BOOK r
                                   where r.BOOK_DATE = #{bookDate}

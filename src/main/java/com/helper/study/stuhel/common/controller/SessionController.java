@@ -14,12 +14,15 @@ import javax.servlet.http.HttpSession;
 public class SessionController {
 
     @GetMapping("/sessionCheck") /*세션확인*/
-    public int sessionCheck(HttpServletRequest request){
+    public MemberTO sessionCheck(HttpServletRequest request){
         HttpSession session = request.getSession();
         if(session.getAttribute("memberId")==null){
-            return -1;
+            return null;
         }
-        return 0;
+        MemberTO member=new MemberTO();
+        member.setId((String)session.getAttribute("memberId"));
+        member.setName((String)session.getAttribute("memberName"));
+        return member;
     }
 
     public static void loginSession(HttpSession session, MemberTO member){

@@ -103,9 +103,9 @@
             if (xhr.readyState == 4 && xhr.status == 200) {
                 // 데이터 확인
                 sessionStatus = xhr.responseText;
-                if(sessionStatus==-1){
+                if(sessionStatus==null||sessionStatus==''){
                     location.href="/index.html";
-                }else if(sessionStatus==0){
+                }else if(sessionStatus!=null){
                     retrieveTopicList();
                 }
             }
@@ -155,6 +155,8 @@
     }
 
     function saveWrite(){
+        let brNote = note.value.replace(/\n/g, '<br/>');
+
         if(title.value.trim()==null || title.value.trim()==""){
             alert("글의 제목을 입력해주세요.");
             return;
@@ -163,7 +165,7 @@
             return;
         }
         let xhr = new XMLHttpRequest();
-	    xhr.open('PATCH', 'stuhel/board/saveWrite?title='+title.value+'&note='+note.value+'&topicNm='+selectTag.value
+	    xhr.open('PATCH', 'stuhel/board/saveWrite?title='+title.value+'&note='+brNote+'&topicNm='+selectTag.value
 	        ,true)
 	    xhr.setRequestHeader('Accept', 'application/json');
 	    xhr.send();

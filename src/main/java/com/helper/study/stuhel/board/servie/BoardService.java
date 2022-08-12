@@ -10,4 +10,5 @@ public interface BoardService {
     ArrayList<BoardTO> retrieveBoardKeyword(String fullKeyword);
     ArrayList<BoardTO> retrieveBoardList();
     BoardTO retrieveBoardRead(BoardTO boardTO);
+    int addViewCount(BoardTO board);
 }

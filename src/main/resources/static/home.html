@@ -80,6 +80,7 @@
                 <li class="nav-item"><a class="nav-link" href="/boardList.html">Board</a></li>
                 <li class="nav-item"><a class="nav-link" href="/myPage.html">MyPage</a></li>
                 <li class="nav-item"><a class="nav-link" onclick="logoutButton()">Logout</a></li>
+                <li class="nav-item" style="display:none"><a class="nav-link" href="#localMap">localMap</a></li>
             </ul>
         </div>
     </div>
@@ -199,7 +200,8 @@
     </br>
     </br>
 </section>
-<section>
+
+<section class="page-section" id="localMap">
     <div>
         <div class="row gx-4 gx-lg-5 justify-content-center">
             <div class="col-lg-8 col-xl-6 text-center">
@@ -252,10 +254,8 @@
             if (xhr.readyState == 4 && xhr.status == 200) {
                 // 데이터 확인
                 let sessionStatus = xhr.responseText;
-                if(sessionStatus==-1){
+                if(sessionStatus==null||sessionStatus==''){
                     location.href="/index.html";
-                }else if(sessionStatus==0){
-
                 }
             }
         }
@@ -279,9 +279,9 @@
 
   $(function(){   //최소선택시간 최대선택시간 초기년월
     $("#datepicker").datepicker({
-    dateFormat: 'yy-mm-dd',
-    prevText: '이전 달',
-    nextText: '다음 달',
+    dateFormat: 'yyyy-mm-dd',
+    //prevText: '이전 달',
+    //nextText: '다음 달',
     monthNames: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
     monthNamesShort: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
     dayNames: ['일', '월', '화', '수', '목', '금', '토'],

@@ -68,4 +68,11 @@ public class BoardController {
         BoardTO board = gson.fromJson(boardData, BoardTO.class);
         return gson.toJson(boardService.retrieveBoardRead(board));
     }
+    @PatchMapping("/addViewCount")
+    int addViewCount(@RequestParam("boardData")String boardData){
+        BoardTO board = gson.fromJson(boardData, BoardTO.class);
+        boardService.addViewCount(board);
+        return 0;
+    }
+
 }

@@ -78,6 +78,9 @@
     const writer = document.querySelector("#writer");
     const note = document.querySelector("#note");
     const title = document.querySelector("#title");
+    let sessionData;
+    let boardReadData;
+
 
     <!--세션체크-->
     let sessionStatus = null;
@@ -91,23 +94,54 @@
             if (xhr.readyState == 4 && xhr.status == 200) {
                 // 데이터 확인
                 sessionStatus = xhr.responseText;
-                if(sessionStatus==-1){
+                console.log(sessionStatus);
+                if(sessionStatus==null||sessionStatus==''){
                     location.href="/index.html";
-                }else if(sessionStatus==0){
+                    return;
+                }else if(sessionStatus!=null){
+                    sessionData = JSON.stringify(sessionStatus);
                     let url = new URL(window.location.href);
                     let urlParams = url.searchParams;
                     console.log(JSON.parse(urlParams.get("boardReadData")));
-                    let boardReadData = JSON.parse(urlParams.get("boardReadData"));
+                    boardReadData = JSON.parse(urlParams.get("boardReadData"));
 
                     dateSpan.innerHTML=boardReadData.writeDate;
                     writer.innerHTML=boardReadData.writer;
                     title.innerHTML=boardReadData.title;
-                    note.value=boardReadData.note;
+                    note.value=boardReadData.note.replaceAll("<br/>", "\r\n");
+
+                    viewCount();
                 }
             }
         }
     })();
 
+    function viewCount(){
+        if(boardReadData.writer==sessionData.id){
+            return;
+        }else{
+            let boardData = Object();
+            boardData.title=boardReadData.title;
+            boardData.writer=boardReadData.writer;
+            boardData.noteSeq=boardReadData.noteSeq;
+
+            boardData=JSON.stringify(boardData);
+            console.log(boardData);
+
+            let xhr = new XMLHttpRequest();
+            xhr.open('PATCH', 'stuhel/board/addViewCount?boardData='+encodeURI(boardData)
+                     ,true);
+            xhr.setRequestHeader('Accept', 'application/json');
+            xhr.send();
+            xhr.onreadystatechange = () => {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    // 데이터 확인
+                    sessionStatus = xhr.responseText;
+
+            }
+        }
+        }
+    }
 </script>
 </body>
 </html>
