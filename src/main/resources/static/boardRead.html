@@ -55,7 +55,7 @@
             </div>
             <hr>
 
-            <div align="right">
+            <div align="right" visible="false">
                 <div><!--visible none -> 파일이 하나라도 있으면 visible -->
                     <div id="fileDownload">
                     </div>
@@ -64,6 +64,17 @@
             </div>
             <div align="center">
                 <textarea required readonly id="note" style="outline:none;height:700px; resize:none; width:900px;border:none;font-size:1.2rem;"></textarea>
+            </div>
+        </div>
+        <div>
+            <div id="comment">
+
+            </div>
+            <div>
+                <textarea placeholder="댓글을 입력하는 당신, 센스쟁이 우후훗" style="resize: none;height:100px; width:900px;" >
+
+                </textarea>
+                <input type="button" id="saveComment" value="댓글달기" class="btn btn-primary btn-xl" style="font-size:15px;padding:11px 22px;text-align:center">
             </div>
         </div>
     </div>
