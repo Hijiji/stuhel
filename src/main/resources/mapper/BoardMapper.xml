@@ -84,4 +84,30 @@
             AND TITLE=#{title}
             AND WRITER=#{writer}
     </update>
+    <select id="selectBoardComment" parameterType="java.lang.String" resultType="com.helper.study.stuhel.board.to.BoardCommentTO">
+        SELECT *
+        FROM BOARD_COMMENT
+        WHERE NOTE_SEQ = #{noteSeq}
+    </select>
+    <insert id="insertComment" parameterType="com.helper.study.stuhel.board.to.BoardCommentTO">
+        INSERT INTO BOARD_COMMENT
+        (
+            comment_seq
+            ,note_seq
+            ,cmt
+            ,writer
+            ,write_Date
+            ,cdepth
+            ,cgroup
+        )VALUES
+        (
+            board_comment_seq.nextval
+            ,#{noteSeq}
+            ,#{cmt}
+            ,#{writer}
+            ,sysdate
+            ,#{cDepth}
+            ,#{cGroup}
+        )
+    </insert>
 </mapper>

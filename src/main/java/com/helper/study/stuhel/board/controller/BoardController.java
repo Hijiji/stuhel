@@ -3,6 +3,7 @@ package com.helper.study.stuhel.board.controller;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.helper.study.stuhel.board.servie.BoardServiceImpl;
+import com.helper.study.stuhel.board.to.BoardCommentTO;
 import com.helper.study.stuhel.board.to.BoardTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -73,6 +74,19 @@ public class BoardController {
         BoardTO board = gson.fromJson(boardData, BoardTO.class);
         boardService.addViewCount(board);
         return 0;
+    }
+    @GetMapping("/retrieveBoardComment")
+    ArrayList<BoardCommentTO> retrieveBoardComment (@RequestParam("noteSeq") String noteSeq){
+        ArrayList<BoardCommentTO> boardCommentList = boardService.retrieveBoardComment(noteSeq);
+        return boardCommentList;
+    }
+    @PostMapping("/saveComment")
+    HashMap<String,Integer> saveComment (@RequestParam("commentData") String commentData, HttpServletRequest request){
+        HttpSession session = request.getSession();
+        BoardCommentTO boardComment= gson.fromJson(commentData, BoardCommentTO.class);
+        boardComment.setWriter((String)session.getAttribute("memberId"));
+
+        return boardService.saveComment(boardComment);
     }
 
 }

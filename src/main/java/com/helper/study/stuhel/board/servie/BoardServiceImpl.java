@@ -1,6 +1,7 @@
 package com.helper.study.stuhel.board.servie;
 
 import com.helper.study.stuhel.board.mapper.BoardDAO;
+import com.helper.study.stuhel.board.to.BoardCommentTO;
 import com.helper.study.stuhel.board.to.BoardTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -54,5 +55,23 @@ public class BoardServiceImpl implements BoardService{
     public int addViewCount(BoardTO board) {
         boardDAO.updateViewCount(board);
         return 0;
+    }
+
+    @Override
+    public ArrayList<BoardCommentTO> retrieveBoardComment(String noteSeq) {
+        return boardDAO.selectBoardComment(noteSeq);
+    }
+
+    @Override
+    public HashMap<String, Integer> saveComment(BoardCommentTO boardComment) {
+        HashMap<String, Integer> map = new HashMap<>();
+        map.put("errorCd",0);
+        try {
+            boardDAO.insertComment(boardComment);
+        }catch (Exception e){
+            e.printStackTrace();
+            map.put("errorCd",-1);
+        }
+        return map;
     }
 }

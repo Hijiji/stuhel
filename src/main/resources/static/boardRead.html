@@ -48,7 +48,7 @@
         </div>
     </div></br>
     <div style="display: flex; justify-content: center;">
-        <div style="width:900px;position:relative" >
+        <div style="width:900px;position:relative">
             <div>
                 <span id="dateSpan" align="right" style="color=#D5D5D5; font-size:14px"></span>&nbsp;&nbsp;·&nbsp;&nbsp;
                 <span id="writer" align="left" style="color=#D5D5D5; font-size:14px"></span>
@@ -65,16 +65,14 @@
             <div align="center">
                 <textarea required readonly id="note" style="outline:none;height:700px; resize:none; width:900px;border:none;font-size:1.2rem;"></textarea>
             </div>
-        </div>
-        <div>
-            <div id="comment">
 
-            </div>
             <div>
-                <textarea placeholder="댓글을 입력하는 당신, 센스쟁이 우후훗" style="resize: none;height:100px; width:900px;" >
-
-                </textarea>
-                <input type="button" id="saveComment" value="댓글달기" class="btn btn-primary btn-xl" style="font-size:15px;padding:11px 22px;text-align:center">
+                <div id="comment" margin="0.7rem">
+                </div>
+                <div margin="1rem">
+                    <textarea placeholder=" 댓글을 입력하는 당신, 센스쟁이 우후훗" id="commentTxt" style="resize: none;height:100px; width:900px;font-size:0.9rem;" ></textarea>
+                    <input type="button" id="saveComment" value="댓글달기" onclick="saveCommentFunction()" class="btn btn-primary btn-xl" style="font-size:15px;padding:11px 22px;text-align:center">
+                </div>
             </div>
         </div>
     </div>
@@ -97,6 +95,11 @@
     const writer = document.querySelector("#writer");
     const note = document.querySelector("#note");
     const title = document.querySelector("#title");
+    const comment = document.querySelector("#comment");
+    const commentTxt =document.querySelector("#commentTxt");
+    let cDepth=0;
+    let cGroup=0;
+    let noteSeq;
     let sessionData;
     let boardReadData;
 
@@ -128,8 +131,10 @@
                     writer.innerHTML=boardReadData.writer;
                     title.innerHTML=boardReadData.title;
                     note.value=boardReadData.note.replaceAll("<br/>", "\r\n");
+                    noteSeq=boardReadData.noteSeq;
 
                     viewCount();
+                    retrieveBoardComment();
                 }
             }
         }
@@ -156,10 +161,99 @@
                 if (xhr.readyState == 4 && xhr.status == 200) {
                     // 데이터 확인
                     sessionStatus = xhr.responseText;
-
+                }
             }
         }
+    }
+    function retrieveBoardComment(){
+        let xhr = new XMLHttpRequest();
+            xhr.open('GET', 'stuhel/board/retrieveBoardComment?noteSeq='+noteSeq
+                     ,true);
+            xhr.setRequestHeader('Accept', 'application/json');
+            xhr.send();
+            xhr.onreadystatechange = () => {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    // 데이터 확인
+                    let commentData = xhr.responseText;
+                    console.log(commentData);
+                    if(commentData==''||commentData==null){
+                        return;
+                    }else{
+                        commentData = JSON.parse(commentData);
+                        comment.innerHTML="";
+                        for(i=0;i<commentData.length; i++){
+                            let divTag = document.createElement("div");
+                            let spanTag = document.createElement("span");
+                            let hrTag = document.createElement("hr");
+                            let dTag = document.createElement("div");
+                            let updateAndDelete = document.createElement("a");
+                            let addComment = document.createElement("a");
+
+                            dTag.align="right";
+                            updateAndDelete.href="#";
+                            updateAndDelete.innerHTML=" 수정/삭제 ";
+                            updateAndDelete.style.fontSize="0.8rem";
+                            updateAndDelete.style.textDecorationLine="none";
+                            updateAndDelete.style.color="gray";
+                            addComment.href="#";
+                            addComment.innerHTML=" 댓글달기 ";
+                            addComment.style.textDecorationLine="none";
+                            addComment.style.color="gray";
+                            addComment.style.fontSize="0.8rem";
+
+                            spanTag.innerHTML = commentData[i].writer+'｜'+commentData[i].writeDate;
+                            spanTag.style.fontSize="0.9rem";
+                            spanTag.style.color="gray";
+
+                            let pTag = document.createElement("p");
+                            pTag.innerHTML=commentData[i].cmt;
+                            pTag.style.margin="1rem";
+                            //pTag.style.padding="10px";
+                            pTag.style.fontSize="0.9rem";
+
+                            comment.appendChild(hrTag);
+                            divTag.appendChild(spanTag);
+                            dTag.appendChild(updateAndDelete);
+                            dTag.appendChild(addComment);
+                            comment.appendChild(divTag);
+                            comment.appendChild(pTag);
+                            comment.appendChild(dTag);
+                        }
+                    }
+                }
+            }
+    }
+    function saveCommentFunction(){
+        if(commentTxt.value.trim()==null || commentTxt.value.trim()==""){
+            alert("댓글의 내용을 입력해주세요.");
+            return;
         }
+        let commentData=new Object();
+            commentData.cmt=commentTxt.value;
+            commentData.noteSeq=noteSeq;
+            commentData.cDepth=cDepth;
+            commentData.cGroup=cGroup;
+        commentData = JSON.stringify(commentData);
+
+        let xhr = new XMLHttpRequest();
+            xhr.open('Post', 'stuhel/board/saveComment?commentData='+encodeURI(commentData)
+                     ,true);
+            xhr.setRequestHeader('Accept', 'application/json');
+            xhr.send();
+            xhr.onreadystatechange = () => {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    // 데이터 확인
+                    let errorData = xhr.responseText;
+                    console.log(errorData);
+                    if(errorData==-1||errorData=="-1"){
+                        alert("서버오류로 인한 댓글 저장실패");
+                        return;
+                    }else{
+                        commentTxt.value="";
+                        retrieveBoardComment();
+                    }
+                }
+            }
     }
 </script>
 </body>
