@@ -88,5 +88,10 @@ public class BoardController {
 
         return boardService.saveComment(boardComment);
     }
+    @DeleteMapping("/deleteBoardComment")
+    HashMap<String,Integer> deleteBoardComment(@RequestParam("deleteCommentData") String deleteCommentData){
+        BoardCommentTO boardComment = gson.fromJson(deleteCommentData, BoardCommentTO.class);
+        return boardService.deleteBoardComment(boardComment);
 
+    }
 }

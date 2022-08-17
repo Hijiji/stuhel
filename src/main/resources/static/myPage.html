@@ -513,6 +513,7 @@
                 else {
                     let cancelBookData = [];
                     cancelTime.forEach( (selectedTime) => {
+                    console.log(selectedTime);
                       cancelBookData.push(clickedBookData[selectedTime.id]);
                     });
                     cancelBookData = JSON.stringify(cancelBookData);

@@ -74,4 +74,17 @@ public class BoardServiceImpl implements BoardService{
         }
         return map;
     }
+
+    @Override
+    public HashMap<String, Integer> deleteBoardComment(BoardCommentTO boardComment) {
+        HashMap<String, Integer> map = new HashMap<>();
+        map.put("errorCd", 0);
+        try {
+            boardDAO.deleteBoardComment(boardComment);
+        }catch(Exception e){
+            e.printStackTrace();
+            map.put("errorCd", -1);
+        }
+        return map;
+    }
 }

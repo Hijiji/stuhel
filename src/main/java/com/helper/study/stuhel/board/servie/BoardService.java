@@ -15,4 +15,5 @@ public interface BoardService {
     int addViewCount(BoardTO board);
     ArrayList<BoardCommentTO> retrieveBoardComment(String noteSeq);
     HashMap<String, Integer> saveComment(BoardCommentTO boardComment);
+    HashMap<String, Integer> deleteBoardComment(BoardCommentTO boardComment);
 }

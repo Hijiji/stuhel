@@ -17,4 +17,5 @@ public interface BoardDAO {
     int updateViewCount(BoardTO board);
     ArrayList<BoardCommentTO> selectBoardComment(String noteSeq);
     void insertComment(BoardCommentTO boardComment);
+    void deleteBoardComment(BoardCommentTO boardComment);
 }

@@ -50,13 +50,8 @@ public class MyPageServiceImpl implements MyPageService{
     public ArrayList<BookTO> retrieveBookStatus(BookTO bookTO) {
         System.out.println("book.getBookingDate() = " + bookTO.getBookDate());
         System.out.println("book.getUserId() = " + bookTO.getUserId());
-        ArrayList<BookTO> a= myPageDAO.selectBookStatus(bookTO);
-        for(BookTO b:a) {
-            System.out.println("b.getBookingDate() = " + b.getBookDate());
-            System.out.println("b.getBookingTime() = " + b.getBookTime());
-            System.out.println("b.getBookingTime() = " + b.getBookTime());
-        }
-        return a;
+        ArrayList<BookTO> book= myPageDAO.selectBookStatus(bookTO);
+        return book;
     }
 
     public HashMap<String,String> cancelBook(ArrayList<BookTO> bookTOList){

@@ -110,4 +110,12 @@
             ,#{cGroup}
         )
     </insert>
+    <delete id="deleteBoardComment" parameterType="com.helper.study.stuhel.board.to.BoardCommentTO">
+        DELETE
+        FROM BOARD_COMMENT
+        WHERE COMMENT_SEQ=#{commentSeq}
+        AND NOTE_SEQ=#{noteSeq}
+        AND WRITER=#{writer}
+
+    </delete>
 </mapper>
