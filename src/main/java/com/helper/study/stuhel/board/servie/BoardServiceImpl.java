@@ -6,6 +6,7 @@ import com.helper.study.stuhel.board.to.BoardTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -76,11 +77,23 @@ public class BoardServiceImpl implements BoardService{
     }
 
     @Override
-    public HashMap<String, Integer> deleteBoardComment(BoardCommentTO boardComment) {
+    public HashMap<String, Integer> deleteBoardComment(ArrayList<BoardCommentTO> boardComment) {
         HashMap<String, Integer> map = new HashMap<>();
         map.put("errorCd", 0);
+        ArrayList<BoardCommentTO> deleteBoardList = new ArrayList<>();
         try {
-            boardDAO.deleteBoardComment(boardComment);
+            for(BoardCommentTO board:boardComment){
+                deleteBoardList = boardDAO.selectRecomment(board); //원댓글 삭제시 대댓글삭제
+            }
+            if(!deleteBoardList.isEmpty()){
+                for(BoardCommentTO deleteBoardComment:deleteBoardList){
+                    boardDAO.deleteBoardComment(deleteBoardComment);
+                }
+            }
+            for(BoardCommentTO a:boardComment){
+                boardDAO.deleteBoardComment(a);
+            }
+
         }catch(Exception e){
             e.printStackTrace();
             map.put("errorCd", -1);

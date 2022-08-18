@@ -245,6 +245,7 @@
                                 divTag.appendChild(dTag);
 
                                 let parentCommentId = 'div'+commentData[i].cgroup;
+                                console.log(parentCommentId);
                                 document.getElementById(parentCommentId).appendChild(divTag);
                             }
                         }
@@ -336,15 +337,15 @@
     }
 
     function deleteComment(id){
-        let deleteCommentData=new Object();
+        let deleteCommentJSON=new Object();
 
         for(i=0;i<commentData.length;i++){
             console.log(commentData[i].writer);
             console.log(sessionData[i].memberId);
             if(commentData[i].commentSeq==parseInt(id.slice(2))){
-                deleteCommentData.commentSeq=commentData[i].commentSeq;
-                deleteCommentData.noteSeq=commentData[i].noteSeq;
-                deleteCommentData.writer=commentData[i].writer;
+                deleteCommentJSON.commentSeq=commentData[i].commentSeq;
+                deleteCommentJSON.noteSeq=commentData[i].noteSeq;
+                deleteCommentJSON.writer=commentData[i].writer;
             }
         }
        if(commentData.writer!=sessionData.memberId){
@@ -354,13 +355,18 @@
         swal({
             title : '댓글삭제'
             , text : 'ヽ(✿ﾟ▽ﾟ)ノ \n'
-                     +'댓글을 삭제하시겠습니까?'
+                     +'댓글을 삭제하시겠습니까? \n'
+                     +'대댓글들도 전부 삭제됩니다.'
             , buttons : ["취소","확인"]
             , buttonColor : 'tomato'
         }).then(function(result) {
             if(result==null) return;
             else{
-                console.log(deleteCommentData);
+                console.log(deleteCommentJSON);
+
+                let deleteCommentData=[];
+                deleteCommentData.push(deleteCommentJSON);
+
                 deleteCommentData=JSON.stringify(deleteCommentData);
 
                 let xhr = new XMLHttpRequest();

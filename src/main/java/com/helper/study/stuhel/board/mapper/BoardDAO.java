@@ -18,4 +18,5 @@ public interface BoardDAO {
     ArrayList<BoardCommentTO> selectBoardComment(String noteSeq);
     void insertComment(BoardCommentTO boardComment);
     void deleteBoardComment(BoardCommentTO boardComment);
+    ArrayList<BoardCommentTO> selectRecomment(BoardCommentTO boardComment);
 }

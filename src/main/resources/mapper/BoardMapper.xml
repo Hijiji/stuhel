@@ -88,6 +88,7 @@
         SELECT *
         FROM BOARD_COMMENT
         WHERE NOTE_SEQ = #{noteSeq}
+        ORDER BY COMMENT_SEQ, WRITE_DATE
     </select>
     <insert id="insertComment" parameterType="com.helper.study.stuhel.board.to.BoardCommentTO">
         INSERT INTO BOARD_COMMENT
@@ -116,6 +117,12 @@
         WHERE COMMENT_SEQ=#{commentSeq}
         AND NOTE_SEQ=#{noteSeq}
         AND WRITER=#{writer}
-
     </delete>
+    <select id="selectRecomment" parameterType="com.helper.study.stuhel.board.to.BoardCommentTO" resultType="com.helper.study.stuhel.board.to.BoardCommentTO">
+        SELECT COMMENT_SEQ ,NOTE_SEQ ,WRITER
+        FROM BOARD_COMMENT
+        WHERE CGROUP = #{commentSeq}
+        AND NOTE_SEQ = #{noteSeq}
+        AND CDEPTH = 1
+    </select>
 </mapper>
