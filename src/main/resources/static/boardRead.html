@@ -104,6 +104,7 @@
     let sessionData;
     let boardReadData;
     let commentData;
+    let reCommentBoxTag=document.createElement("div");
 
     <!--세션체크-->
     let sessionStatus = null;
@@ -117,7 +118,6 @@
             if (xhr.readyState == 4 && xhr.status == 200) {
                 // 데이터 확인
                 sessionStatus = xhr.responseText;
-                console.log(sessionStatus);
                 if(sessionStatus==null||sessionStatus==''){
                     location.href="/index.html";
                     return;
@@ -176,21 +176,20 @@
                 if (xhr.readyState == 4 && xhr.status == 200) {
                     // 데이터 확인
                     commentData = xhr.responseText;
-                    console.log(commentData);
                     if(commentData==''||commentData==null){
                         return;
                     }else{
                         comment.innerHTML="";
                         commentData = JSON.parse(commentData);
                         for(i=0;i<commentData.length; i++){
-                            let divTag = document.createElement("div");
-                            let spanTag = document.createElement("span");
+                            let commentBoxTag = document.createElement("div");
+                            let writerInfoTag = document.createElement("span");
                             let hrTag = document.createElement("hr");
-                            let dTag = document.createElement("div");
+                            let UDACTag = document.createElement("div");
                             let updateAndDelete = document.createElement("a");
                             let addComment = document.createElement("a");
-                            dTag.align="right";
-                            divTag.id='div'+commentData[i].commentSeq;
+                            UDACTag.align="right";
+                            commentBoxTag.id='div'+commentData[i].commentSeq;
 
                             updateAndDelete.innerHTML="삭제 / ";
                             updateAndDelete.style.fontSize="0.8rem";
@@ -208,9 +207,9 @@
                             addComment.onclick =()=> {makeReCommentBox(addComment.id);}
                             addComment.href="javascript:void(0)";
 
-                            spanTag.innerHTML = commentData[i].writer+'｜'+commentData[i].writeDate;
-                            spanTag.style.fontSize="0.9rem";
-                            spanTag.style.color="gray";
+                            writerInfoTag.innerHTML = commentData[i].writer+'｜'+commentData[i].writeDate;
+                            writerInfoTag.style.fontSize="0.9rem";
+                            writerInfoTag.style.color="gray";
 
                             let pTag = document.createElement("p");
                             pTag.innerHTML=commentData[i].cmt;
@@ -218,35 +217,34 @@
                             pTag.style.fontSize="0.9rem";
 
                             if(commentData[i].cgroup==0 && commentData[i].cdepth==0){
-                                spanTag.style.marginBottom="1rem";
+                                writerInfoTag.style.marginBottom="1rem";
                                 comment.appendChild(hrTag);
-                                dTag.appendChild(updateAndDelete);
+                                UDACTag.appendChild(updateAndDelete);
 
-                                dTag.appendChild(addComment);
-                                divTag.appendChild(spanTag);
-                                divTag.appendChild(pTag);
-                                divTag.appendChild(dTag);
-                                comment.appendChild(divTag);
+                                UDACTag.appendChild(addComment);
+                                commentBoxTag.appendChild(writerInfoTag);
+                                commentBoxTag.appendChild(pTag);
+                                commentBoxTag.appendChild(UDACTag);
+                                comment.appendChild(commentBoxTag);
 
                             }else if(commentData[i].cgroup>0 && commentData[i].cdepth>0) {
                                 let image = document.createElement("i");
                                 image.className='bi-arrow-return-right';
                                 image.style.marginRight="5px";
 
-                                divTag.style.marginLeft="30px";
+                                commentBoxTag.style.marginLeft="30px";
                                 updateAndDelete.innerHTML="삭제 ";
                                 updateAndDelete.style.marginRight="4rem"
                                 pTag.style.marginLeft="3rem";
 
-                                dTag.appendChild(updateAndDelete);
-                                divTag.appendChild(image);
-                                divTag.appendChild(spanTag);
-                                divTag.appendChild(pTag);
-                                divTag.appendChild(dTag);
+                                UDACTag.appendChild(updateAndDelete);
+                                commentBoxTag.appendChild(image);
+                                commentBoxTag.appendChild(writerInfoTag);
+                                commentBoxTag.appendChild(pTag);
+                                commentBoxTag.appendChild(UDACTag);
 
                                 let parentCommentId = 'div'+commentData[i].cgroup;
-                                console.log(parentCommentId);
-                                document.getElementById(parentCommentId).appendChild(divTag);
+                                document.getElementById(parentCommentId).appendChild(commentBoxTag);
                             }
                         }
                     }
@@ -302,46 +300,43 @@
     }
    function makeReCommentBox(id){
        let addCommentId=document.getElementById(id);
-        console.log(addCommentId.lastChild);
-        let divTag=document.createElement("div");
-        divTag.innerHTML="";
-        let textareaTag=document.createElement("textarea");
-        let inputTag=document.createElement("input");
+        reCommentBoxTag.innerHTML="";
 
-        textareaTag.id="reCommentTxt";
-        textareaTag.placeholder="대댓글 입력";
-        textareaTag.style.resize="none";
-        textareaTag.style.height="50px";
-        textareaTag.style.width="900px";
-        textareaTag.marginLeft="2rem";
-        textareaTag.style.fontSize="0.9rem";
+        let reCommentTxtTag=document.createElement("textarea");
+        let saveBtnTag=document.createElement("input");
 
-        inputTag.type="button";
-        inputTag.value="대댓달기";
-        inputTag.onclick=()=>{saveCommentFunction("reComment",id); divTag.innerHTML="";}
-        inputTag.className="btn";
-        inputTag.style.marginBottom="1rem";
-        inputTag.style.fontSize="15px";
-        inputTag.style.padding="11px  22px";
-        inputTag.style.textAlign="center";
-        inputTag.style.color="#fff";
-        inputTag.style.backgroundColor="#f4623a";
-        inputTag.style.borderRadius="10rem";
-        inputTag.style.border="none";
+        reCommentTxtTag.id="reCommentTxt";
+        reCommentTxtTag.placeholder="대댓글 입력";
+        reCommentTxtTag.style.resize="none";
+        reCommentTxtTag.style.height="50px";
+        reCommentTxtTag.style.width="900px";
+        reCommentTxtTag.marginLeft="2rem";
+        reCommentTxtTag.style.fontSize="0.9rem";
 
-        divTag.appendChild(textareaTag);
-        divTag.appendChild(inputTag);
+        saveBtnTag.type="button";
+        saveBtnTag.value="대댓달기";
+        saveBtnTag.onclick=()=>{saveCommentFunction("reComment",id); reCommentBoxTag.innerHTML="";}
+        saveBtnTag.className="btn";
+        saveBtnTag.style.marginBottom="1rem";
+        saveBtnTag.style.fontSize="15px";
+        saveBtnTag.style.padding="11px  22px";
+        saveBtnTag.style.textAlign="center";
+        saveBtnTag.style.color="#fff";
+        saveBtnTag.style.backgroundColor="#f4623a";
+        saveBtnTag.style.borderRadius="10rem";
+        saveBtnTag.style.border="none";
 
-        addCommentId.parentNode.parentNode.appendChild(divTag);
-        textareaTag.focus();
+        reCommentBoxTag.appendChild(reCommentTxtTag);
+        reCommentBoxTag.appendChild(saveBtnTag);
+
+        addCommentId.parentNode.parentNode.appendChild(reCommentBoxTag);
+        reCommentTxtTag.focus();
     }
 
     function deleteComment(id){
         let deleteCommentJSON=new Object();
 
         for(i=0;i<commentData.length;i++){
-            console.log(commentData[i].writer);
-            console.log(sessionData[i].memberId);
             if(commentData[i].commentSeq==parseInt(id.slice(2))){
                 deleteCommentJSON.commentSeq=commentData[i].commentSeq;
                 deleteCommentJSON.noteSeq=commentData[i].noteSeq;
@@ -363,10 +358,8 @@
             if(result==null) return;
             else{
                 console.log(deleteCommentJSON);
-
                 let deleteCommentData=[];
                 deleteCommentData.push(deleteCommentJSON);
-
                 deleteCommentData=JSON.stringify(deleteCommentData);
 
                 let xhr = new XMLHttpRequest();
