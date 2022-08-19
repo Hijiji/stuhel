@@ -25,7 +25,22 @@
     <link rel="stylesheet" href="https://unpkg.com/ag-grid-community/dist/styles/ag-grid.css">
     <link rel="stylesheet" href="https://unpkg.com/ag-grid-community/dist/styles/ag-theme-balham.css">
     <style>
+a:link {
+  text-decoration: none;
+}
 
+a:visited {
+  text-decoration: none;
+  color: blue;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+a:active {
+  text-decoration: underline;
+}
     </style>
 </head>
 <body id="page-top">
@@ -63,12 +78,26 @@
 
 <section id="list">
     <div style="display: flex; justify-content: center;">
-    <div style="width:1200px;position:relative" >
+    <div style="width:1250px;position:relative" >
         <div align="right">
-            <input type="button" id="boardWriterBtn" value="글쓰기" onclick="location.href='/boardWrite.html'" class="btn btn-light btn-xl"  style="margin:7px;font-size:15px;padding:11px 22px;text-align:center">
+            <input type="button" id="boardWriterBtn" value="글쓰기" onclick="location.href='/boardWrite.html'" class="btn btn-primary btn-xl"  style="margin:7px;font-size:15px;padding:11px 22px;text-align:center">
         </div>
-        <div align="center">
-            <div id="boardListGrid" class="ag-theme-balham" style="height:70vh; width:auto; text-align: center;"></div>
+        <div align="center;margin:10px,0px;">
+            <!--<div id="boardListGrid" class="ag-theme-balham" style="height:70vh; width:auto; text-align: center;"></div>-->
+            <hr>
+            <table style="text-align:center;align:center; font-size:22px;">
+                <tr>
+                    <td style="width:200px; text-align:center;">작성자</td>
+                    <td style="width:850px; text-align:center;">제목</td>
+                    <td style="width:130px; text-align:center;">조회</td>
+                    <td style="width:150px; text-align:center;">주제</td>
+                    <td style="width:150px; text-align:center;">작성일</td>
+                </tr>
+            </table>
+            <hr>
+            <table id="boardListTable" style="text-align:center;align:center;font-size:15px;padding:3px">
+            </table>
+            <hr>
         </div>
     </div>
     </div>
@@ -104,52 +133,17 @@
                     location.href="/index.html";
                 }else if(sessionStatus!=null){
                     retrieveBoardList();
-                    new agGrid.Grid(boardListGrid, boardListGridOptions);
                 }
             }
         }
     })();
 
-    const boardListGrid = document.querySelector("#boardListGrid");
-    const boardSearchTxt =  document.querySelector("#boardSearchTxt");
-    const boardSearchBtn =  document.querySelector("#boardSearchBtn");
+    const boardSearchTxt = document.querySelector("#boardSearchTxt");
+    const boardSearchBtn = document.querySelector("#boardSearchBtn");
+    const boardListBody = document.querySelector("#boardListBody");
+    const boardListTable = document.querySelector("#boardListTable");
+    let boardList=0;
     let userSelectedRowData;
-
-    const boardListColumn = [
-        {headerName: "seq", field: "noteSeq", hide:true, sort:"asc", width :20},
-        {headerName: "작성자", field: "writer", width :50},
-        {headerName: "제목", field: "title", width :200},
-        {headerName: '작성일', field: "writeDate", width :50},
-        {headerName: '주제', field: 'topicNm', width :50},
-        {headerName: '조회', field: 'clickAmount', width :50},
-    ];
-    let boardListRowData = [];
-    const boardListGridOptions = {
-        defaultColDef: {
-            flex: 1,
-            editable: false,
-            resizable : false,
-            minWidth: 50,
-        },
-        columnDefs: boardListColumn,
-        rowSelection: 'single',
-        rowData: boardListRowData,
-        overlayNoRowsTemplate: "등록된 게시글이 없습니다.",
-        onRowSelected: function(selectedRow) {
-        },
-        onRowClicked : function(selectedRow){
-            console.log("클릭이벤트");
-            console.log(selectedRow);
-            userSelectedRowData = selectedRow.data;
-            retrieveBoardRead();
-        },
-        onGridReady: function(event) {// onload 이벤트와 유사 ready 이후 필요한 이벤트 삽입한다.
-            event.api.sizeColumnsToFit();
-        },
-        getRowStyle: function(param) {
-            return {'text-align': 'center'};
-        },
-    }
 
     function enterkeyEvent(){
         if(event.keyCode == 13){
@@ -165,15 +159,22 @@
 	    xhr.send();
 	    xhr.onreadystatechange = () => {
 	        if (xhr.readyState == 4 && xhr.status == 200) {
-	            let txt = xhr.responseText;
-	            txt = JSON.parse(txt);
-	            console.log(txt);
-	            boardListGridOptions.api.setRowData(txt);
+	            boardList = xhr.responseText;
+	            boardList = JSON.parse(boardList);
+	            console.log(boardList);
+
+	            setBoardList(boardList);
+
 	        }
 	    }
 	}
-
     function retrieveBoardKeyword(){
+        let boardListTableRows = boardListTable.rows.length-1;
+        if(boardListTableRows>0){
+            for(i=boardListTableRows;i>=0;i--){
+                boardListTable.deleteRow(i);
+            }
+        }
         let xhr = new XMLHttpRequest();
         xhr.open('GET', "/stuhel/board/retrieveBoardKeyword?fullKeyword="+boardSearchTxt.value
             ,true);
@@ -181,16 +182,16 @@
         xhr.send();
         xhr.onreadystatechange = () => {
             if (xhr.readyState == 4 && xhr.status == 200) {
-                let txt = xhr.responseText;
-                txt = JSON.parse(txt);
-                console.log(txt);
-                boardListGridOptions.api.setRowData(txt.writeList);
+                boardList = xhr.responseText;
+                boardList = JSON.parse(boardList);
+                console.log(boardList);
+                setBoardList(boardList);
                 location.href="#list";
             }
         }
     }
 
-    function retrieveBoardRead(){
+    function retrieveBoardRead(userSelectedRowData){
         if(userSelectedRowData==null||userSelectedRowData==""){
             return;
         }
@@ -210,6 +211,56 @@
         }
     }
 
+    function setBoardList(boardList){
+        if(boardList.length<=0){
+            let tr = boardListTable.insertRow();
+            tr.textContent="등록된 게시글이 없습니다.";
+        }else if(boardList.length>0){
+	        for(let boardData of boardList){
+                let tr = boardListTable.insertRow();
+
+                let seqTag = tr.insertCell(0);
+                let writerTag = tr.insertCell(1);
+                let titleTag = tr.insertCell(2);
+                let clickAmountTag = tr.insertCell(3);
+                let topicNmTag = tr.insertCell(4);
+                let writeDateTag = tr.insertCell(5);
+                let titleATag=document.createElement("a");
+
+                tr.style.margin="30px";
+                seqTag.style.display="none";
+                writerTag.style.width="200px";
+                titleTag.style.width="850px";
+                clickAmountTag.style.width="130px";
+                topicNmTag.style.width="150px";
+                writeDateTag.style.width="150px";
+                titleATag.style.textDecorationLine="none";
+                titleATag.style.color="black";
+
+                titleATag.onclick = () => {
+                        userSelectedRowData=new Object();
+                        userSelectedRowData.noteSeq = boardData.noteSeq;
+                        userSelectedRowData.writer = boardData.writer;
+                        userSelectedRowData.title = boardData.title;
+                        retrieveBoardRead(userSelectedRowData);
+                }
+                let boardTitle=boardData.title;
+                if(boardData.title.length>50){
+                    boardTitle = boardData.title.substr(0,50);
+                    boardTitle = boardTitle+' · · · '
+                }
+                titleATag.innerHTML=boardTitle;
+                titleATag.href="javascript:void(0)";
+
+                titleTag.appendChild(titleATag);
+                seqTag.textContent = boardData.noteSeq;
+                writerTag.textContent = boardData.writer;
+                clickAmountTag.textContent = boardData.clickAmount;
+                topicNmTag.textContent = boardData.topicNm;
+                writeDateTag.textContent = boardData.writeDate.substr(0,10);
+            }
+	    }
+	}
     /*로그아웃*/
     function logoutButton(){
         let xhr = new XMLHttpRequest();

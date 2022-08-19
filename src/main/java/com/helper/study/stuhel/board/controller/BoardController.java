@@ -37,11 +37,10 @@ public class BoardController {
     }
 
     @GetMapping("/retrieveBoardKeyword")
-    HashMap<String,ArrayList> retrieveBoardKeyword(HttpServletRequest request,@RequestParam("fullKeyword")String fullKeyword){
+    ArrayList<BoardTO> retrieveBoardKeyword(HttpServletRequest request,@RequestParam("fullKeyword")String fullKeyword){
         HashMap<String, ArrayList> map = new HashMap<>();
         ArrayList<BoardTO> board = boardService.retrieveBoardKeyword(fullKeyword);
-        map.put("writeList", board);
-        return map; //리다이렉트 게시글 조회
+        return board; //리다이렉트 게시글 조회
     }
 
     @PatchMapping("/saveWrite")
