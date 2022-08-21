@@ -29,17 +29,23 @@ public class BoardController {
     }
 
     @GetMapping("/retrieveBoardList")
-    ArrayList<BoardTO> retrieveBoardList(HttpServletRequest request){
+    ArrayList<BoardTO> retrieveBoardList(HttpServletRequest request,@RequestParam("minNum")int minNum, @RequestParam("maxNum")int maxNum){
         HttpSession session = request.getSession();
+        BoardTO boardTO = new BoardTO();
+        boardTO.setMaxNum(maxNum);
+        boardTO.setMinNum(minNum);
         String sessionId = (String)session.getAttribute("memberId");
-        ArrayList<BoardTO> board=boardService.retrieveBoardList();
+        ArrayList<BoardTO> board=boardService.retrieveBoardList(boardTO);
         return board;
     }
 
     @GetMapping("/retrieveBoardKeyword")
-    ArrayList<BoardTO> retrieveBoardKeyword(HttpServletRequest request,@RequestParam("fullKeyword")String fullKeyword){
-        HashMap<String, ArrayList> map = new HashMap<>();
-        ArrayList<BoardTO> board = boardService.retrieveBoardKeyword(fullKeyword);
+    ArrayList<BoardTO> retrieveBoardKeyword(HttpServletRequest request,@RequestParam("fullKeyword")String fullKeyword, @RequestParam("minNum")int minNum, @RequestParam("maxNum")int maxNum){
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("maxNum",maxNum);
+        map.put("minNum",minNum);
+        map.put("fullKeyword", fullKeyword);
+        ArrayList<BoardTO> board = boardService.retrieveBoardKeyword(map);
         return board; //리다이렉트 게시글 조회
     }
 

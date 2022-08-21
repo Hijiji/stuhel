@@ -27,11 +27,11 @@ public class BoardServiceImpl implements BoardService{
         boardDAO.insertWrite(boardTO);
     }
     @Override
-    public ArrayList<BoardTO> retrieveBoardKeyword(String fullKeyword) {
+    public ArrayList<BoardTO> retrieveBoardKeyword(HashMap<String, Object> map) {
         //요거는 서비스단에서 하자..! 앞단에서 받은것을 문자열로 서비스단에 넘겨준 다음, 서비스단에서 가공하여서 디비조사.
-        String[] keywordList = fullKeyword.split(" ");
+        String[] keywordList = ((String)map.get("fullKeyword")).split(" ");
 
-        HashMap<String, String[]> map = new HashMap<>();
+        //HashMap<String, String[]> map = new HashMap<>();
         map.put("keywordList", keywordList);
 
         ArrayList<BoardTO> board = boardDAO.selectBoardKeyword(map);
@@ -39,8 +39,8 @@ public class BoardServiceImpl implements BoardService{
     }
 
     @Override
-    public ArrayList<BoardTO> retrieveBoardList() {
-        ArrayList<BoardTO>board=boardDAO.selectBoardList();
+    public ArrayList<BoardTO> retrieveBoardList(BoardTO boardTO) {
+        ArrayList<BoardTO>board=boardDAO.selectBoardList(boardTO);
         return board;
     }
 

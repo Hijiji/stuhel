@@ -76,6 +76,10 @@ public class MyPageController {
 
         map=myPageService.changeMemberInfo(memberTO,session);
 
+        session.setAttribute("memberName",memberTO.getName());
+        session.setAttribute("memberId",memberTO.getId());
+        session.setAttribute("memberBirth",memberTO.getBirth());
+
         return map;
     }
     @GetMapping("/retrieveBookStatus")

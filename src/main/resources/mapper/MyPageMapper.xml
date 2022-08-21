@@ -19,7 +19,8 @@
     </resultMap>
 
     <select id="selectMemberInfo" parameterType="com.helper.study.stuhel.member.to.MemberTO" resultMap="myPageMember">
-        select * from MEMBER_SECURITY
+        select ID, PASSWORD,NAME, BIRTH
+        from MEMBER_SECURITY
         where ID = #{id}
     </select>
 

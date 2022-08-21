@@ -17,4 +17,8 @@ public class BoardTO {
     int clickAmount;
     @Id
     String writer;
+    int minNum;
+    int maxNum;
+    int totalListCnt;
+    int rNum;
 }

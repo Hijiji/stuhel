@@ -95,9 +95,13 @@ a:active {
                 </tr>
             </table>
             <hr>
-            <table id="boardListTable" style="text-align:center;align:center;font-size:15px;padding:3px">
+            <table id="boardListTable" style="text-align:center;align:center;font-size:17px;padding:3px">
             </table>
+            <div align="center">
+                <input type="button" id="retrieveMoreListBtn" value="더보기 ▼" onclick="retrieveMoreList()" class="btn btn-light btn-xl"  style="width:900px;margin:20px;padding:14px 450px;font-size:15px;text-align:center;">
+            </div>
             <hr>
+            <div align="center" id="noMoreList" style="margin:45px;font-size:24px;"></div>
         </div>
     </div>
     </div>
@@ -142,8 +146,14 @@ a:active {
     const boardSearchBtn = document.querySelector("#boardSearchBtn");
     const boardListBody = document.querySelector("#boardListBody");
     const boardListTable = document.querySelector("#boardListTable");
+    const retrieveMoreListBtn = document.querySelector("#retrieveMoreListBtn");
+    const noMoreList= document.querySelector("#noMoreList");
     let boardList=0;
     let userSelectedRowData;
+    let maxNum;
+    let minNum;
+    let kMaxNum;
+    let kMinNum;
 
     function enterkeyEvent(){
         if(event.keyCode == 13){
@@ -152,8 +162,10 @@ a:active {
     }
 
     function retrieveBoardList(){
+        maxNum=10;
+        minNum=1;
 	    let xhr = new XMLHttpRequest();
-	    xhr.open('GET', 'stuhel/board/retrieveBoardList'
+	    xhr.open('GET', 'stuhel/board/retrieveBoardList?minNum='+minNum+'&maxNum='+maxNum
 	        ,true)
 	    xhr.setRequestHeader('Accept', 'application/json');
 	    xhr.send();
@@ -162,21 +174,30 @@ a:active {
 	            boardList = xhr.responseText;
 	            boardList = JSON.parse(boardList);
 	            console.log(boardList);
-
 	            setBoardList(boardList);
 
 	        }
 	    }
 	}
+
     function retrieveBoardKeyword(){
+        if(boardSearchTxt.value==null||boardSearchTxt.value==''){
+            retrieveBoardList();
+            return;
+        }
+        kMaxNum=10;
+        kMinNum=1;
+        maxNum=0;
+        minNum=0;
         let boardListTableRows = boardListTable.rows.length-1;
         if(boardListTableRows>0){
             for(i=boardListTableRows;i>=0;i--){
                 boardListTable.deleteRow(i);
             }
         }
+
         let xhr = new XMLHttpRequest();
-        xhr.open('GET', "/stuhel/board/retrieveBoardKeyword?fullKeyword="+boardSearchTxt.value
+        xhr.open('GET', "/stuhel/board/retrieveBoardKeyword?fullKeyword="+boardSearchTxt.value+"&minNum="+kMinNum+"&maxNum="+kMaxNum
             ,true);
         xhr.setRequestHeader('Accept', 'application/json');
         xhr.send();
@@ -210,11 +231,51 @@ a:active {
             }
         }
     }
+    function retrieveMoreList(){
+        if(boardSearchTxt.value==null||boardSearchTxt.value==''){
+            maxNum=maxNum+10;
+            minNum=minNum+10;
+            kMaxNum=0;
+            kMinNum=0;
+            let xhr = new XMLHttpRequest();
+	        xhr.open('GET', 'stuhel/board/retrieveBoardList?minNum='+minNum+'&maxNum='+maxNum
+	            ,true)
+    	    xhr.setRequestHeader('Accept', 'application/json');
+	        xhr.send();
+	        xhr.onreadystatechange = () => {
+	            if (xhr.readyState == 4 && xhr.status == 200) {
+	                boardList = xhr.responseText;
+    	            boardList = JSON.parse(boardList);
+	                console.log(boardList);
+	                setBoardList(boardList);
+	            }
+	        }
+        }else{
+            kMaxNum=kMaxNum+10;
+            kMinNum=kMinNum+10;
+            maxNum=0;
+            minNum=0;
 
+            let xhr = new XMLHttpRequest();
+            xhr.open('GET', "/stuhel/board/retrieveBoardKeyword?fullKeyword="+boardSearchTxt.value+"&minNum="+kMinNum+"&maxNum="+kMaxNum
+                ,true);
+            xhr.setRequestHeader('Accept', 'application/json');
+            xhr.send();
+            xhr.onreadystatechange = () => {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    boardList = xhr.responseText;
+                    boardList = JSON.parse(boardList);
+                    console.log(boardList);
+                    setBoardList(boardList);
+                    location.href="#list";
+                }
+            }
+        }
+    }
     function setBoardList(boardList){
         if(boardList.length<=0){
-            let tr = boardListTable.insertRow();
-            tr.textContent="등록된 게시글이 없습니다.";
+            noMoreList.innerHTML="등록된 게시글이 없습니다.";
+            retrieveMoreListBtn.style.display="none";
         }else if(boardList.length>0){
 	        for(let boardData of boardList){
                 let tr = boardListTable.insertRow();
@@ -227,7 +288,6 @@ a:active {
                 let writeDateTag = tr.insertCell(5);
                 let titleATag=document.createElement("a");
 
-                tr.style.margin="30px";
                 seqTag.style.display="none";
                 writerTag.style.width="200px";
                 titleTag.style.width="850px";
@@ -236,6 +296,7 @@ a:active {
                 writeDateTag.style.width="150px";
                 titleATag.style.textDecorationLine="none";
                 titleATag.style.color="black";
+                noMoreList.innerHTML="";
 
                 titleATag.onclick = () => {
                         userSelectedRowData=new Object();
@@ -245,9 +306,9 @@ a:active {
                         retrieveBoardRead(userSelectedRowData);
                 }
                 let boardTitle=boardData.title;
-                if(boardData.title.length>50){
-                    boardTitle = boardData.title.substr(0,50);
-                    boardTitle = boardTitle+' · · · '
+                if(boardData.title.length>45){
+                    boardTitle = boardData.title.substr(0,45);
+                    boardTitle = boardTitle+' · · ·  · · · ';
                 }
                 titleATag.innerHTML=boardTitle;
                 titleATag.href="javascript:void(0)";
@@ -258,6 +319,7 @@ a:active {
                 clickAmountTag.textContent = boardData.clickAmount;
                 topicNmTag.textContent = boardData.topicNm;
                 writeDateTag.textContent = boardData.writeDate.substr(0,10);
+                retrieveMoreListBtn.style.display="flex";
             }
 	    }
 	}

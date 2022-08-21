@@ -20,9 +20,19 @@
     </select>
 
     <select id="selectBoardList" resultMap="Board" parameterType="com.helper.study.stuhel.board.to.BoardTO">
-        SELECT
-            TITLE, NOTE_SEQ, WRITE_DATE, TOPIC_NM, CLICK_AMOUNT, WRITER
-        FROM BOARD
+        <![CDATA[
+            SELECT
+                TITLE, NOTE_SEQ, WRITE_DATE, TOPIC_NM, CLICK_AMOUNT, WRITER, R_NUM, TOTAL_LIST_CNT
+            FROM(SELECT
+                    B.*,
+                    ROWNUM AS R_NUM
+                FROM(SELECT TITLE, NOTE_SEQ, WRITE_DATE, TOPIC_NM, CLICK_AMOUNT, WRITER, COUNT(*) OVER() AS TOTAL_LIST_CNT
+                    FROM BOARD
+                    ORDER BY NOTE_SEQ DESC ) B )
+            WHERE R_NUM <= #{maxNum}
+            AND   R_NUM >= #{minNum}
+        ]]>
+<!--SELECT TITLE, NOTE_SEQ, WRITE_DATE, TOPIC_NM, CLICK_AMOUNT, WRITER FROM BOARD-->
     </select>
     <select id="selectReadBoard" resultMap="Board" parameterType="map">
         SELECT *
@@ -33,25 +43,38 @@
         ORDER BY NOTE_SEQ ASC
     </select>
     <select id="selectBoardKeyword" parameterType="map" resultMap="Board">
-        SELECT
-            TITLE, NOTE_SEQ, WRITE_DATE, TOPIC_NM, CLICK_AMOUNT, WRITER
-        FROM BOARD
-        WHERE TITLE LIKE
-            <foreach collection="keywordList" item="keyword" separator=" OR TITLE LIKE ">
-                '%'||#{keyword}||'%'
-            </foreach>
-        OR NOTE LIKE
-            <foreach collection="keywordList" item="keyword" separator=" OR NOTE LIKE ">
-                '%'||#{keyword}||'%'
-            </foreach>
-        OR WRITER LIKE
-            <foreach collection="keywordList" item="keyword" separator=" OR WRITER LIKE ">
-                '%'||#{keyword}||'%'
-            </foreach>
-        OR TOPIC_NM LIKE
-            <foreach collection="keywordList" item="keyword" separator=" OR TOPIC_NM LIKE ">
-                '%'||#{keyword}||'%'
-            </foreach>
+        <![CDATA[
+            SELECT
+                TITLE, NOTE_SEQ, WRITE_DATE, TOPIC_NM, CLICK_AMOUNT, WRITER, R_NUM, TOTAL_LIST_CNT
+            FROM(SELECT
+                    B.*,
+                    ROWNUM AS R_NUM
+                FROM(
+        ]]>
+                    SELECT
+                    TITLE, NOTE_SEQ, WRITE_DATE, TOPIC_NM, CLICK_AMOUNT, WRITER, COUNT(*) OVER() AS TOTAL_LIST_CNT
+                    FROM BOARD
+                    WHERE TITLE LIKE
+                    <foreach collection="keywordList" item="keyword" separator=" OR TITLE LIKE ">
+                        '%'||#{keyword}||'%'
+                    </foreach>
+                    OR NOTE LIKE
+                    <foreach collection="keywordList" item="keyword" separator=" OR NOTE LIKE ">
+                        '%'||#{keyword}||'%'
+                    </foreach>
+                    OR WRITER LIKE
+                    <foreach collection="keywordList" item="keyword" separator=" OR WRITER LIKE ">
+                        '%'||#{keyword}||'%'
+                    </foreach>
+                    OR TOPIC_NM LIKE
+                    <foreach collection="keywordList" item="keyword" separator=" OR TOPIC_NM LIKE ">
+                        '%'||#{keyword}||'%'
+                    </foreach>
+        <![CDATA[
+                    ORDER BY NOTE_SEQ DESC ) B )
+            WHERE R_NUM <= #{maxNum}
+            AND   R_NUM >= #{minNum}
+        ]]>
     </select>
     <insert id="insertWrite" parameterType="com.helper.study.stuhel.board.to.BoardTO">
         INSERT INTO BOARD
