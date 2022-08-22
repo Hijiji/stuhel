@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import java.util.ArrayList;
 
 @Mapper
-public interface MyPageDAO {
+public interface MyPageMapper {
     MemberTO selectMemberInfo(MemberTO memberTO);
     void updateMemberInfo(MemberTO memberTO);
     ArrayList<BookTO> selectBookStatus(BookTO bookTO);

@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 @Mapper
-public interface BoardDAO {
+public interface BoardMapper {
     ArrayList<BoardTO> selectTopicList();
     void insertWrite(BoardTO board);
     ArrayList<BoardTO> selectBoardKeyword(HashMap<String, Object> map);

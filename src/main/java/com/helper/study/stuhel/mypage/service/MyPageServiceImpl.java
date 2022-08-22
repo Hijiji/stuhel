@@ -1,6 +1,6 @@
 package com.helper.study.stuhel.mypage.service;
 
-import com.helper.study.stuhel.mypage.mapper.MyPageDAO;
+import com.helper.study.stuhel.mypage.mapper.MyPageMapper;
 import com.helper.study.stuhel.book.to.BookTO;
 import com.helper.study.stuhel.member.to.MemberTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,16 +12,16 @@ import java.util.HashMap;
 
 @Service
 public class MyPageServiceImpl implements MyPageService{
-    private final MyPageDAO myPageDAO;
+    private final MyPageMapper myPageMapper;
 
     @Autowired
-    public MyPageServiceImpl(MyPageDAO myPageDAO) {
-        this.myPageDAO = myPageDAO;
+    public MyPageServiceImpl(MyPageMapper myPageMapper) {
+        this.myPageMapper = myPageMapper;
     }
 
     @Override
     public MemberTO retrieveMemberInfo(MemberTO memberTO) {
-        return myPageDAO.selectMemberInfo(memberTO);
+        return myPageMapper.selectMemberInfo(memberTO);
     }
 
     public HashMap<String,Integer> changeMemberInfo(MemberTO memberTO, HttpSession session){
@@ -41,7 +41,7 @@ public class MyPageServiceImpl implements MyPageService{
             memberTO.setBirth(0);
         }
 
-        myPageDAO.updateMemberInfo(memberTO);
+        myPageMapper.updateMemberInfo(memberTO);
         map.put("errorCode", 1);
         return map;
     }
@@ -50,7 +50,7 @@ public class MyPageServiceImpl implements MyPageService{
     public ArrayList<BookTO> retrieveBookStatus(BookTO bookTO) {
         System.out.println("book.getBookingDate() = " + bookTO.getBookDate());
         System.out.println("book.getUserId() = " + bookTO.getUserId());
-        ArrayList<BookTO> book= myPageDAO.selectBookStatus(bookTO);
+        ArrayList<BookTO> book= myPageMapper.selectBookStatus(bookTO);
         return book;
     }
 
@@ -59,7 +59,7 @@ public class MyPageServiceImpl implements MyPageService{
         try{
 
             for(BookTO bookTO:bookTOList) {
-                myPageDAO.deleteBook(bookTO);
+                myPageMapper.deleteBook(bookTO);
             }
             map.put("errorCode","Y");
             System.out.println("map.get(\"errorCode\") = " + map.get("errorCode"));

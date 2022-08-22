@@ -3,7 +3,7 @@ package com.helper.study.stuhel.member.service;
 import com.helper.study.stuhel.member.to.MemberTO;
 import com.helper.study.stuhel.exception.IdNotFoundException;
 import com.helper.study.stuhel.exception.PwMissMatchException;
-import com.helper.study.stuhel.member.mapper.MemberDAO;
+import com.helper.study.stuhel.member.mapper.MemberMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,20 +13,20 @@ import java.util.regex.Pattern;
 @Service
 public class MemberServiceImpl implements MemberService {
 
-    private final MemberDAO memberDAO;
+    private final MemberMapper memberMapper;
     @Autowired
-    public MemberServiceImpl(MemberDAO memberDAO) {
-        this.memberDAO = memberDAO;
+    public MemberServiceImpl(MemberMapper memberMapper) {
+        this.memberMapper = memberMapper;
     }
 
     @Override
     public MemberTO login(MemberTO memberTO) throws IdNotFoundException, PwMissMatchException { /*로그인*/
         System.out.println("MemberService - login");
-        String id = memberDAO.selectIdDoubleCheck(memberTO.getId());
+        String id = memberMapper.selectIdDoubleCheck(memberTO.getId());
         if (id == null || id.equalsIgnoreCase("null") || id.isEmpty()) {
             throw new IdNotFoundException("존재하지 않는 ID 입니다.");
         } else if (memberTO.getId().equalsIgnoreCase(id)) {
-            MemberTO member = memberDAO.selectMemberLogin(memberTO);
+            MemberTO member = memberMapper.selectMemberLogin(memberTO);
             if (member == null || member.getPassword() == null) {
                 throw new PwMissMatchException("잘못된 비밀번호입니다.");
             } else {
@@ -45,7 +45,7 @@ public class MemberServiceImpl implements MemberService {
             map.put("errorCode", -1);
             return map;
         }
-        result = memberDAO.selectIdDoubleCheck(identity.toLowerCase());
+        result = memberMapper.selectIdDoubleCheck(identity.toLowerCase());
         if (result != null) {
             map.put("errorCode", -1);
         } else {
@@ -57,7 +57,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public HashMap<String, Integer> memberJoin(MemberTO memberTO) { /*회원가입*/
         HashMap<String, Integer> map = new HashMap<>();
-        memberDAO.insertMember(memberTO);
+        memberMapper.insertMember(memberTO);
         map.put("errorCode", 1);
         return map;
     }

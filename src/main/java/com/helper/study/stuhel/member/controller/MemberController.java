@@ -32,22 +32,18 @@ public class MemberController {
     public HashMap<String, Object> login(@RequestParam("loginData") String loginData,HttpServletRequest request){
         HttpSession session = request.getSession();
         HashMap<String, Object> map = new HashMap<>();
-
         try{
             MemberTO memberTO = gson.fromJson(loginData, MemberTO.class);
             MemberTO member = memberService.login(memberTO);
             SessionController.loginSession(session,member);
-
         } catch (IdNotFoundException e1) {
             //e1.printStackTrace();
             map.put("errorCode", -1);
             map.put("errorMsg", e1.getMessage());
-
         } catch (PwMissMatchException e2) {
             //e2.printStackTrace();
             map.put("errorCode", -2);
             map.put("errorMsg", e2.getMessage());
-
         }
         return map;
     }
