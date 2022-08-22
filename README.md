@@ -1,5 +1,5 @@
 # stuhel
-div학업을 도와주는 <strong>study helper [STUHEL]</strong> 입니다.</br>
+학원생들의 학업을 도와주는 <strong>study helper [STUHEL]</strong> 입니다.</br>
 과거 학원을 다니던 시절, 팀모임을 위한 세미나실 예약에 불편함을 경험하여 이를 해결하고자
 세미나실 예약을 주 목적으로 하는 본 프로젝트를 개발했습니다.
 
