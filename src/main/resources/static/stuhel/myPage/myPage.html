@@ -565,7 +565,7 @@
            loginData = JSON.stringify(loginData);
 
            let xhr = new XMLHttpRequest();
-           xhr.open('GET', "/member/login?"
+           xhr.open('GET', "/stuhel/member/login?"
                + "loginData=" + encodeURI(loginData)
                ,true);
            xhr.setRequestHeader('Accept', 'application/json');
@@ -635,7 +635,7 @@
             return;
         }
         let xhr = new XMLHttpRequest();
-        xhr.open('Get', "/member/idDoubleCheck?"
+        xhr.open('Get', "/stuhel/member/idDoubleCheck?"
             + "identity=" + identity.value
             ,true);
         xhr.setRequestHeader('Accept', 'application/json');

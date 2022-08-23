@@ -18,7 +18,7 @@ import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 
 @Controller
-@RequestMapping("/member")
+@RequestMapping("/stuhel/member")
 @ResponseBody
 public class MemberController {
     private static Gson gson = new GsonBuilder().serializeNulls().create(); // 속성값이 null 인 속성도 json 변환
@@ -28,7 +28,7 @@ public class MemberController {
         this.memberService = memberService;
     }
 
-    @GetMapping("/login")/*로그인*/
+    @GetMapping("/login")
     public HashMap<String, Object> login(@RequestParam("loginData") String loginData,HttpServletRequest request){
         HttpSession session = request.getSession();
         HashMap<String, Object> map = new HashMap<>();
@@ -47,15 +47,13 @@ public class MemberController {
         }
         return map;
     }
-    /*id중복검사*/
     @GetMapping("/idDoubleCheck")
-    public HashMap<String,Integer> idDoubleCheck (@RequestParam("identity") String identity) {
+    public HashMap<String,String> idDoubleCheck (@RequestParam("identity") String identity) {
         return memberService.idDoubleCheck(identity);
     }
-
     /*회원가입*/
     @PostMapping("/join")
-    public HashMap<String, Integer> memberJoin (@RequestParam("joinData") String memberJoinData ){
+    public HashMap<String, String> memberJoin (@RequestParam("joinData") String memberJoinData ){
         MemberTO memberTO = gson.fromJson(memberJoinData, MemberTO.class);
         return memberService.memberJoin(memberTO);
     }

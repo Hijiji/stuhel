@@ -1,6 +1,6 @@
-package com.helper.study.stuhel.book.mapper;
+package com.helper.study.stuhel.home.mapper;
 
-import com.helper.study.stuhel.book.to.BookTO;
+import com.helper.study.stuhel.home.to.BookTO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.ArrayList;

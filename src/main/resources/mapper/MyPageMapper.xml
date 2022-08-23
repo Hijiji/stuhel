@@ -10,7 +10,7 @@
         <result property="birth" column="BIRTH" />
     </resultMap>
 
-    <resultMap type="com.helper.study.stuhel.book.to.BookTO" id="myPageBook">
+    <resultMap type="com.helper.study.stuhel.home.to.BookTO" id="myPageBook">
         <result property="bookId" column="BOOK_ID" />
         <result property="userId" column="USER_ID" />
         <result property="roomId" column="ROOM_ID" />
@@ -34,7 +34,7 @@
         WHERE ID = #{sessionId}  <!--TO에 sessionId 없어서 에러뜰 수도 있음 파라메터타입 ...바꾸든지 어쩌던지 해봐 ~-->
     </update>
 
-    <select id="selectBookStatus" parameterType="com.helper.study.stuhel.book.to.BookTO" resultMap="myPageBook">
+    <select id="selectBookStatus" parameterType="com.helper.study.stuhel.home.to.BookTO" resultMap="myPageBook">
         SELECT *
         FROM ROOM_BOOK
         WHERE USER_ID = #{userId}
@@ -45,7 +45,7 @@
         FROM STUDY_ROOM
         WHERE ROOM_ID = #{id}
     </select>
-    <delete id="deleteBook" parameterType="com.helper.study.stuhel.book.to.BookTO">
+    <delete id="deleteBook" parameterType="com.helper.study.stuhel.home.to.BookTO">
         DELETE
         FROM ROOM_BOOK
         WHERE

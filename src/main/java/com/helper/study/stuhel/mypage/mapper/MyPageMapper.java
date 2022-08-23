@@ -1,6 +1,6 @@
 package com.helper.study.stuhel.mypage.mapper;
 
-import com.helper.study.stuhel.book.to.BookTO;
+import com.helper.study.stuhel.home.to.BookTO;
 import com.helper.study.stuhel.member.to.MemberTO;
 import org.apache.ibatis.annotations.Mapper;
 

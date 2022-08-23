@@ -20,8 +20,8 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public MemberTO login(MemberTO memberTO) throws IdNotFoundException, PwMissMatchException { /*로그인*/
-        System.out.println("MemberService - login");
+    public MemberTO login(MemberTO memberTO) throws IdNotFoundException, PwMissMatchException {
+
         String id = memberMapper.selectIdDoubleCheck(memberTO.getId());
         if (id == null || id.equalsIgnoreCase("null") || id.isEmpty()) {
             throw new IdNotFoundException("존재하지 않는 ID 입니다.");
@@ -37,28 +37,38 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public HashMap<String, Integer> idDoubleCheck(String identity) { /*id 중복검사*/
-        HashMap<String, Integer> map = new HashMap<>();
+    public HashMap<String, String> idDoubleCheck(String identity) {
+        HashMap<String, String> map = new HashMap<>();
         String result;
         String regExp="^[a-z0-9]*$";
         if( !Pattern.matches(regExp, identity) || identity.length()>20 || identity.length()<5){
-            map.put("errorCode", -1);
+            map.put("errorCode", "Y");
             return map;
         }
         result = memberMapper.selectIdDoubleCheck(identity.toLowerCase());
         if (result != null) {
-            map.put("errorCode", -1);
+            map.put("errorCode", "Y");
         } else {
-            map.put("errorCode", 0);
+            map.put("errorCode", "N");
         }
         return map;
     }
 
     @Override
-    public HashMap<String, Integer> memberJoin(MemberTO memberTO) { /*회원가입*/
-        HashMap<String, Integer> map = new HashMap<>();
+    public HashMap<String, String> memberJoin(MemberTO memberTO) {
+        HashMap<String, String> map = new HashMap<>();
+
+        if(idDoubleCheck(memberTO.getId()).get("errorCode")=="Y"){
+            map.put("errorCode", "Y");
+            map.put("errorMsg", "ID가 중복되었습니다.");
+            return map;
+        }else if(!Integer.toString(memberTO.getBirth()).matches("[0-9]+")){
+            map.put("errorCode", "Y");
+            map.put("errorMsg", "생년월일을 숫자로만 입력해주세요.");
+            return map;
+        }
         memberMapper.insertMember(memberTO);
-        map.put("errorCode", 1);
+        map.put("errorCode", "N");
         return map;
     }
 

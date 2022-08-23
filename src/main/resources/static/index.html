@@ -22,12 +22,9 @@
     <!--sweet alert-->
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <style>
-
 </style>
 </head>
-
 <body id="page-top">
-
 <!-- Navigation-->
 <nav class="navbar navbar-expand-lg navbar-light fixed-top py-3" id="mainNav">
     <div class="container px-4 px-lg-5">
@@ -41,8 +38,6 @@
         </div>
     </div>
 </nav>
-
-
 <!-- WELCOME-->
 <header class="masthead">
     <div class="container px-4 px-lg-5 h-100">
@@ -53,14 +48,11 @@
             </div>
             <div class="col-lg-8 align-self-baseline">
                 <p class="text-white-75 mb-5">STUDY HELPER에 오신걸 환영합니다.</br> 로그인 후 사용할 수 있습니다.</p>
-
-                <a class="btn btn-primary btn-xl" onclick="enterkeyEvent(inputIdentity)">login</a>
+                <a class="btn btn-primary btn-xl" onclick="moveNextSpot(loginId)">login</a>
             </div>
         </div>
     </div>
 </header>
-
-
 <!--LOGIN-->
 <section class="page-section bg-primary" id="login">
     <div class="container px-4 px-lg-5">
@@ -70,12 +62,12 @@
                 <hr class="divider divider-light"/>
                         <form>
                             <div class="form-floating mb-3">
-                                <input class="form-control" id="inputIdentity" type="identity" onkeyup="enterkeyEvent(inputPassword)" placeholder="ID" />
-                                <label for="inputIdentity">ID</label>
+                                <input class="form-control" id="loginId" type="identity" onkeyup="moveNextSpot(loginPassword)" placeholder="ID" />
+                                <label for="loginId">ID</label>
                             </div>
                             <div class="form-floating mb-3">
-                                <input class="form-control" id="inputPassword" type="password" onkeyup="enterkeyEvent(loginButton)" placeholder="Password" />
-                                <label for="inputPassword">Password</label>
+                                <input class="form-control" id="loginPassword" type="password" onkeyup="moveNextSpot(loginButton)" placeholder="Password" />
+                                <label for="loginPassword">Password</label>
                             </div>
                     <!--             <div class="form-check mb-3">
                                      <input class="form-check-input" id="inputRememberPassword" type="checkbox" value="" />
@@ -97,8 +89,6 @@
         </div>
     </div>
 </section>
-
-
 <!-- Join-->
 <section class="page-section" id="join">
     <div class="container px-4 px-lg-5">
@@ -106,57 +96,49 @@
             <div class="col-lg-8 col-xl-6 text-center">
                 <h2 class="mt-0">회원가입</h2>
                 <hr class="divider" />
-                <p class="text-muted mb-5">원활한 회원가입을 위해 아래의 항목을 전부 기입해주시기바랍니다.</p>
+                <p class="text-muted mb-5">원활한 회원가입을 위해 모든 항목을 기입해주시기바랍니다.</p>
             </div>
-
         </div>
         <div class="row gx-4 gx-lg-5 justify-content-center mb-5">
             <div class="col-lg-6">
                 <form id="joinForm" data-sb-form-api-token="API_TOKEN">
-
                     <!-- Name input-->
                     <div class="form-floating mb-3">
-                        <input class="form-control" id="name" type="text" onkeyup="enterkeyEvent(identity)"
+                        <input class="form-control" id="newMemberName" type="text" onkeyup="moveNextSpot(newMemberId)"
                                maxlength="20" placeholder="Enter your name..." data-sb-validations="required" />
-                        <label for="name">Full name</label>
+                        <label for="newMemberName">Full name</label>
                     </div>
-
                     <!-- ID input-->
                     <div class="form-floating mb-3">
-                        <input class="form-control" id="identity" type="identity" onkeyup="enterkeyEvent(idDoubleCheck)" placeholder="ID" data-sb-validations="required" />
-                        <label for="identity">ID</label>
+                        <input class="form-control" id="newMemberId" type="identity" onkeyup="moveNextSpot(idDoubleCheck)" placeholder="ID" data-sb-validations="required" />
+                        <label for="newMemberId">ID</label>
                     </div>
                     <div class="form-floating mb-3">
-                        <input class="btn btn-primary btn-xl" type="button" id="idDoubleCheck" value="ID중복확인"/>
+                        <input class="btn btn-primary btn-xl" type="button" id="idDoubleCheck" onclick=""value="ID중복확인"/>
                     </div>
-
                     <!-- Password input-->
                     <div class="form-floating mb-3">
-                        <input class="form-control" id="password" type="password" onkeyup="enterkeyEvent(confirmPassword)" placeholder="Password" data-sb-validations="required"/>
-                        <label for="password">Password</label>
+                        <input class="form-control" id="newMemberPassword" type="password" onkeyup="moveNextSpot(pwDoubleCheck)" placeholder="newMemberPassword" data-sb-validations="required"/>
+                        <label for="newMemberPassword">Password</label>
                     </div>
-
                     <!-- Password confirm input-->
                     <div class="form-floating mb-3">
-                        <input class="form-control" id="confirm-password" type="password"  placeholder="Password-Check" onkeyup="enterkeyEvent(birth)" data-sb-validations="required" />
-                        <label for="confirm-password">Password-Check</label>
+                        <input class="form-control" id="pwDoubleCheck" type="password"  placeholder="Password-Check" onkeyup="moveNextSpot(newMemberBirth)" data-sb-validations="required" />
+                        <label for="pwDoubleCheck">Password-Check</label>
                     </div>
-
-                    <!-- Credit Number-->
+                    <!-- BirthDay input-->
                     <div class="form-floating mb-3">
-                        <input class="form-control" id="birth" type="birth" placeholder="Birth" data-sb-validations="required" />
-                        <label for="birth">Birth</label>
+                        <input class="form-control" id="newMemberBirth" type="birth" placeholder="Birth" data-sb-validations="required" />
+                        <label for="newMemberBirth">Birth</label>
                     </div>
-
-                    <!---->
+                    <!--결과메세지-->
                     <div>
                         <div class="text-center mb-3">
                             <div class="fw-bolder" id="joinResultMessage" style="color:tomato; font-size:18px;"></div>
                         </div>
                     </div>
-
-                    <!-- Submit Button-->
-                    <div class="d-grid"><input type="button"class="btn btn-primary btn-xl" id="submitButton" value="완료" /></div>
+                    <!-- member join insert-->
+                    <div class="d-grid"><input type="button"class="btn btn-primary btn-xl" onclick="newMemberInfoSubmit()" value="완료" /></div>
                 </form>
             </div>
         </div>
@@ -164,72 +146,65 @@
     </div>
 </section>
 
-
 <!-- Footer-->
 <footer class="bg-light py-5">
     <div class="container px-4 px-lg-5"><div class="small text-center text-muted">Copyright &copy; 2022 - isjiji</div></div>
 </footer>
 
-
 <!-- Bootstrap core JS-->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-
 <!-- SimpleLightbox plugin JS-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/SimpleLightbox/2.1.0/simpleLightbox.min.js"></script>
-
 <!-- Core theme JS-->
 <script src="js/scripts.js"></script>
 <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
 
 <script>
-    const submitButton = document.querySelector("#submitButton"); //아이디를 객체로 만들경우 const로 변경불가하게 만들어준다.
-    const idDoubleCheck =document.querySelector("#idDoubleCheck");
-    const identity = document.querySelector("#identity");
-
     const loginButton = document.querySelector("#loginButton");
-    const inputIdentity = document.querySelector("#inputIdentity");
-    const inputPassword = document.querySelector("#inputPassword");
+    const loginId = document.querySelector("#loginId");
+    const loginPassword = document.querySelector("#loginPassword");
     const loginMsg = document.querySelector("#loginMsg");
 
-    const name = document.querySelector("#name");
-    const password = document.querySelector("#password");
-    const birth = document.querySelector("#birth");
-    const confirmPassword = document.querySelector("#confirm-password");
+    const newMemberName = document.querySelector("#newMemberName");
+    const newMemberId = document.querySelector("#newMemberId");
+    const idDoubleCheck =document.querySelector("#idDoubleCheck");
+    const idCheckInfo = document.querySelector("#idCheckInfo");
+    const newMemberPassword = document.querySelector("#newMemberPassword");
+    const newMemberBirth = document.querySelector("#newMemberBirth");
+    const pwDoubleCheck = document.querySelector("#pwDoubleCheck");
     const joinResultMsg = document.querySelector("#joinResultMessage");
 
-    function enterkeyEvent(next){
+    function moveNextSpot(next){
         if(event.keyCode == 13){
             if(next==loginButton) loginOnclick();
             else next.focus();
-        }else if(next==inputIdentity) inputIdentity.focus();
+        }else if(next==loginId) loginId.focus();
     }
 
-    /*로그인*/
     function loginOnclick(){
-       if(inputPassword.value.trim()==null||inputPassword.value.trim()=="" ||
-           inputIdentity.value.trim()==null||inputIdentity.value.trim()==""
+       if(loginPassword.value.trim()==null||loginPassword.value.trim()=="" ||
+           loginId.value.trim()==null||loginId.value.trim()==""
        ){
            loginMsg.innerHTML = "※ ID 혹은 비밀번호를 입력해주세요";
            return;
        }else{
-           let loginData = {"password":inputPassword.value, "id":inputIdentity.value}
+           let loginData = {"password":loginPassword.value, "id":loginId.value}
            loginData = JSON.stringify(loginData);
 
            let xhr = new XMLHttpRequest();
-           xhr.open('GET', "/member/login?"
+           xhr.open('GET', "/stuhel/member/login?"
                + "loginData=" + encodeURI(loginData)
                ,true);
            xhr.setRequestHeader('Accept', 'application/json');
            xhr.send();
            xhr.onreadystatechange = () => {
                if (xhr.readyState == 4 && xhr.status == 200) {
-                   // 데이터 확인
-                   let txt = xhr.responseText;
-                   txt = JSON.parse(txt);
-                   console.log(txt.errorCode);
-                   console.log(txt.errorMsg);
-                   if (txt.errorCode == -1 || txt.errorCode == -2 ) {
-                      loginMsg.innerHTML = "※ " + txt.errorMsg;
+                   let errorInfo = xhr.responseText;
+                   errorInfo = JSON.parse(errorInfo);
+                   console.log(errorInfo.errorCode);
+                   console.log(errorInfo.errorMsg);
+                   if (errorInfo.errorCode == 'Y' ) {
+                      loginMsg.innerHTML = "※ " + errorInfo.errorMsg;
                        return;
                    } else {
                       location.href="/stuhel/home/home.html";
@@ -239,95 +214,91 @@
        }
     }
 
-
-    /*아이디 중복체크*/
     idDoubleCheck.addEventListener('click', () => {
         var regExp=/^[a-z0-9]*$/;
 
-        if(identity.value.trim()==""||identity.value.trim()==null){
+        if(newMemberId.value.trim()==""||newMemberId.value.trim()==null){
             joinResultMsg.innerHTML="ID를 입력해주세요";
             idDoubleCheck.value="ID중복확인";
-            identity.focus();
+            newMemberId.focus();
             return;
-        }else if( !regExp.test(identity.value.trim()) || identity.value.trim().length < 5 ||identity.value.trim().length > 20){
+        }else if( !regExp.test(newMemberId.value.trim()) || newMemberId.value.trim().length < 5 ||newMemberId.value.trim().length > 20){
             joinResultMsg.innerHTML = "※ 아이디는 5~20자 영문 소문자와 숫자만으로 구성되어야합니다.";
             idDoubleCheck.value="ID중복확인";
-            identity.focus();
+            newMemberId.focus();
             return;
         }
         let xhr = new XMLHttpRequest();
-        xhr.open('Get', "/member/idDoubleCheck?"
-            + "identity=" + identity.value
+        xhr.open('Get', "/stuhel/member/idDoubleCheck?"
+            + "newMemberId=" + encodeURI(newMemberId.value)
             ,true);
         xhr.setRequestHeader('Accept', 'application/json');
         xhr.send();
         xhr.onreadystatechange = () => {
             if (xhr.readyState == 4 && xhr.status == 200) {
                 // 데이터 확인
-                let txt = xhr.responseText;
-                console.log("txt");
-                console.log(txt);
-                txt = JSON.parse(txt);
-                if (txt.errorCode < 0) {
+                let errorInfo = xhr.responseText;
+                console.log("errorInfo");
+                console.log(errorInfo);
+                errorInfo = JSON.parse(errorInfo);
+                if (errorInfo.errorCode == 'Y') {
                     joinResultMsg.innerHTML="※ 이미 사용중인 아이디입니다.";
                     idDoubleCheck.value="ID중복확인";
-                    identity.focus();
+                    newMemberId.focus();
                     return;
                 }
                 joinResultMsg.innerHTML="※ 사용 가능한 아이디입니다.";
+                idCheckInfo={'usableId':newMemberId.value};
                 idDoubleCheck.value="사용가능";
-                password.focus();
+                newMemberPassword.focus();
             }
         }
     });
 
-
-    /*회원가입*/
-    submitButton.addEventListener('click', () => {
-
-        if (identity.value.trim()==""||identity.value==null
-                ||name.value.trim()==""||name.value==null
-                ||password.value.trim()==""||password.value==null
-                ||birth.value.trim()==""||birth.value==null){
+    function newMemberInfoSubmit{
+        if (newMemberId.value.trim()==""||newMemberId.value==null
+                ||newMemberName.value.trim()==""||newMemberName.value==null
+                ||newMemberPassword.value.trim()==""||newMemberPassword.value==null
+                ||newMemberBirth.value.trim()==""||newMemberBirth.value==null){
 
             joinResultMsg.innerHTML = "※ 빈칸이 있습니다. </br>모든 정보를 기입하세요.";
             return;
         } else if(idDoubleCheck.value != "사용가능"){
             joinResultMsg.innerHTML = "※ 아이디 중복 검사가 필요합니다.";
             return;
-        } else if (password.value != confirmPassword.value) {
+        } else if(idDoubleCheck.value == "사용가능" || idCheckInfo.usableId != newMemberId.value)
+            joinResultMsg.innerHTML = "※ 아이디 중복 검사를 재실행해주세요.";
+            return;
+        } else if (newMemberPassword.value != pwDoubleCheck.value) {
             joinResultMsg.innerHTML = "※ 비밀번호를 다시 확인해주세요";
             return;
-        }else if(isNaN(birth.value)||birth.value.length != 8){
+        }else if(isNaN(newMemberBirth.value)||newMemberBirth.value.length != 8){
             joinResultMsg.innerHTML="※ 8자리 숫자만 입력가능합니다. ex) 19450815";
             return;
         }else {
-
-            let joinData ={"id" : identity.value, "name" : name.value, "password" : password.value, "birth" : birth.value};
+            let joinData ={"id" : newMemberId.value, "name" : newMemberName.value, "password" : newMemberPassword.value, "birth" : newMemberBirth.value};
             joinData = JSON.stringify(joinData);
-
             let xhr = new XMLHttpRequest();
-            xhr.open('POST', "/member/join?"
+            xhr.open('POST', "/stuhel/member/join?"
                                  + "joinData=" + encodeURI(joinData)
                 , true);
             xhr.setRequestHeader('Accept', 'application/json');
             xhr.send();
             xhr.onreadystatechange = () => {
                 if (xhr.readyState == 4 && xhr.status == 200) {
-                    // 데이터 확인
-                    let txt = xhr.responseText;
-                    txt = JSON.parse(txt);
-                    if (txt.errorCode < 0) {
-                        joinResultMsg.innerHTML = "※ 오류 발생 관리자에게 문의바람";
+                    let errorInfo = xhr.responseText;
+                    errorInfo = JSON.parse(errorInfo);
+                    if (errorInfo.errorCode == 'Y') {
+                        joinResultMsg.innerHTML = "※"+errorInfo.errorMsg;
                         return;
                     }
                     joinResultMsg.innerHTML = "ヽ(✿ﾟ▽ﾟ)ノ</br>회원가입에 성공했습니다";
                     idDoubleCheck.value = "ID중복확인";
-                    identity.value=null;
-                    name.value=null;
-                    password.value=null;
-                    birth.value=null;
-                    confirmPassword.value=null;
+                    newMemberId.value=null;
+                    newMemberName.value=null;
+                    newMemberPassword.value=null;
+                    newMemberBirth.value=null;
+                    pwDoubleCheck.value=null;
 
                     swal({
                           title : '회원가입 성공'

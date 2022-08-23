@@ -1,9 +1,9 @@
-package com.helper.study.stuhel.book.controller;
+package com.helper.study.stuhel.home.controller;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.helper.study.stuhel.book.service.HomeServiceImpl;
-import com.helper.study.stuhel.book.to.BookTO;
+import com.helper.study.stuhel.home.service.HomeServiceImpl;
+import com.helper.study.stuhel.home.to.BookTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;

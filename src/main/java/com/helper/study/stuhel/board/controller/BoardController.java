@@ -6,7 +6,7 @@ import com.google.gson.reflect.TypeToken;
 import com.helper.study.stuhel.board.servie.BoardServiceImpl;
 import com.helper.study.stuhel.board.to.BoardCommentTO;
 import com.helper.study.stuhel.board.to.BoardTO;
-import com.helper.study.stuhel.book.to.BookTO;
+import com.helper.study.stuhel.home.to.BookTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;

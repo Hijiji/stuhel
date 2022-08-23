@@ -1,7 +1,7 @@
 package com.helper.study.stuhel.mypage.service;
 
 import com.helper.study.stuhel.mypage.mapper.MyPageMapper;
-import com.helper.study.stuhel.book.to.BookTO;
+import com.helper.study.stuhel.home.to.BookTO;
 import com.helper.study.stuhel.member.to.MemberTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -48,8 +48,8 @@ public class MyPageServiceImpl implements MyPageService{
 
     @Override
     public ArrayList<BookTO> retrieveBookStatus(BookTO bookTO) {
-        System.out.println("book.getBookingDate() = " + bookTO.getBookDate());
-        System.out.println("book.getUserId() = " + bookTO.getUserId());
+        System.out.println("bookTO.getBookingDate() = " + bookTO.getBookDate());
+        System.out.println("bookTO.getUserId() = " + bookTO.getUserId());
         ArrayList<BookTO> book= myPageMapper.selectBookStatus(bookTO);
         return book;
     }
@@ -62,7 +62,6 @@ public class MyPageServiceImpl implements MyPageService{
                 myPageMapper.deleteBook(bookTO);
             }
             map.put("errorCode","Y");
-            System.out.println("map.get(\"errorCode\") = " + map.get("errorCode"));
         }catch (Exception e) {
             map.put("errorCode", "N");
             e.printStackTrace();
