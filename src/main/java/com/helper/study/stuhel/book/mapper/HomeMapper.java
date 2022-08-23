@@ -6,7 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import java.util.ArrayList;
 
 @Mapper
-public interface BookMapper {
+public interface HomeMapper {
    ArrayList<Integer> selectBookableRoom(BookTO bookTO);
    void insertRoomBook(BookTO bookTO);
 

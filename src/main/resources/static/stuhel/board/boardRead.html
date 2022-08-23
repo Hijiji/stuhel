@@ -8,7 +8,7 @@
     <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
     <title>Stuhel Board Read</title>
     <!-- Favicon-->
-    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="../../assets/favicon.ico" />
     <!-- Bootstrap Icons-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
     <!-- Google fonts-->
@@ -17,7 +17,7 @@
     <!-- SimpleLightbox plugin CSS-->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/SimpleLightbox/2.1.0/simpleLightbox.min.css" rel="stylesheet" />
     <!-- Core theme CSS (includes Bootstrap)-->
-    <link href="css/styles.css" rel="stylesheet" />
+    <link href="../../css/styles.css" rel="stylesheet" />
     <!--sweet alert-->
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <style>
@@ -32,8 +32,8 @@
         <button class="navbar-toggler navbar-toggler-right" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ms-auto my-2 my-lg-0">
-                <li class="nav-item"><a class="nav-link" href="/home.html" style="color:#495057">Home</a></li>
-                <li class="nav-item"><a class="nav-link" href="/boardList.html" style="color:#495057">목록</a></li>
+                <li class="nav-item"><a class="nav-link" href="/stuhel/home/home.html" style="color:#495057">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="/stuhel/board/boardList.html" style="color:#495057">목록</a></li>
             </ul>
         </div>
     </div>
@@ -86,7 +86,7 @@
 <!-- SimpleLightbox plugin JS-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/SimpleLightbox/2.1.0/simpleLightbox.min.js"></script>
 <!-- Core theme JS-->
-<script src="js/scripts.js"></script>
+<script src="../../js/scripts.js"></script>
 <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
 
 <script>
@@ -153,7 +153,7 @@
             console.log(boardData);
 
             let xhr = new XMLHttpRequest();
-            xhr.open('PATCH', 'stuhel/board/addViewCount?boardData='+encodeURI(boardData)
+            xhr.open('PATCH', '/stuhel/board/addViewCount?boardData='+encodeURI(boardData)
                      ,true);
             xhr.setRequestHeader('Accept', 'application/json');
             xhr.send();
@@ -167,7 +167,7 @@
     }
     function retrieveBoardComment(){
         let xhr = new XMLHttpRequest();
-            xhr.open('GET', 'stuhel/board/retrieveBoardComment?noteSeq='+noteSeq
+            xhr.open('GET', '/stuhel/board/retrieveBoardComment?noteSeq='+noteSeq
                      ,true);
             xhr.setRequestHeader('Accept', 'application/json');
             xhr.send();
@@ -278,7 +278,7 @@
         commentData = JSON.stringify(commentData);
 
         let xhr = new XMLHttpRequest();
-            xhr.open('Post', 'stuhel/board/saveComment?commentData='+encodeURI(commentData)
+            xhr.open('Post', '/stuhel/board/saveComment?commentData='+encodeURI(commentData)
                      ,true);
             xhr.setRequestHeader('Accept', 'application/json');
             xhr.send();

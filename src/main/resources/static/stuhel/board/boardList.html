@@ -8,7 +8,7 @@
     <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
     <title>Stuhel Board List</title>
     <!-- Favicon-->
-    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="../../assets/favicon.ico" />
     <!-- Bootstrap Icons-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
     <!-- Google fonts-->
@@ -17,7 +17,7 @@
     <!-- SimpleLightbox plugin CSS-->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/SimpleLightbox/2.1.0/simpleLightbox.min.css" rel="stylesheet" />
     <!-- Core theme CSS (includes Bootstrap)-->
-    <link href="css/styles.css" rel="stylesheet" />
+    <link href="../../css/styles.css" rel="stylesheet" />
     <!--sweet alert-->
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <!--ag-grid-->
@@ -53,8 +53,8 @@ a:active {
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ms-auto my-2 my-lg-0">
                 <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
-                <li class="nav-item"><a class="nav-link" href="/home.html">Home</a></li>
-                <li class="nav-item"><a class="nav-link" href="/myPage.html">My page</a></li>
+                <li class="nav-item"><a class="nav-link" href="/stuhel/home/home.html">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="/stuhel/myPage/myPage.html">My page</a></li>
                 <li class="nav-item"><a class="nav-link" onclick="logoutButton()">Logout</a></li>
             </ul>
         </div>
@@ -80,7 +80,7 @@ a:active {
     <div style="display: flex; justify-content: center;">
     <div style="width:1250px;position:relative" >
         <div align="right">
-            <input type="button" id="boardWriterBtn" value="글쓰기" onclick="location.href='/boardWrite.html'" class="btn btn-primary btn-xl"  style="margin:7px;font-size:15px;padding:11px 22px;text-align:center">
+            <input type="button" id="boardWriterBtn" value="글쓰기" onclick="location.href='/stuhel/board/boardWrite.html'" class="btn btn-primary btn-xl"  style="margin:7px;font-size:15px;padding:11px 22px;text-align:center">
         </div>
         <div align="center;margin:10px,0px;">
             <!--<div id="boardListGrid" class="ag-theme-balham" style="height:70vh; width:auto; text-align: center;"></div>-->
@@ -117,7 +117,7 @@ a:active {
 <!-- SimpleLightbox plugin JS-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/SimpleLightbox/2.1.0/simpleLightbox.min.js"></script>
 <!-- Core theme JS-->
-<script src="js/scripts.js"></script>
+<script src="../../js/scripts.js"></script>
 <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
 
 <script>
@@ -165,7 +165,7 @@ a:active {
         maxNum=10;
         minNum=1;
 	    let xhr = new XMLHttpRequest();
-	    xhr.open('GET', 'stuhel/board/retrieveBoardList?minNum='+minNum+'&maxNum='+maxNum
+	    xhr.open('GET', '/stuhel/board/retrieveBoardList?minNum='+minNum+'&maxNum='+maxNum
 	        ,true)
 	    xhr.setRequestHeader('Accept', 'application/json');
 	    xhr.send();
@@ -227,7 +227,7 @@ a:active {
         xhr.onreadystatechange = () => {
             if (xhr.readyState == 4 && xhr.status == 200) {
                 let txt = xhr.responseText;
-                location.href="/boardRead.html?boardReadData="+encodeURI(txt);
+                location.href="/stuhel/board/boardRead.html?boardReadData="+encodeURI(txt);
             }
         }
     }
@@ -238,7 +238,7 @@ a:active {
             kMaxNum=0;
             kMinNum=0;
             let xhr = new XMLHttpRequest();
-	        xhr.open('GET', 'stuhel/board/retrieveBoardList?minNum='+minNum+'&maxNum='+maxNum
+	        xhr.open('GET', '/stuhel/board/retrieveBoardList?minNum='+minNum+'&maxNum='+maxNum
 	            ,true)
     	    xhr.setRequestHeader('Accept', 'application/json');
 	        xhr.send();

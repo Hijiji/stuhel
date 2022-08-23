@@ -1,6 +1,6 @@
 package com.helper.study.stuhel.book.service;
 
-import com.helper.study.stuhel.book.mapper.BookMapper;
+import com.helper.study.stuhel.book.mapper.HomeMapper;
 import com.helper.study.stuhel.book.to.BookTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,26 +9,26 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 @Service
-public class BookServiceImpl implements BookService {
+public class HomeServiceImpl implements HomeService {
 
-    private final BookMapper bookMapper;
+    private final HomeMapper homeMapper;
 
     @Autowired
-    public BookServiceImpl(BookMapper bookMapper) {
-        this.bookMapper = bookMapper;
+    public HomeServiceImpl(HomeMapper homeMapper) {
+        this.homeMapper = homeMapper;
     }
 
 
     @Override
     public ArrayList<Integer> retrieveBookableRoom(BookTO bookTO) {
-        ArrayList<Integer> roomName = bookMapper.selectBookableRoom(bookTO);
+        ArrayList<Integer> roomName = homeMapper.selectBookableRoom(bookTO);
         return roomName;
     }
 
     @Override
     public HashMap<String, Integer> roomBook(BookTO bookTO) {
         HashMap<String,Integer> map =new HashMap<>();
-                bookMapper.insertRoomBook(bookTO);
+                homeMapper.insertRoomBook(bookTO);
         return map;
     }
 }

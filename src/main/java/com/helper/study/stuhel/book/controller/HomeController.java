@@ -2,7 +2,7 @@ package com.helper.study.stuhel.book.controller;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.helper.study.stuhel.book.service.BookServiceImpl;
+import com.helper.study.stuhel.book.service.HomeServiceImpl;
 import com.helper.study.stuhel.book.to.BookTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,14 +14,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 @Controller
-@RequestMapping("/stuhel/book")
+@RequestMapping("/stuhel/home")
 @ResponseBody
-public class StudyRoomController {
+public class HomeController {
 
     private static Gson gson = new GsonBuilder().serializeNulls().create(); // 속성값이 null 인 속성도 json 변환
-    private final BookServiceImpl bookService;
+    private final HomeServiceImpl bookService;
     @Autowired
-    public StudyRoomController(BookServiceImpl bookService) {
+    public HomeController(HomeServiceImpl bookService) {
         this.bookService = bookService;
     }
 

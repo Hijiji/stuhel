@@ -49,7 +49,7 @@ public class BoardController {
         return board; //리다이렉트 게시글 조회
     }
 
-    @PatchMapping("/saveWrite")
+    @PostMapping("/saveWrite")
     HashMap<String,Integer> saveWrite(HttpServletRequest request
                     ,@RequestParam("title")String title, @RequestParam("note")String note, @RequestParam("topicNm")String topicNm){
 
