@@ -31,7 +31,7 @@
         ,NAME = #{name}
         ,PASSWORD = #{password}
         ,BIRTH = #{birth}
-        WHERE ID = #{sessionId}  <!--TO에 sessionId 없어서 에러뜰 수도 있음 파라메터타입 ...바꾸든지 어쩌던지 해봐 ~-->
+        WHERE ID = #{sessionId}
     </update>
 
     <select id="selectBookStatus" parameterType="com.helper.study.stuhel.home.to.BookTO" resultMap="myPageBook">

@@ -24,25 +24,26 @@ public class MyPageServiceImpl implements MyPageService{
         return myPageMapper.selectMemberInfo(memberTO);
     }
 
-    public HashMap<String,Integer> changeMemberInfo(MemberTO memberTO, HttpSession session){
-        HashMap<String, Integer> map = new HashMap<>();
-        String sessionId=(String)session.getAttribute("memberId");
-        memberTO.setSessionId(sessionId);
-        if(memberTO.getId()==null) {
-            memberTO.setId(sessionId);
-        }
-        if(memberTO.getName()==null){
-            memberTO.setName((String)session.getAttribute("memberName"));
-        }
-        if(memberTO.getPassword()==null){
-            memberTO.setPassword((String)session.getAttribute("memberPassword"));
-        }
-        if(memberTO.getBirth()==0){
-            memberTO.setBirth(0);
-        }
+    public HashMap<String,String> changeMemberInfo(MemberTO memberTO,HttpSession session){
+        HashMap<String, String> map = new HashMap<>();
+        map.put("errorCd", "N");
+        try {
+            if(memberTO.getId()==null&&memberTO.getBirth()==0&&memberTO.getPassword()==null&memberTO.getName()==null) {
+                map.put("errorCd", "Y");
+                map.put("errorMsg", "변경할 데이터가 없습니다.");
+                return map;
+            }
+            myPageMapper.updateMemberInfo(memberTO);
+            memberTO=retrieveMemberInfo(memberTO);
+            session.setAttribute("memberName",memberTO.getName());
+            session.setAttribute("memberId",memberTO.getId());
+            session.setAttribute("memberBirth",memberTO.getBirth());
 
-        myPageMapper.updateMemberInfo(memberTO);
-        map.put("errorCode", 1);
+
+        }catch (Exception e) {
+            map.put("errorCd", "Y");
+            map.put("errorMsg", "정보변경 중 데이터 에러발생");
+        }
         return map;
     }
 

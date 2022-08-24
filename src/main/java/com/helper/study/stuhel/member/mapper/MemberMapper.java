@@ -5,7 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface MemberMapper {
-    String selectIdDoubleCheck(String identity);
+    String selectIdDoubleCheck(String memberId);
     void insertMember(MemberTO memberTO);
     MemberTO selectMemberLogin(MemberTO memberTO);
 

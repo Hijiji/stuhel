@@ -48,8 +48,8 @@ public class MemberController {
         return map;
     }
     @GetMapping("/idDoubleCheck")
-    public HashMap<String,String> idDoubleCheck (@RequestParam("identity") String identity) {
-        return memberService.idDoubleCheck(identity);
+    public HashMap<String,String> idDoubleCheck (@RequestParam("memberId") String memberId) {
+        return memberService.idDoubleCheck(memberId);
     }
     /*회원가입*/
     @PostMapping("/join")

@@ -37,15 +37,15 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public HashMap<String, String> idDoubleCheck(String identity) {
+    public HashMap<String, String> idDoubleCheck(String memberId) {
         HashMap<String, String> map = new HashMap<>();
         String result;
         String regExp="^[a-z0-9]*$";
-        if( !Pattern.matches(regExp, identity) || identity.length()>20 || identity.length()<5){
+        if( !Pattern.matches(regExp, memberId) || memberId.length()>20 || memberId.length()<5){
             map.put("errorCode", "Y");
             return map;
         }
-        result = memberMapper.selectIdDoubleCheck(identity.toLowerCase());
+        result = memberMapper.selectIdDoubleCheck(memberId.toLowerCase());
         if (result != null) {
             map.put("errorCode", "Y");
         } else {

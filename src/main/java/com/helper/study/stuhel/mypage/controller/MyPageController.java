@@ -33,33 +33,26 @@ public class MyPageController {
     @GetMapping("/retrieveMemberInfo")
     String retrieveMemberInfo(HttpServletRequest request) {
         HttpSession session = request.getSession();
-        HashMap<String, MemberTO> map=new HashMap<>();
         MemberTO memberTO=new MemberTO();
-        String result;
 
         if(session.getAttribute("memberId")==null) {
-           result=null;
+           return null;
         }else {
             memberTO.setId((String)session.getAttribute("memberId"));
             memberTO.setName((String)session.getAttribute("memberName"));
             memberTO=myPageService.retrieveMemberInfo(memberTO);
-            /*아래 코드 없어도 session 잘 작동하는지 확인하기*/
-           /* session.setAttribute("memberName",memberTO.getName());
-            session.setAttribute("birthday",memberTO.getBirth());
-            session.setAttribute("password",memberTO.getPassword());*/
-            result =gson.toJson(memberTO);
         }
-        return result;
+        return gson.toJson(memberTO);
     }
 
     @PutMapping("/changeMemberInfo")
-    HashMap<String, Integer> changeMemberInfo(HttpServletRequest request, @RequestParam("changeMemberInfo") String changeMemberInfo){
+    HashMap<String, String> changeMemberInfo(HttpServletRequest request, @RequestParam("changeMemberInfo") String changeMemberInfo){
         HttpSession session = request.getSession();
         String sessionMemberId=(String)session.getAttribute("memberId");
         String sessionName=(String)session.getAttribute("memberName");
         MemberTO memberTO = gson.fromJson(changeMemberInfo, MemberTO.class);
 
-        HashMap<String, Integer> map = new HashMap<>();
+        HashMap<String, String> map = new HashMap<>();
         memberTO.setSessionId(sessionMemberId);
         if(memberTO.getId().isEmpty()|| memberTO.getId()==null || memberTO.getId().trim()=="") {
             memberTO.setId(sessionMemberId);
@@ -75,10 +68,6 @@ public class MyPageController {
         }
 
         map=myPageService.changeMemberInfo(memberTO,session);
-
-        session.setAttribute("memberName",memberTO.getName());
-        session.setAttribute("memberId",memberTO.getId());
-        session.setAttribute("memberBirth",memberTO.getBirth());
 
         return map;
     }

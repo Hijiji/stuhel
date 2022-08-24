@@ -28,10 +28,17 @@
         }
     }
 
+    /*엔터키 입력시 focus 이동*/
+    function moveNextSpot(next){
+        if(event.keyCode == 13){
+            if(next==loginButton) loginOnclick();
+            else next.focus();
+        }
+    }
+
 /*서버가기전 확인하는 alert*/
 function checkAlert(title, text,buttons){
     if(buttons==null||buttons==''){buttons=["취소","확인"];}
-    //if(btnColor==null||btnColor==''){btnColor='tomato';}
     swal({
         title : title
         , text : text

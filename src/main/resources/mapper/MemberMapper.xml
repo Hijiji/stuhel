@@ -28,7 +28,7 @@
     <select id="selectIdDoubleCheck" resultType="java.lang.String" parameterType="java.lang.String">
         SELECT ID
         FROM MEMBER_SECURITY
-        WHERE LOWER(ID) = #{identity}
+        WHERE LOWER(ID) = #{memberId}
     </select>
 
     <insert id="insertMember" parameterType="com.helper.study.stuhel.member.to.MemberTO">

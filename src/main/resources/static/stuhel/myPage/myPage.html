@@ -64,11 +64,11 @@
             <div class="col-lg-6">
                     <!-- Name input-->
                     <div class="form-floating mb-3">
-                        <h6 class="mt-0"> NAME </h6> <input class="form-control" id="name" type="text" onkeyup="enterkeyEvent(identity)" disabled/>
+                        <h6 class="mt-0"> NAME </h6> <input class="form-control" id="userName" type="text" onkeyup="moveNextSpot(userId)" disabled/>
                     </div>
                 <!-- ID input-->
                     <div class="form-floating mb-3">
-                        <h6 class="mt-0"> I D </h6><input class="form-control" id="identity" type="text" onkeyup="enterkeyEvent(birth)" disabled/><!--placeholder="ID" data-sb-validations="required" -->
+                        <h6 class="mt-0"> I D </h6><input class="form-control" id="userId" type="text" onkeyup="moveNextSpot(userBirth)" disabled/><!--placeholder="ID" data-sb-validations="required" -->
                     </div>
                     <div>
                         <div class="text-center mb-3">
@@ -76,12 +76,12 @@
                         </div>
                     </div>
                     <!-- ID DoubleCheck input-->
-                    <div class="form-floating mb-3" id="idCheckDiv" style="display:none" >
+                    <div class="form-floating mb-3" id="idDoubleCheckDiv" style="display:none" >
                         <input class="btn btn-primary btn-xl" type="button" id="idDoubleCheck" value="ID중복확인"/>
                     </div>
                     <!-- birth input-->
                     <div class="form-floating mb-3">
-                        <h6 class="mt-0"> BIRTH </h6><input class="form-control" id="birth" onkeyup="enterkeyEvent(password)" disabled/><!--placeholder="ID" data-sb-validations="required" -->
+                        <h6 class="mt-0"> BIRTH </h6><input class="form-control" id="userBirth" onkeyup="moveNextSpot(UserPassword)" disabled/><!--placeholder="ID" data-sb-validations="required" -->
                     </div>
                     <div>
                         <div class="text-center mb-3">
@@ -90,7 +90,7 @@
                     </div>
                 <!-- Password input-->
                     <div class="form-floating mb-3" id="pwDiv" style="display:none" >
-                        <h6 class="mt-0"> NEW PW </h6><input class="form-control" id="password" type="password" onkeyup="enterkeyEvent(confirmPassword)" placeholder="Password" data-sb-validations="required"/>
+                        <h6 class="mt-0"> NEW PW </h6><input class="form-control" id="UserPassword" type="password" onkeyup="moveNextSpot(confirmPassword)" placeholder="Password" data-sb-validations="required"/>
                     </div>
                     <div>
                         <div class="text-center mb-3">
@@ -112,7 +112,7 @@
                     </div>
                     <!--수정저장-->
                     <div class="d-grid">
-                        <input type="button"  class="btn btn-primary btn-xl" id="submitButton" value="완료" style="display:none"/>
+                        <input type="button"  class="btn btn-primary btn-xl" id="userInfoChangeSubmit" onclick="userInfoChangeSubmitBtn()" value="완료" style="display:none"/>
                     </div>
                     <!--수정취소-->
                     <div class="d-grid">
@@ -157,8 +157,8 @@
         <div class="modal-title">사용자 확인</div>
         <hr class="divider" />
         <div>
-            I  D  <input class="form-control" type="text" onkeyup="enterkeyEvent(checkPw)" id="checkId"/>
-            P W  <input class="form-control" type="password" onkeyup="enterkeyEvent(idPwConfirm)" id="checkPw"/>
+            I  D  <input class="form-control" type="text" onkeyup="moveNextSpot(checkPw)" id="checkId"/>
+            P W  <input class="form-control" type="password" onkeyup="moveNextSpot(idPwConfirm)" id="checkPw"/>
         </div>
         </br>
         <div class="fw-bolder" id="checkMsg" style="color:#1a1e21;"></div>
@@ -194,29 +194,28 @@
 <footer class="bg-light py-5">
     <div class="container px-4 px-lg-5"><div class="small text-center text-muted">Copyright &copy; 2022 - isjiji</div></div>
 </footer>
-
 <!-- Bootstrap core JS-->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 <!-- SimpleLightbox plugin JS-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/SimpleLightbox/2.1.0/simpleLightbox.min.js"></script>
 <!-- Core theme JS-->
 <script src="../../js/scripts.js"></script>
+<script src="../../js/common.js"></script>
 <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
-
 <script>
-    let dbName = "";
-    let dbIdentity = "";
-    let dbBirth = "";
+    let dbUserName = "";
+    let dbUserId = "";
+    let dbUserBirth = "";
 
     const changeButton = document.querySelector("#changeButton");
-    const submitButton = document.querySelector("#submitButton");
-    const name = document.querySelector("#name");
-    const identity = document.querySelector("#identity");
-    const birth = document.querySelector("#birth");
-    const password = document.querySelector("#password");
+    const userInfoChangeSubmit = document.querySelector("#userInfoChangeSubmit");
+    const userName = document.querySelector("#userName");
+    const userId = document.querySelector("#userId");
+    const userBirth = document.querySelector("#userBirth");
+    const UserPassword = document.querySelector("#UserPassword");
     const confirmPassword = document.querySelector("#confirmPassword");
 
-    const idCheckDiv = document.querySelector("#idCheckDiv");
+    const idDoubleCheckDiv = document.querySelector("#idDoubleCheckDiv");
     const pwDiv = document.querySelector("#pwDiv");
     const pwConfirmDiv = document.querySelector("#pwConfirmDiv");
     const changeCancelButton = document.querySelector("#changeCancelButton");
@@ -234,28 +233,13 @@
     let monthBookDataArr=[];
     let clickedBookData=[];
 
-    <!--세션체크-->
-    let sessionStatus = null;
+    <!--초기세팅-->
     (function(){
-        let xhr = new XMLHttpRequest();
-        xhr.open('Get', "/session/sessionCheck"
-                 ,true);
-        xhr.setRequestHeader('Accept', 'application/json');
-        xhr.send();
-        xhr.onreadystatechange = () => {
-            if (xhr.readyState == 4 && xhr.status == 200) {
-                // 데이터 확인
-                sessionStatus = xhr.responseText;
-                if(sessionStatus==null||sessionStatus==''){
-                    location.href="/index.html";
-                    return;
-                }
-                retrieveMemberInfo();
-            }
-        }
+        sessionCheck();
+        retrieveMemberInfo();
     })();
 
-    <!--초기회원정보화면-->
+    <!--화면로드시 회원정보-->
     function retrieveMemberInfo(){
         let xhr = new XMLHttpRequest();
             xhr.open('GET', "/stuhel/myPage/retrieveMemberInfo?"
@@ -265,23 +249,18 @@
             xhr.onreadystatechange = () => {
                 if (xhr.readyState == 4 && xhr.status == 200) {
                     // 데이터 확인
-                    let txt = xhr.responseText;
-                    txt = JSON.parse(txt);
-                    dbName=txt.name;
-                    dbIdentity=txt.id;
-                    dbBirth=txt.birth;
-                    name.value=dbName;
-                    identity.value=dbIdentity;
-                    birth.value=dbBirth;
+                    let userData = xhr.responseText;
+                    userData = JSON.parse(userData);
+                    if(userData==null){logoutButton();}
+                    dbUserName=userData.name;
+                    dbUserId=userData.id;
+                    dbUserBirth=userData.userBirth;
+                    userName.value=dbUserName;
+                    userId.value=dbUserId;
+                    userBirth.value=dbUserBirth;
                 }
             }
             setDate();
-    }
-
-    function enterkeyEvent(next){
-        if(event.keyCode == 13){
-            next.focus();
-        }
     }
 
     <!--달력-->
@@ -514,7 +493,7 @@
         ){
            checkMsg.innerHTML = "※ ID 혹은 비밀번호를 입력해주세요";
            return;
-        }else if(dbIdentity!=checkId.value.trim()){
+        }else if(dbUserId!=checkId.value.trim()){
            checkMsg.innerHTML = "※ 잘못된 ID를 입력하셨습니다.";
            return;
         }else{
@@ -537,22 +516,22 @@
                        return;
                    } else {
                       userCheckModal.style.display = "none";
-                      name.disabled=false;
-                      identity.disabled=false;
-                      birth.disabled=false;
-                      password.style.display="block";
-                      idCheckDiv.style.display="block";
+                      userName.disabled=false;
+                      userId.disabled=false;
+                      userBirth.disabled=false;
+                      UserPassword.style.display="block";
+                      idDoubleCheckDiv.style.display="block";
                       pwDiv.style.display="block";
                       pwConfirmDiv.style.display="block";
                       changeButton.style.display="none";
-                      submitButton.style.display="block";
+                      userInfoChangeSubmit.style.display="block";
                       changeCancelButton.display="block";
                       checkPw.value="";
                       checkId.value="";
                       checkMsg.innerHTML="";
-                      name.value = dbName;
-                      identity.value  = dbIdentity;
-                      birth.value  = dbBirth;
+                      userName.value = dbUserName;
+                      userId.value  = dbUserId;
+                      userBirth.value  = dbUserBirth;
                    }
                }
            }
@@ -575,25 +554,24 @@
             bookRoomAndTimeDiv.innerHTML="";
             return;
         }
-
     };
 
     <!--아이디 더블체크-->
     idDoubleCheck.addEventListener('click', () => {
         var regExp=/^[a-z0-9]*$/;
-        if(identity.value.trim()==""||identity.value.trim()==null){
+        if(userId.value.trim()==""||userId.value.trim()==null){
             idCheckResultMsg.innerHTML="ID를 입력해주세요";
             idDoubleCheck.value="ID중복확인";
             return;
-        }else if( !regExp.test(identity.value.trim()) || identity.value.trim().length < 5 ||identity.value.trim().length > 20){
+        }else if( !regExp.test(userId.value.trim()) || userId.value.trim().length < 5 ||userId.value.trim().length > 20){
             idCheckResultMsg.innerHTML = "※ 아이디는 5~20자 영문 소문자와 숫자만으로 구성되어야합니다.";
             idDoubleCheck.value="ID중복확인";
-            identity.focus();
+            userId.focus();
             return;
         }
         let xhr = new XMLHttpRequest();
         xhr.open('Get', "/member/idDoubleCheck?"
-            + "identity=" + identity.value
+            + "memberId=" + userId.value
             ,true);
         xhr.setRequestHeader('Accept', 'application/json');
         xhr.send();
@@ -612,40 +590,40 @@
             }
         }
     });
-    let changeName="" ;
-    let changeIdentity="";
-    let changeBirth="";
-    let changePassword="";
+    let changeUserName="" ;
+    let changeUserId="";
+    let changeUserBirth="";
+    let changeUserPassword="";
 
-    submitButton.addEventListener('click',()=>{
+    function userInfoChangeSubmitBtn(){
     idCheckResultMsg.innerHTML=""; idCheckResultMsg.innerHTML="";birthCheckResultMsg.innerHTML="";pwCheckResultMsg.innerHTML="";
-        if (identity.value.trim()==""||identity.value==null
-            ||name.value.trim()==""||name.value==null
-            ||birth.value.trim()==""||birth.value==null
+        if (userId.value.trim()==""||userId.value==null
+            ||userName.value.trim()==""||userName.value==null
+            ||userBirth.value.trim()==""||userBirth.value==null
             ){
            idCheckResultMsg.innerHTML ="※ ID, 이름, 생년월일은 비워둘 수 없습니다.";
         }
-        if(name.value.trim()!=dbName){
-            changeName=name.value.trim();
-        }if(identity.value.trim()!=dbIdentity){
+        if(userName.value.trim()!=dbUserName){
+            changeUserName=userName.value.trim();
+        }if(userId.value.trim()!=dbUserId){
             if(idDoubleCheck.value=="사용가능"){
-                changeIdentity=identity.value.trim();
+                changeUserId=userId.value.trim();
 
             }else{
                 idCheckResultMsg.innerHTML="※ 변경 아이디 중복체크가 필요합니다.";
                 return;
             }
-        }if(birth.value.trim()!=dbBirth){
-            if(isNaN(birth.value)||birth.value.length != 8){
+        }if(userBirth.value.trim()!=dbUserBirth){
+            if(isNaN(userBirth.value)||userBirth.value.length != 8){
                 birthCheckResultMsg.innerHTML="※ 8자리 숫자만 입력가능합니다. ex) 19450815";
                 return;
             }else {
-                changeBirth=birth.value.trim();
+                changeUserBirth=userBirth.value.trim();
             }
-        }else changeBirth=dbBirth;
-        if(password.value!=null || password.value.trim()!="" && confirmPassword.value!=null || confirmPassword.value.trim()!=""){
-            if(password.value==confirmPassword.value){
-                changePassword=password.value.trim();
+        }else changeUserBirth=dbUserBirth;
+        if(UserPassword.value!=null || UserPassword.value.trim()!="" && confirmPassword.value!=null || confirmPassword.value.trim()!=""){
+            if(UserPassword.value==confirmPassword.value){
+                changeUserPassword=UserPassword.value.trim();
 
             }else{
                 pwCheckResultMsg.innerHTML="입력한 비밀번호를 확인해주세요.";
@@ -662,7 +640,7 @@
                 console.log(result);
                 if(result==null) return;
                 else {
-                    let changeMemberInfo = {"birth":changeBirth,"password":changePassword,"id":changeIdentity,"name":changeName} //데이터 추가하기
+                    let changeMemberInfo = {"birth":changeUserBirth,"password":changeUserPassword,"id":changeUserId,"name":changeUserName} //데이터 추가하기
                     changeMemberInfo = JSON.stringify(changeMemberInfo);
 
                     let xhr = new XMLHttpRequest();
@@ -674,32 +652,32 @@
                     xhr.onreadystatechange = () => {
                         if (xhr.readyState == 4 && xhr.status == 200) {
                             // 데이터 확인
-                            let txt = xhr.responseText;
-                            txt = JSON.parse(txt);
-                            console.log(txt.errorCode);
-                            console.log(txt.errorMsg);
-                            if (txt.errorCode == -1 || txt.errorCode == -2 ) {
+                            let errorInfo = xhr.responseText;
+                            errorInfo = JSON.parse(errorInfo);
+                            console.log(errorInfo.errorCode);
+                            console.log(errorInfo.errorMsg);
+                            if (errorInfo.errorCd== "Y" ) {
                                 alert(errMsg);
                                 return;
                             } else {
                                 alert("변경이 완료되었습니다.");
                             }
-                            name.disabled=true;
-                            identity.disabled=true;
-                            birth.disabled=true;
-                            password.style.display="none";
-                            idCheckDiv.style.display="none";
+                            userName.disabled=true;
+                            userId.disabled=true;
+                            userBirth.disabled=true;
+                            UserPassword.style.display="none";
+                            idDoubleCheckDiv.style.display="none";
                             pwDiv.style.display="none";
                             pwConfirmDiv.style.display="none";
                             changeButton.style.display="block";
-                            submitButton.style.display="none";
+                            userInfoChangeSubmit.style.display="none";
                             changeCancelButton.display="none";
-                            name.value = dbName;
-                            identity.value  = dbIdentity
-                            birth.value  = dbBirth;
+                            userName.value = dbUserName;
+                            userId.value  = dbUserId
+                            userBirth.value  = dbUserBirth;
                             idDoubleCheck.value="ID중복확인";
-                            password.value="";
-                            confirmPassword.value="";
+                            UserPassword.value="";
+                            UserPassword.value="";
                             idCheckResultMsg.innerHTML="";
                             pwCheckResultMsg.innerHTML="";
                             birthCheckResultMsg.innerHTML="";
@@ -709,20 +687,6 @@
                     }
                 }
         });
-    });
-
-    /*로그아웃*/
-    function logoutButton(){
-        let xhr = new XMLHttpRequest();
-        xhr.open('DELETE', "/session/logout"
-            ,true);
-        xhr.setRequestHeader('Accept', 'application/json');
-        xhr.send();
-        xhr.onreadystatechange = () => {
-            if (xhr.readyState == 4 && xhr.status == 200) {
-                location.href="/index.html";
-            }
-        }
     }
 </script>
 </body>

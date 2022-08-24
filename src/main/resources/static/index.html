@@ -174,14 +174,6 @@
     const pwDoubleCheck = document.querySelector("#pwDoubleCheck");
     const joinResultMsg = document.querySelector("#joinResultMessage");
 
-    /*엔터키 입력시 focus 이동*/
-    function moveNextSpot(next){
-        if(event.keyCode == 13){
-            if(next==loginButton) loginOnclick();
-            else next.focus();
-        }else if(next==loginId) loginId.focus();
-    }
-
     function loginOnclick(){
        if(loginPassword.value.trim()==null||loginPassword.value.trim()=="" ||
            loginId.value.trim()==null||loginId.value.trim()==""
@@ -230,7 +222,7 @@
         }
         let xhr = new XMLHttpRequest();
         xhr.open('Get', "/member/idDoubleCheck?"
-            + "newMemberId=" + encodeURI(newMemberId.value)
+            + "memberId=" + encodeURI(newMemberId.value)
             ,true);
         xhr.setRequestHeader('Accept', 'application/json');
         xhr.send();
