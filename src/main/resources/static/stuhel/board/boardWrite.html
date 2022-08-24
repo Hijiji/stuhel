@@ -64,17 +64,17 @@
                 <textarea required id="title" placeholder="제목을 입력하세요" onkeypress="enterkeyEvent()" style="outline: none;height:60px; width:900px; resize: none; font-size:2rem;border: none;"></textarea>
             </div>
             <hr>
-            <div align="right">
-                <label class="bi bi-folder-plus fs-1 text-primary" for="input-file">
-                </label>
-                <input type="file" multiple id="input-file"/> <!-- style="display:none"-->
+            <!--<div align="right">-->
+                <!--<label class="bi bi-folder-plus fs-1 text-primary" for="input-file">-->
+                <!--</label>-->
+                <!--<input type="file" multiple id="input-file"/> &lt;!&ndash; style="display:none"&ndash;&gt;-->
                 <!--<div><i class="bi bi-folder-plus" onclick="openFolder()"></i></div>-->
-                <div visible="false" id="uploadFile"><!--visible none -> 파일이 하나라도 있으면 visible -->
-                    <div id="uploadFileName">
-                    </div>
-                    <hr width="50%">
-                </div>
-            </div>
+                <!--<div visible="false" id="uploadFile">&lt;!&ndash;visible none -> 파일이 하나라도 있으면 visible &ndash;&gt;-->
+                    <!--<div id="uploadFileName">-->
+                    <!--</div>-->
+                    <!--<hr width="50%">-->
+                <!--</div>-->
+            <!--</div>-->
             <div align="center">
                 <textarea required id="note" onkeydown="resize(this)"style="outline: none;height:700px; resize: none; width:900px;border: none;font-size:1rem;"></textarea>
             </div>
@@ -180,7 +180,7 @@
             return;
         }
         let xhr = new XMLHttpRequest();
-	    xhr.open('POST', '/stuhel/board/saveWrite?title='+title.value+'&note='+brNote+'&topicNm='+selectTag.value
+	    xhr.open('POST', '/stuhel/board/saveWrite?title='+title.value+'&note='+encodeURI(brNote)+'&topicNm='+selectTag.value
 	        ,true)
 	    xhr.setRequestHeader('Accept', 'application/json');
 	    xhr.send();
@@ -200,7 +200,6 @@
 	        }
 	    }
     }
-
 </script>
 </body>
 </html>

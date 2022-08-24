@@ -18,7 +18,7 @@ import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 
 @Controller
-@RequestMapping("/stuhel/member")
+@RequestMapping("/member")
 @ResponseBody
 public class MemberController {
     private static Gson gson = new GsonBuilder().serializeNulls().create(); // 속성값이 null 인 속성도 json 변환
@@ -29,20 +29,20 @@ public class MemberController {
     }
 
     @GetMapping("/login")
-    public HashMap<String, Object> login(@RequestParam("loginData") String loginData,HttpServletRequest request){
+    public HashMap<String, String> login(@RequestParam("loginData") String loginData,HttpServletRequest request){
         HttpSession session = request.getSession();
-        HashMap<String, Object> map = new HashMap<>();
+        HashMap<String, String> map = new HashMap<>();
         try{
             MemberTO memberTO = gson.fromJson(loginData, MemberTO.class);
             MemberTO member = memberService.login(memberTO);
             SessionController.loginSession(session,member);
         } catch (IdNotFoundException e1) {
             //e1.printStackTrace();
-            map.put("errorCode", -1);
+            map.put("errorCode", "Y");
             map.put("errorMsg", e1.getMessage());
         } catch (PwMissMatchException e2) {
             //e2.printStackTrace();
-            map.put("errorCode", -2);
+            map.put("errorCode", "Y");
             map.put("errorMsg", e2.getMessage());
         }
         return map;

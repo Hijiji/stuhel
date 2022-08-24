@@ -8,5 +8,5 @@ import java.util.HashMap;
 public interface HomeService {
 
     ArrayList<Integer> retrieveBookableRoom(BookTO bookTO);
-    HashMap<String, Integer> roomBook(BookTO bookTO);
+    HashMap<String, String> addReservationInfo(BookTO bookTO);
 }

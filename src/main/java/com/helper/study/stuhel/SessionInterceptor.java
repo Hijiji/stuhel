@@ -19,6 +19,7 @@ public class SessionInterceptor implements AsyncHandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         if(session.getAttribute("memberId")==null){
             response.sendRedirect("/");
+            System.out.println("prehandle 세션없음");
             return false;
         }
         else {

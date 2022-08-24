@@ -26,9 +26,13 @@ public class HomeServiceImpl implements HomeService {
     }
 
     @Override
-    public HashMap<String, Integer> roomBook(BookTO bookTO) {
-        HashMap<String,Integer> map =new HashMap<>();
-                homeMapper.insertRoomBook(bookTO);
+    public HashMap<String, String> addReservationInfo(BookTO bookTO) {
+        HashMap<String,String> map =new HashMap<>();
+        try {
+            homeMapper.insertReservationInfo(bookTO);
+        }catch (Exception e) {
+            map.put("errorCd","Y");
+        }
         return map;
     }
 }

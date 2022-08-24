@@ -114,7 +114,7 @@
                         <label for="newMemberId">ID</label>
                     </div>
                     <div class="form-floating mb-3">
-                        <input class="btn btn-primary btn-xl" type="button" id="idDoubleCheck" onclick=""value="ID중복확인"/>
+                        <input class="btn btn-primary btn-xl" type="button" id="idDoubleCheck" onclick="idDoubleCheckClick()"value="ID중복확인"/>
                     </div>
                     <!-- Password input-->
                     <div class="form-floating mb-3">
@@ -174,6 +174,7 @@
     const pwDoubleCheck = document.querySelector("#pwDoubleCheck");
     const joinResultMsg = document.querySelector("#joinResultMessage");
 
+    /*엔터키 입력시 focus 이동*/
     function moveNextSpot(next){
         if(event.keyCode == 13){
             if(next==loginButton) loginOnclick();
@@ -188,12 +189,11 @@
            loginMsg.innerHTML = "※ ID 혹은 비밀번호를 입력해주세요";
            return;
        }else{
-           let loginData = {"password":loginPassword.value, "id":loginId.value}
+           let loginData = {"password":loginPassword.value, "id":loginId.value};
            loginData = JSON.stringify(loginData);
 
            let xhr = new XMLHttpRequest();
-           xhr.open('GET', "/stuhel/member/login?"
-               + "loginData=" + encodeURI(loginData)
+           xhr.open('GET', "/member/login?loginData=" + encodeURI(loginData)
                ,true);
            xhr.setRequestHeader('Accept', 'application/json');
            xhr.send();
@@ -214,7 +214,7 @@
        }
     }
 
-    idDoubleCheck.addEventListener('click', () => {
+    function idDoubleCheckClick(){
         var regExp=/^[a-z0-9]*$/;
 
         if(newMemberId.value.trim()==""||newMemberId.value.trim()==null){
@@ -229,7 +229,7 @@
             return;
         }
         let xhr = new XMLHttpRequest();
-        xhr.open('Get', "/stuhel/member/idDoubleCheck?"
+        xhr.open('Get', "/member/idDoubleCheck?"
             + "newMemberId=" + encodeURI(newMemberId.value)
             ,true);
         xhr.setRequestHeader('Accept', 'application/json');
@@ -253,9 +253,9 @@
                 newMemberPassword.focus();
             }
         }
-    });
+    }
 
-    function newMemberInfoSubmit{
+    function newMemberInfoSubmit(){
         if (newMemberId.value.trim()==""||newMemberId.value==null
                 ||newMemberName.value.trim()==""||newMemberName.value==null
                 ||newMemberPassword.value.trim()==""||newMemberPassword.value==null
@@ -266,7 +266,7 @@
         } else if(idDoubleCheck.value != "사용가능"){
             joinResultMsg.innerHTML = "※ 아이디 중복 검사가 필요합니다.";
             return;
-        } else if(idDoubleCheck.value == "사용가능" || idCheckInfo.usableId != newMemberId.value)
+        } else if(idDoubleCheck.value == "사용가능" || idCheckInfo.usableId != newMemberId.value){
             joinResultMsg.innerHTML = "※ 아이디 중복 검사를 재실행해주세요.";
             return;
         } else if (newMemberPassword.value != pwDoubleCheck.value) {
@@ -279,7 +279,7 @@
             let joinData ={"id" : newMemberId.value, "name" : newMemberName.value, "password" : newMemberPassword.value, "birth" : newMemberBirth.value};
             joinData = JSON.stringify(joinData);
             let xhr = new XMLHttpRequest();
-            xhr.open('POST', "/stuhel/member/join?"
+            xhr.open('POST', "/member/join?"
                                  + "joinData=" + encodeURI(joinData)
                 , true);
             xhr.setRequestHeader('Accept', 'application/json');
@@ -312,7 +312,7 @@
                 }
             }
         }
-    });
+    };
 
 </script>
 </body>

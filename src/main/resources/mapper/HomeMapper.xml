@@ -15,7 +15,7 @@
                                     and r.BOOK_TIME = #{bookTime})
     </select>
 
-    <insert id="insertRoomBook" parameterType="com.helper.study.stuhel.home.to.BookTO">
+    <insert id="insertReservationInfo" parameterType="com.helper.study.stuhel.home.to.BookTO">
         INSERT INTO ROOM_BOOK (
             BOOK_ID
             ,USER_ID
