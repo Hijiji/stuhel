@@ -31,8 +31,7 @@
     /*엔터키 입력시 focus 이동*/
     function moveNextSpot(next){
         if(event.keyCode == 13){
-            if(next==loginButton) loginOnclick();
-            else next.focus();
+            next.focus();
         }
     }
 

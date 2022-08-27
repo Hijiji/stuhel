@@ -48,7 +48,7 @@
             </div>
             <div class="col-lg-8 align-self-baseline">
                 <p class="text-white-75 mb-5">STUDY HELPER에 오신걸 환영합니다.</br> 로그인 후 사용할 수 있습니다.</p>
-                <a class="btn btn-primary btn-xl" onclick="moveNextSpot(loginId)">login</a>
+                <a class="btn btn-primary btn-xl" href="#login" onclick="moveNextSpot(loginId)">login</a>
             </div>
         </div>
     </div>
@@ -82,7 +82,7 @@
                                     <div class="fw-bolder" id="loginMsg" style="color:#1a1e21; font-size:18px;"></div>
                                 </div>
                             </div>
-                            <input type="button" class="btn btn-light btn-xl" id="loginButton" onclick="loginOnclick()" value="Login"/>  <!--href="index.html"-->
+                            <input type="button" class="btn btn-light btn-xl" id="loginButton" onfocus="loginOnclick()" value="Login"/>  <!--href="index.html"-->
                             <a class="btn btn-primary btn-xl" href="#join">회원가입</a>
                         </form>
             </div>
@@ -157,6 +157,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/SimpleLightbox/2.1.0/simpleLightbox.min.js"></script>
 <!-- Core theme JS-->
 <script src="js/scripts.js"></script>
+<script src="js/common.js"></script>
 <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
 
 <script>

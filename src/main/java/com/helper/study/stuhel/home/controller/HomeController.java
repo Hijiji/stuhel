@@ -26,15 +26,18 @@ public class HomeController {
     }
 
     @GetMapping("/retrieveBookableRoom")
-    ArrayList<Integer> retrieveBookableRoom(@RequestParam("requestBookableDate") String requestBookableDate){
+    HashMap<String,ArrayList> retrieveBookableRoom(@RequestParam("requestBookableDate") String requestBookableDate){
+        HashMap<String, ArrayList> map = new HashMap<>();
         BookTO bookTO = gson.fromJson(requestBookableDate, BookTO.class);
-        return bookService.retrieveBookableRoom(bookTO);
+        ArrayList<Integer> roomId = bookService.retrieveBookableRoom(bookTO);
+        map.put("roomId", roomId);
+        return map;
     }
 
     @PostMapping("/addReservationInfo")
-    HashMap<String,String> addReservationInfo(@RequestParam("insertBookData") String setBookData, HttpServletRequest request){
+    HashMap<String,String> addReservationInfo(@RequestParam("addBookData") String addBookData, HttpServletRequest request){
         HttpSession session=request.getSession();
-        BookTO bookTO = gson.fromJson(setBookData, BookTO.class);
+        BookTO bookTO = gson.fromJson(addBookData, BookTO.class);
         bookTO.setUserId(session.getAttribute("memberId").toString());
 
         return bookService.addReservationInfo(bookTO);

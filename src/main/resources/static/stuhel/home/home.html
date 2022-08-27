@@ -245,6 +245,7 @@
     function retrieveBookableRoom(){
         studyRoomTable.style.display="none";
         let requestBookableDate={"bookTime":bookTime.value,"bookDate":bookDate.value};
+        requestBookableDate = JSON.stringify(requestBookableDate);
         let xhr = new XMLHttpRequest();
         xhr.open('Get'
                   , "/stuhel/home/retrieveBookableRoom?requestBookableDate="+encodeURI(requestBookableDate)
@@ -256,7 +257,7 @@
                 let roomIdList = xhr.responseText;
                 roomIdList = JSON.parse(roomIdList);
                 console.log(roomIdList);
-                if(roomIdList.length <= 0){alert("예약가능한 세미나실이 없습니다."); return;}
+                if(roomIdList.roomId.length <= 0){alert("예약가능한 세미나실이 없습니다."); return;}
                 room101.disabled=true;
                 room102.disabled=true;
                 room103.disabled=true;
@@ -264,7 +265,7 @@
                 room105.disabled=true;
                 room106.disabled=true;
                 studyRoomTable.style="flex";
-                for(let i of roomIdList){
+                for(let i of roomIdList.roomId){
                     if(i==101){
                         room101.disabled=false;
                         room101.style.backgroundColor="tomato";
@@ -292,7 +293,7 @@
     <!--세미나실 예약확인 창 -->
     function sendRoomId(roomId){
         swal({
-               title :
+               title : '세미나실 예약'
              , text : 'ヽ(✿ﾟ▽ﾟ)ノ \n'
                        +bookDate.value+'\n'
                        +bookTime.value+'시 ~ '+(parseInt(bookTime.value)+1) + '시 \n'

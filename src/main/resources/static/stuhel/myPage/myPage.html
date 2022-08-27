@@ -164,7 +164,7 @@
         <div class="fw-bolder" id="checkMsg" style="color:#1a1e21;"></div>
         </br>
         <div class="close-wrapper">
-            <button class="btn btn-light btn-xl" id="idPwConfirm" onclick="idPwConfirmFunc()">확인</button>&nbsp;&nbsp;
+            <button class="btn btn-light btn-xl" id="idPwConfirm" onfocus="idPwConfirmFunc()">확인</button>&nbsp;&nbsp;
             <button class="btn btn-light btn-xl" value="userCheckModalClose" onclick="modalClose(this)" >닫기</button>
         </div>
     </div>
@@ -233,6 +233,14 @@
     let monthBookDataArr=[];
     let clickedBookData=[];
 
+        <!--달력-->
+    const today = new Date();
+    let choiceMonth=today.getMonth();
+    let choiceYear=today.getFullYear();
+    let bookCalendar = document.querySelector("#bookCalendar");
+    const month=document.querySelector("#month");
+    const year=document.querySelector("#year");
+
     <!--초기세팅-->
     (function(){
         sessionCheck();
@@ -254,7 +262,7 @@
                     if(userData==null){logoutButton();}
                     dbUserName=userData.name;
                     dbUserId=userData.id;
-                    dbUserBirth=userData.userBirth;
+                    dbUserBirth=userData.birth;
                     userName.value=dbUserName;
                     userId.value=dbUserId;
                     userBirth.value=dbUserBirth;
@@ -263,13 +271,7 @@
             setDate();
     }
 
-    <!--달력-->
-    const today = new Date();
-    let choiceMonth=today.getMonth();
-    let choiceYear=today.getFullYear();
-    let bookCalendar = document.querySelector("#bookCalendar");
-    const month=document.querySelector("#month");
-    const year=document.querySelector("#year");
+<!--달력-->
 
     function setDate(){
             year.innerHTML=choiceYear;
@@ -578,9 +580,9 @@
         xhr.onreadystatechange = () => {
             if (xhr.readyState == 4 && xhr.status == 200) {
                 // 데이터 확인
-                let txt = xhr.responseText;
-                txt = JSON.parse(txt);
-                if (txt.errorCode < 0) {
+                let errorInfo = xhr.responseText;
+                errorInfo = JSON.parse(errorInfo);
+                if (errorInfo.errorCode =='Y') {
                     idCheckResultMsg.innerHTML="※ 이미 사용중인 아이디입니다.";
                     idDoubleCheck.value="ID중복확인";
                     return;
@@ -657,7 +659,7 @@
                             console.log(errorInfo.errorCode);
                             console.log(errorInfo.errorMsg);
                             if (errorInfo.errorCd== "Y" ) {
-                                alert(errMsg);
+                                alert(errorInfo.errMsg);
                                 return;
                             } else {
                                 alert("변경이 완료되었습니다.");
