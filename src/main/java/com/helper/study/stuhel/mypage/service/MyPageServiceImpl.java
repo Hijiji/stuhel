@@ -1,5 +1,6 @@
 package com.helper.study.stuhel.mypage.service;
 
+import com.helper.study.stuhel.common.controller.SessionController;
 import com.helper.study.stuhel.mypage.mapper.MyPageMapper;
 import com.helper.study.stuhel.home.to.BookTO;
 import com.helper.study.stuhel.member.to.MemberTO;
@@ -27,22 +28,26 @@ public class MyPageServiceImpl implements MyPageService{
     public HashMap<String,String> changeMemberInfo(MemberTO memberTO,HttpSession session){
         HashMap<String, String> map = new HashMap<>();
         map.put("errorCd", "N");
+        map.put("errorMsg", "성공");
+        if(memberTO.getId().isEmpty()&&memberTO.getBirth()==0&&memberTO.getPassword().isEmpty()&&memberTO.getName().isEmpty()) {
+            map.put("errorCd", "Y");
+            map.put("errorMsg", "변경할 데이터가 없습니다.");
+            return map;
+        }
         try {
-            if(memberTO.getId()==null&&memberTO.getBirth()==0&&memberTO.getPassword()==null&memberTO.getName()==null) {
-                map.put("errorCd", "Y");
-                map.put("errorMsg", "변경할 데이터가 없습니다.");
-                return map;
-            }
             myPageMapper.updateMemberInfo(memberTO);
-            memberTO=retrieveMemberInfo(memberTO);
-            session.setAttribute("memberName",memberTO.getName());
-            session.setAttribute("memberId",memberTO.getId());
-            session.setAttribute("memberBirth",memberTO.getBirth());
 
+            if(memberTO.getId().isEmpty() || memberTO.getId()==""){
+                memberTO.setId((String) session.getAttribute("memberId"));
+            }
+            memberTO.setId(memberTO.getId());
+            memberTO=retrieveMemberInfo(memberTO);
+            SessionController.loginSession(session, memberTO);
 
         }catch (Exception e) {
             map.put("errorCd", "Y");
             map.put("errorMsg", "정보변경 중 데이터 에러발생");
+            e.printStackTrace();
         }
         return map;
     }

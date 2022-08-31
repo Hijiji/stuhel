@@ -37,12 +37,12 @@ public class MemberController {
             MemberTO member = memberService.login(memberTO);
             SessionController.loginSession(session,member);
         } catch (IdNotFoundException e1) {
-            //e1.printStackTrace();
-            map.put("errorCode", "Y");
+            e1.printStackTrace();
+            map.put("errorCd", "Y");
             map.put("errorMsg", e1.getMessage());
         } catch (PwMissMatchException e2) {
-            //e2.printStackTrace();
-            map.put("errorCode", "Y");
+            e2.printStackTrace();
+            map.put("errorCd", "Y");
             map.put("errorMsg", e2.getMessage());
         }
         return map;

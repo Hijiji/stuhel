@@ -19,7 +19,7 @@
     </resultMap>
 
     <select id="selectMemberInfo" parameterType="com.helper.study.stuhel.member.to.MemberTO" resultMap="myPageMember">
-        select ID, PASSWORD,NAME, BIRTH
+        select ID, PASSWORD, NAME, BIRTH
         from MEMBER_SECURITY
         where ID = #{id}
     </select>
@@ -27,10 +27,12 @@
     <update id="updateMemberInfo" parameterType="com.helper.study.stuhel.member.to.MemberTO">
         UPDATE MEMBER_SECURITY
         SET
-        ID = #{id}
-        ,NAME = #{name}
-        ,PASSWORD = #{password}
-        ,BIRTH = #{birth}
+        UP_STATUS = 'U'
+        ,UP_DATE = SYSDATE
+        <if test="!id.isEmpty()" >,ID = #{id}</if>
+        <if test="!name.isEmpty()" >,NAME = #{name}</if>
+        <if test="!password.isEmpty()" >,PASSWORD = #{password}</if>
+        <if test="birth>0" >,BIRTH = #{birth}</if>
         WHERE ID = #{sessionId}
     </update>
 

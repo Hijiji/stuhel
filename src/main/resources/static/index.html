@@ -169,11 +169,11 @@
     const newMemberName = document.querySelector("#newMemberName");
     const newMemberId = document.querySelector("#newMemberId");
     const idDoubleCheck =document.querySelector("#idDoubleCheck");
-    const idCheckInfo = document.querySelector("#idCheckInfo");
     const newMemberPassword = document.querySelector("#newMemberPassword");
     const newMemberBirth = document.querySelector("#newMemberBirth");
     const pwDoubleCheck = document.querySelector("#pwDoubleCheck");
     const joinResultMsg = document.querySelector("#joinResultMessage");
+    let idCheckInfo = new Object();
 
     function loginOnclick(){
        if(loginPassword.value.trim()==null||loginPassword.value.trim()=="" ||
@@ -194,9 +194,9 @@
                if (xhr.readyState == 4 && xhr.status == 200) {
                    let errorInfo = xhr.responseText;
                    errorInfo = JSON.parse(errorInfo);
-                   console.log(errorInfo.errorCode);
+                   console.log(errorInfo.errorCd);
                    console.log(errorInfo.errorMsg);
-                   if (errorInfo.errorCode == 'Y' ) {
+                   if (errorInfo.errorCd == 'Y' ) {
                       loginMsg.innerHTML = "※ " + errorInfo.errorMsg;
                        return;
                    } else {
@@ -231,7 +231,6 @@
             if (xhr.readyState == 4 && xhr.status == 200) {
                 // 데이터 확인
                 let errorInfo = xhr.responseText;
-                console.log("errorInfo");
                 console.log(errorInfo);
                 errorInfo = JSON.parse(errorInfo);
                 if (errorInfo.errorCode == 'Y') {
@@ -241,7 +240,7 @@
                     return;
                 }
                 joinResultMsg.innerHTML="※ 사용 가능한 아이디입니다.";
-                idCheckInfo={'usableId':newMemberId.value};
+                idCheckInfo.usableId=newMemberId.value; <!--ID중복체크 후, ID입력값을 변경했을 경우 중복 재검사를 위한 데이터-->
                 idDoubleCheck.value="사용가능";
                 newMemberPassword.focus();
             }
@@ -259,8 +258,9 @@
         } else if(idDoubleCheck.value != "사용가능"){
             joinResultMsg.innerHTML = "※ 아이디 중복 검사가 필요합니다.";
             return;
-        } else if(idDoubleCheck.value == "사용가능" || idCheckInfo.usableId != newMemberId.value){
+        } else if(idCheckInfo.usableId.trim() != newMemberId.value.trim()){
             joinResultMsg.innerHTML = "※ 아이디 중복 검사를 재실행해주세요.";
+            idDoubleCheck.value="중복확인";
             return;
         } else if (newMemberPassword.value != pwDoubleCheck.value) {
             joinResultMsg.innerHTML = "※ 비밀번호를 다시 확인해주세요";

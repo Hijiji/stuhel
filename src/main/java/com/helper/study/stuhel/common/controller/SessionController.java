@@ -29,6 +29,7 @@ public class SessionController {
         session.setAttribute("sessionId", session.getId());
         session.setAttribute("memberId", member.getId());
         session.setAttribute("memberName", member.getName());
+        session.setAttribute("memberBirth", member.getBirth());
         session.setMaxInactiveInterval(30*60);
 
     }

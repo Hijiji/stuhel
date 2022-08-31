@@ -39,7 +39,9 @@ public class MyPageController {
            return null;
         }else {
             memberTO.setId((String)session.getAttribute("memberId"));
+            System.out.println("memberTO.getId() = " + memberTO.getId());
             memberTO.setName((String)session.getAttribute("memberName"));
+            System.out.println("memberTO.getName() = " + memberTO.getName());
             memberTO=myPageService.retrieveMemberInfo(memberTO);
         }
         return gson.toJson(memberTO);
@@ -51,9 +53,9 @@ public class MyPageController {
         String sessionMemberId=(String)session.getAttribute("memberId");
         String sessionName=(String)session.getAttribute("memberName");
         MemberTO memberTO = gson.fromJson(changeMemberInfo, MemberTO.class);
-
-        HashMap<String, String> map = new HashMap<>();
         memberTO.setSessionId(sessionMemberId);
+        HashMap<String, String> map = new HashMap<>();
+/*
         if(memberTO.getId().isEmpty()|| memberTO.getId()==null || memberTO.getId().trim()=="") {
             memberTO.setId(sessionMemberId);
         }
@@ -61,11 +63,13 @@ public class MyPageController {
             memberTO.setName(sessionName);
         }
         if(memberTO.getPassword().isEmpty()||memberTO.getPassword()==null){
+            System.out.println("memberTO.getPassword() = " + memberTO.getPassword());
+            System.out.println("(String)session.getAttribute(password) = " + (String)session.getAttribute("password"));
             memberTO.setPassword((String)session.getAttribute("password"));
         }
         if(memberTO.getBirth()==0){
             memberTO.setBirth((int)session.getAttribute("birthday"));
-        }
+        }*/
 
         map=myPageService.changeMemberInfo(memberTO,session);
 

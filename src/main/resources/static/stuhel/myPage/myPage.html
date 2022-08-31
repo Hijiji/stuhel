@@ -226,7 +226,7 @@
     const checkMsg = document.querySelector("#checkMsg");
     const idCheckResultMsg = document.querySelector("#idCheckResultMsg");
     const idPwConfirm = document.querySelector("#idPwConfirm");
-
+    let idCheckInfo = new Object();
     const bookConditionModal = document.querySelector("#bookConditionModal");
 
     let tdTagIdArr=[];
@@ -513,7 +513,7 @@
                    // 데이터 확인
                    let txt = xhr.responseText;
                    txt = JSON.parse(txt);
-                   if (txt.errorCode == -1 || txt.errorCode == -2 ) {
+                   if (txt.errorCd == 'Y') {
                       checkMsg.innerHTML = "※ " + txt.errorMsg;
                        return;
                    } else {
@@ -588,16 +588,18 @@
                     return;
                 }
                 idCheckResultMsg.innerHTML="※ 사용 가능한 아이디입니다.";
+                idCheckInfo.usableId=userId.value; <!--ID중복체크 후, ID입력값을 변경했을 경우 중복 재검사를 위한 데이터-->
                 idDoubleCheck.value="사용가능";
             }
         }
     });
-    let changeUserName="" ;
-    let changeUserId="";
-    let changeUserBirth="";
-    let changeUserPassword="";
+
 
     function userInfoChangeSubmitBtn(){
+    let changeUserName="" ;
+    let changeUserId="";
+    let changeUserBirth=0;
+    let changeUserPassword="";
     idCheckResultMsg.innerHTML=""; idCheckResultMsg.innerHTML="";birthCheckResultMsg.innerHTML="";pwCheckResultMsg.innerHTML="";
         if (userId.value.trim()==""||userId.value==null
             ||userName.value.trim()==""||userName.value==null
@@ -608,12 +610,15 @@
         if(userName.value.trim()!=dbUserName){
             changeUserName=userName.value.trim();
         }if(userId.value.trim()!=dbUserId){
-            if(idDoubleCheck.value=="사용가능"){
-                changeUserId=userId.value.trim();
-
-            }else{
+            if(idDoubleCheck.value!="사용가능"){
                 idCheckResultMsg.innerHTML="※ 변경 아이디 중복체크가 필요합니다.";
                 return;
+            } else if(idCheckInfo.usableId.trim() != userId.value.trim()){
+                idCheckResultMsg.innerHTML = "※ 아이디 중복 검사를 재실행해주세요.";
+                idDoubleCheck.value="중복확인";
+                return;
+            }else{
+                changeUserId=userId.value.trim();
             }
         }if(userBirth.value.trim()!=dbUserBirth){
             if(isNaN(userBirth.value)||userBirth.value.length != 8){
@@ -622,7 +627,7 @@
             }else {
                 changeUserBirth=userBirth.value.trim();
             }
-        }else changeUserBirth=dbUserBirth;
+        }
         if(UserPassword.value!=null || UserPassword.value.trim()!="" && confirmPassword.value!=null || confirmPassword.value.trim()!=""){
             if(UserPassword.value==confirmPassword.value){
                 changeUserPassword=UserPassword.value.trim();
@@ -643,6 +648,7 @@
                 if(result==null) return;
                 else {
                     let changeMemberInfo = {"birth":changeUserBirth,"password":changeUserPassword,"id":changeUserId,"name":changeUserName} //데이터 추가하기
+                    console.log(changeMemberInfo);
                     changeMemberInfo = JSON.stringify(changeMemberInfo);
 
                     let xhr = new XMLHttpRequest();
@@ -656,10 +662,10 @@
                             // 데이터 확인
                             let errorInfo = xhr.responseText;
                             errorInfo = JSON.parse(errorInfo);
-                            console.log(errorInfo.errorCode);
+                            console.log(errorInfo.errorCd);
                             console.log(errorInfo.errorMsg);
                             if (errorInfo.errorCd== "Y" ) {
-                                alert(errorInfo.errMsg);
+                                alert(errorInfo.errorMsg);
                                 return;
                             } else {
                                 alert("변경이 완료되었습니다.");
@@ -679,11 +685,15 @@
                             userBirth.value  = dbUserBirth;
                             idDoubleCheck.value="ID중복확인";
                             UserPassword.value="";
-                            UserPassword.value="";
+                            confirmPassword.value="";
                             idCheckResultMsg.innerHTML="";
                             pwCheckResultMsg.innerHTML="";
                             birthCheckResultMsg.innerHTML="";
                             confirmBeforeCheckMsg.innerHTML="";
+                            hangeUserName="" ;
+                            changeUserId="";
+                            changeUserBirth=0;
+                            changeUserPassword="";
                             retrieveMemberInfo();
                         }
                     }
