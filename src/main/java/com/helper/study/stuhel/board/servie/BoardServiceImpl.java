@@ -22,8 +22,18 @@ public class BoardServiceImpl implements BoardService{
         return boardMapper.selectTopicList();
     }
     @Override
-    public void saveWrite(BoardTO boardTO) {
-        boardMapper.insertWrite(boardTO);
+    public HashMap<String, String> saveWrite(BoardTO boardTO) {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("errorCd", "N");
+        map.put("errorMsg", "성공");
+        try {
+            boardMapper.insertWrite(boardTO);
+        }catch (Exception e){
+            e.printStackTrace();
+            map.put("errorCd", "Y");
+            map.put("errorMsg", "저장중 오류발생");
+        }
+        return map;
     }
     @Override
     public ArrayList<BoardTO> retrieveBoardKeyword(HashMap<String, Object> map) {

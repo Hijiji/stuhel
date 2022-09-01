@@ -31,6 +31,9 @@
     /*엔터키 입력시 focus 이동*/
     function moveNextSpot(next){
         if(event.keyCode == 13){
+            if(next=="block"){ /*block이 들어오면, 엔터를 막는다.*/
+                event.returnValue=false;
+            }
             next.focus();
         }
     }

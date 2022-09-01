@@ -32,8 +32,8 @@
             WHERE R_NUM <= #{maxNum}
             AND   R_NUM >= #{minNum}
         ]]>
-<!--SELECT TITLE, NOTE_SEQ, WRITE_DATE, TOPIC_NM, CLICK_AMOUNT, WRITER FROM BOARD-->
     </select>
+    <!--SELECT TITLE, NOTE_SEQ, WRITE_DATE, TOPIC_NM, CLICK_AMOUNT, WRITER FROM BOARD-->
     <select id="selectReadBoard" resultMap="Board" parameterType="map">
         SELECT *
         FROM BOARD

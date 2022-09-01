@@ -8,7 +8,7 @@ import java.util.HashMap;
 
 public interface BoardService {
     ArrayList<BoardTO> retrieveTopicList();
-    void saveWrite(BoardTO boardTO);
+    HashMap<String, String> saveWrite(BoardTO boardTO);
     ArrayList<BoardTO> retrieveBoardKeyword(HashMap<String, Object> map);
     ArrayList<BoardTO> retrieveBoardList(BoardTO boardTO);
     BoardTO retrieveBoardRead(BoardTO boardTO);

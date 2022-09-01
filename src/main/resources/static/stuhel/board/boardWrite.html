@@ -21,21 +21,6 @@
     <!--sweet alert-->
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <style>
-    #selectTopic {
-        width:200px;
-        padding:5px;
-        border:1px solid #999;
-        background:url('https://i.ibb.co/98Vbb8L/gnb-bg.gif') no-repeat 95% 50%;
-        border-radius:3px;
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        appearance : none;
-        outline: none;
-    }
-    #selectTopic::-ms-expand {
-        display: none;
-    }
-
     </style>
 </head>
 <body id="page-top">
@@ -56,27 +41,16 @@
 <section style="padding-top:10rem; padding-bottom: 10rem;resize: none;">
     <div style="display: flex; justify-content: center;">
         <div style="width:900px;position:relative" >
-            <div align="right" ><!--style="padding-right:150px;"-->
+            <div align="right" >
                 <select id="topicSelect" style="width:150px">
                 </select>
             </div>
             <div align="center">
-                <textarea required id="title" placeholder="제목을 입력하세요" onkeypress="enterkeyEvent()" style="outline: none;height:60px; width:900px; resize: none; font-size:2rem;border: none;"></textarea>
+                <textarea required id="title" placeholder="제목을 입력하세요" onkeypress="moveNextSpot('block')" style="outline: none;height:60px; width:900px; resize: none; font-size:2rem;border: none;"></textarea>
             </div>
             <hr>
-            <!--<div align="right">-->
-                <!--<label class="bi bi-folder-plus fs-1 text-primary" for="input-file">-->
-                <!--</label>-->
-                <!--<input type="file" multiple id="input-file"/> &lt;!&ndash; style="display:none"&ndash;&gt;-->
-                <!--<div><i class="bi bi-folder-plus" onclick="openFolder()"></i></div>-->
-                <!--<div visible="false" id="uploadFile">&lt;!&ndash;visible none -> 파일이 하나라도 있으면 visible &ndash;&gt;-->
-                    <!--<div id="uploadFileName">-->
-                    <!--</div>-->
-                    <!--<hr width="50%">-->
-                <!--</div>-->
-            <!--</div>-->
             <div align="center">
-                <textarea required id="note" onkeydown="resize(this)"style="outline: none;height:700px; resize: none; width:900px;border: none;font-size:1rem;"></textarea>
+                <textarea required id="note" onkeyup="textareaResize(this)" style="outline: none;height:500px; resize: none; width:900px;border: none;font-size:1rem;"></textarea>
             </div>
         </div>
     </div>
@@ -98,40 +72,22 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/SimpleLightbox/2.1.0/simpleLightbox.min.js"></script>
 <!-- Core theme JS-->
 <script src="../../js/scripts.js"></script>
+<script src="../../js/common.js"></script>
 <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
 
 <script>
-
-    <!--세션체크-->
-    let sessionStatus = null;
-    (function(){
-        let xhr = new XMLHttpRequest();
-        xhr.open('Get', "/session/sessionCheck"
-                 ,true);
-        xhr.setRequestHeader('Accept', 'application/json');
-        xhr.send();
-        xhr.onreadystatechange = () => {
-            if (xhr.readyState == 4 && xhr.status == 200) {
-                // 데이터 확인
-                sessionStatus = xhr.responseText;
-                if(sessionStatus==null||sessionStatus==''){
-                    location.href="/index.html";
-                }else if(sessionStatus!=null){
-                    retrieveTopicList();
-                }
-            }
-        }
-    })();
-
     const dateDiv = document.querySelector("#dateBox");
     const note = document.querySelector("#note");
     const title = document.querySelector("#title");
     const selectTag = document.querySelector("#topicSelect");
 
-    function openFolder(){
+    <!--초기세팅-->
+    (function(){
+        sessionCheck(); //세션체크
+        retrieveTopicList();
+    })();
 
-    }
-
+    <!--입력할 글의 주제list 조회해서 select 태그에 세팅-->
     function retrieveTopicList(){
         let xhr = new XMLHttpRequest();
         xhr.open('GET', "/stuhel/board/retrieveTopicList?"
@@ -140,10 +96,8 @@
         xhr.send();
         xhr.onreadystatechange = () => {
             if (xhr.readyState == 4 && xhr.status == 200) {
-                // 데이터 확인
                 let topicList = xhr.responseText;
                 topicList = JSON.parse(topicList);
-                console.log(topicList);
 
                 for(let i=0; i<topicList.length; i++){
                     let optionTag = document.createElement("option");
@@ -155,41 +109,39 @@
         }
     }
 
-    function resize(obj) {
-        obj.style.height = "700px";
-        if(event.keyCode == 13){
-            if(obj.scrollHeight>700){
-                obj.style.height = (obj.scrollHeight)+"px";
-            }
-        }
-    }
-    function enterkeyEvent(){
-        if(event.keyCode == 13){
-            event.returnValue=false;
-        }
+    <!--입력된 글 길이에 맞춰서 textarea 길이변경-->
+    function textareaResize(obj) {
+        if(obj.scrollHeight>=500){
+            obj.style.height = (obj.scrollHeight)+"px";
+        }else obj.style.height = "500px";
     }
 
     function saveWrite(){
-        let brNote = note.value.replace(/\n/g, '<br/>');
+        let brNote = note.value.replace(/\n/g, '<br/>'); //유효한 내려쓰기를 위한 엔터키데이터 변경
 
         if(title.value.trim()==null || title.value.trim()==""){
             alert("글의 제목을 입력해주세요.");
             return;
         }else if(title.value.trim()==null || title.value.trim()==""){
-            alert("글의 내용을 입력해주세요.");
+            alert("글내용을 입력해주세요.");
             return;
         }
+        let addNoteData = new Object();
+        addNoteData.title=title.value;
+        addNoteData.note=brNote;
+        addNoteData.topicNm=selectTag.value;
+        addNoteData = JSON.stringify(addNoteData);
+
         let xhr = new XMLHttpRequest();
-	    xhr.open('POST', '/stuhel/board/saveWrite?title='+title.value+'&note='+encodeURI(brNote)+'&topicNm='+selectTag.value
+	    xhr.open('POST', '/stuhel/board/saveWrite?addNoteData='+encodeURI(addNoteData)
 	        ,true)
 	    xhr.setRequestHeader('Accept', 'application/json');
 	    xhr.send();
 	    xhr.onreadystatechange = () => {
 	        if (xhr.readyState == 4 && xhr.status == 200) {
-	            let errorResult = xhr.responseText;
-	            errorResult=JSON.parse(errorResult);
-	            console.log(errorResult);
-	            if(errorResult.errorCode==0){
+	            let errorInfo = xhr.responseText;
+	            errorInfo=JSON.parse(errorInfo);
+	            if(errorInfo.errorCd=="N"){
 	                alert("성공적으로 저장되었습니다.");
                     location.reload();
                     location.href="/stuhel/board/boardList.html";

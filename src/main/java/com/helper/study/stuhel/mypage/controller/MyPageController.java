@@ -50,28 +50,10 @@ public class MyPageController {
     @PutMapping("/changeMemberInfo")
     HashMap<String, String> changeMemberInfo(HttpServletRequest request, @RequestParam("changeMemberInfo") String changeMemberInfo){
         HttpSession session = request.getSession();
-        String sessionMemberId=(String)session.getAttribute("memberId");
-        String sessionName=(String)session.getAttribute("memberName");
         MemberTO memberTO = gson.fromJson(changeMemberInfo, MemberTO.class);
-        memberTO.setSessionId(sessionMemberId);
-        HashMap<String, String> map = new HashMap<>();
-/*
-        if(memberTO.getId().isEmpty()|| memberTO.getId()==null || memberTO.getId().trim()=="") {
-            memberTO.setId(sessionMemberId);
-        }
-        if(memberTO.getName().isEmpty()|| memberTO.getName()==null || memberTO.getName().trim()==""){
-            memberTO.setName(sessionName);
-        }
-        if(memberTO.getPassword().isEmpty()||memberTO.getPassword()==null){
-            System.out.println("memberTO.getPassword() = " + memberTO.getPassword());
-            System.out.println("(String)session.getAttribute(password) = " + (String)session.getAttribute("password"));
-            memberTO.setPassword((String)session.getAttribute("password"));
-        }
-        if(memberTO.getBirth()==0){
-            memberTO.setBirth((int)session.getAttribute("birthday"));
-        }*/
-
-        map=myPageService.changeMemberInfo(memberTO,session);
+        //회원 ID가 변경될 경우도 있기 때문에, session에 저장된 회원Id를 UPDATE쿼리의 조건으로 두기위해 셋팅함
+        memberTO.setSessionId((String)session.getAttribute("memberId"));
+        HashMap<String, String> map=myPageService.changeMemberInfo(memberTO,session);
 
         return map;
     }

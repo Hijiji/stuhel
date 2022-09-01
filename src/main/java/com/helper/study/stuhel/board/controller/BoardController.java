@@ -3,6 +3,7 @@ package com.helper.study.stuhel.board.controller;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import com.google.gson.stream.JsonReader;
 import com.helper.study.stuhel.board.servie.BoardServiceImpl;
 import com.helper.study.stuhel.board.to.BoardCommentTO;
 import com.helper.study.stuhel.board.to.BoardTO;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.StringReader;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,7 +36,7 @@ public class BoardController {
         BoardTO boardTO = new BoardTO();
         boardTO.setMaxNum(maxNum);
         boardTO.setMinNum(minNum);
-        String sessionId = (String)session.getAttribute("memberId");
+/*        String sessionId = (String)session.getAttribute("memberId");*/
         ArrayList<BoardTO> board=boardService.retrieveBoardList(boardTO);
         return board;
     }
@@ -50,20 +52,13 @@ public class BoardController {
     }
 
     @PostMapping("/saveWrite")
-    HashMap<String,Integer> saveWrite(HttpServletRequest request
-                    ,@RequestParam("title")String title, @RequestParam("note")String note, @RequestParam("topicNm")String topicNm){
+    HashMap<String,String> saveWrite(HttpServletRequest request,@RequestParam("addNoteData")String addNoteData){
+        JsonReader reader = new JsonReader(new StringReader(addNoteData)); /*특수문자 변환*/
+        reader.setLenient(true);
+        BoardTO boardTO = gson.fromJson(addNoteData, BoardTO.class);
+        boardTO.setWriter((String)request.getSession().getAttribute("memberId"));
 
-        HashMap<String, Integer> map = new HashMap<>();
-        BoardTO boardTO=new BoardTO();
-        boardTO.setTitle(title); boardTO.setNote(note); boardTO.setTopicNm(topicNm); boardTO.setWriter((String)request.getSession().getAttribute("memberId"));
-        map.put("errorCode", 0);
-        try {
-            boardService.saveWrite(boardTO);
-        }catch (Exception e) {
-            e.printStackTrace();
-            map.put("errorCode", -1);
-        }
-        return map;
+        return boardService.saveWrite(boardTO);
     }
 
     @GetMapping("/retrieveTopicList")

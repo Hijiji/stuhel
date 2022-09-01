@@ -24,6 +24,7 @@ public class MyPageServiceImpl implements MyPageService{
     public MemberTO retrieveMemberInfo(MemberTO memberTO) {
         return myPageMapper.selectMemberInfo(memberTO);
     }
+/*
 
     public HashMap<String,String> changeMemberInfo(MemberTO memberTO,HttpSession session){
         HashMap<String, String> map = new HashMap<>();
@@ -51,7 +52,39 @@ public class MyPageServiceImpl implements MyPageService{
         }
         return map;
     }
+*/
+    public HashMap<String,String> changeMemberInfo(MemberTO memberTO,HttpSession session){
+        HashMap<String, String> map = new HashMap<>();
+        map.put("errorCd", "N");
+        map.put("errorMsg", "성공");
 
+        //변경저장요청은 들어왔지만, 변경사항된 회원정보가 없을경우
+        if(memberTO.getId().isEmpty()&&memberTO.getBirth()==0&&memberTO.getPassword().isEmpty()&&memberTO.getName().isEmpty()) {
+            map.put("errorCd", "Y");
+            map.put("errorMsg", "변경할 데이터가 없습니다.");
+            return map;
+        }
+        try {
+            //회원 정보변경
+            myPageMapper.updateMemberInfo(memberTO);
+
+            //회원ID가 변경되지 않은 경우 session에 있는 회원 ID를 가져온다.
+            if(memberTO.getId().isEmpty() || memberTO.getId()==""){
+                memberTO.setId((String) session.getAttribute("memberId"));
+            }
+            memberTO.setId(memberTO.getId());
+            //회원 ID를담은 TO를 회원정보조회 메서드로 보내 변경된 회원정보를 가져온다.
+            memberTO=retrieveMemberInfo(memberTO);
+            //변경된 회원정보를 session에 담아준다.
+            SessionController.loginSession(session, memberTO);
+
+        }catch (Exception e) {
+            map.put("errorCd", "Y");
+            map.put("errorMsg", "정보변경 중 데이터 에러발생");
+            e.printStackTrace();
+        }
+        return map;
+    }
     @Override
     public ArrayList<BookTO> retrieveBookStatus(BookTO bookTO) {
         System.out.println("bookTO.getBookingDate() = " + bookTO.getBookDate());

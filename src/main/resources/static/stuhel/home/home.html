@@ -204,8 +204,10 @@
 
     let today=new Date();
     todayMonth=today.getMonth()+1;
+    todayDate=today.getDate();
     if(todayMonth<10) todayMonth="0"+todayMonth;
-    bookDate.value=today.getFullYear()+"-"+todayMonth+"-"+today.getDate();
+    if(todayDate<10) todayDate="0"+todayDate;
+    bookDate.value=today.getFullYear()+"-"+todayMonth+"-"+todayDate;
 
     <!--초기세팅-->
     (function(){
