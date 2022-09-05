@@ -50,7 +50,7 @@
     <div style="position:relative;display: flex; justify-content: center;">
         <div style="width:900px;position:relative">
             <div>
-                <span id="dateSpan" align="right" style="color=#D5D5D5; font-size:14px"></span>&nbsp;&nbsp;·&nbsp;&nbsp;
+                <span id="wroteDate" align="right" style="color=#D5D5D5; font-size:14px"></span>&nbsp;&nbsp;·&nbsp;&nbsp;
                 <span id="writer" align="left" style="color=#D5D5D5; font-size:14px"></span>
             </div>
             <hr>
@@ -65,7 +65,7 @@
                 <textarea required readonly id="note" style="outline:none;height:400px; padding:20px ;resize:none; width:900px;border:none;font-size:1.2rem;"></textarea>
             </div>
             <div>
-                <div id="comment" margin="0.7rem">
+                <div id="commentDiv" margin="0.7rem">
                 </div>
                 <div margin="20rem" style="padding=10rem;">
                     <textarea placeholder=" 댓글을 입력하는 당신, 센스쟁이 우후훗" id="commentTxt" style="resize: none;height:100px; width:900px;font-size:0.9rem;" ></textarea>
@@ -90,11 +90,11 @@
 <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
 
 <script>
-    const dateSpan = document.querySelector("#dateSpan");
+    const wroteDate = document.querySelector("#wroteDate");
     const writer = document.querySelector("#writer");
     const note = document.querySelector("#note");
     const title = document.querySelector("#title");
-    const comment = document.querySelector("#comment");
+    const commentDiv = document.querySelector("#commentDiv");
     const commentTxt =document.querySelector("#commentTxt");
     const ud =document.getElementsByClassName("ud");
     const ac =document.getElementsByClassName("ac");
@@ -128,7 +128,7 @@
                     let urlParams = url.searchParams;
                     boardReadData = JSON.parse(urlParams.get("boardReadData"));
 
-                    dateSpan.innerHTML=boardReadData.writeDate;
+                    wroteDate.innerHTML=boardReadData.writeDate;
                     writer.innerHTML=boardReadData.writer;
                     title.innerHTML=boardReadData.title;
                     note.value=boardReadData.note.replaceAll("<br/>", "\r\n");  //내려쓰기 변경
@@ -157,6 +157,7 @@
             boardData.title=boardReadData.title;
             boardData.writer=boardReadData.writer;
             boardData.noteSeq=boardReadData.noteSeq;
+            boardData.reader=sessionData.id;
 
             boardData=JSON.stringify(boardData);
             console.log(boardData);
@@ -169,14 +170,19 @@
             xhr.onreadystatechange = () => {
                 if (xhr.readyState == 4 && xhr.status == 200) {
                     // 데이터 확인
-                    sessionStatus = xhr.responseText;
+                    let errorInfo = xhr.responseText;
+                    console.log(errorInfo);
                 }
             }
         }
     }
+    <!--댓글조회-->
     function retrieveBoardComment(){
         let xhr = new XMLHttpRequest();
-            xhr.open('GET', '/stuhel/board/retrieveBoardComment?noteSeq='+noteSeq
+        let retrieveCmtData=new Object();
+        retrieveCmtData.noteSeq=noteSeq;
+        retrieveCmtData=JSON.stringify(retrieveCmtData);
+            xhr.open('GET', '/stuhel/board/retrieveBoardComment?retrieveCmtData='+encodeURI(retrieveCmtData)
                      ,true);
             xhr.setRequestHeader('Accept', 'application/json');
             xhr.send();
@@ -184,28 +190,29 @@
                 if (xhr.readyState == 4 && xhr.status == 200) {
                     // 데이터 확인
                     commentData = xhr.responseText;
+                    console.log(commentData);
                     if(commentData==''||commentData==null){
                         return;
                     }else{
-                        comment.innerHTML="";
+                        commentDiv.innerHTML="";
                         commentData = JSON.parse(commentData);
                         for(i=0;i<commentData.length; i++){
                             let commentBoxTag = document.createElement("div");
                             let writerInfoTag = document.createElement("span");
                             let hrTag = document.createElement("hr");
                             let UDACTag = document.createElement("div");
-                            let updateAndDelete = document.createElement("a");
+                            let deleteCmt = document.createElement("a");
                             let addComment = document.createElement("a");
                             UDACTag.align="right";
                             commentBoxTag.id='div'+commentData[i].commentSeq;
 
-                            updateAndDelete.innerHTML="삭제 / ";
-                            updateAndDelete.style.fontSize="0.8rem";
-                            updateAndDelete.style.textDecorationLine="none";
-                            updateAndDelete.style.color="gray";
-                            updateAndDelete.id='ud'+commentData[i].commentSeq;
-                            updateAndDelete.onclick =()=> {deleteComment(updateAndDelete.id);  comment.focus();}
-                            updateAndDelete.href="javascript:void(0)";
+                            deleteCmt.innerHTML="삭제 / ";
+                            deleteCmt.style.fontSize="0.8rem";
+                            deleteCmt.style.textDecorationLine="none";
+                            deleteCmt.style.color="gray";
+                            deleteCmt.id='ud'+commentData[i].commentSeq;
+                            deleteCmt.onclick =()=> {deleteComment(deleteCmt.id);  commentDiv.focus();}
+                            deleteCmt.href="javascript:void(0)";
 
                             addComment.innerHTML=" 댓글달기";
                             addComment.style.textDecorationLine="none";
@@ -226,14 +233,14 @@
 
                             if(commentData[i].cgroup==0 && commentData[i].cdepth==0){
                                 writerInfoTag.style.marginBottom="1rem";
-                                comment.appendChild(hrTag);
-                                UDACTag.appendChild(updateAndDelete);
+                                commentDiv.appendChild(hrTag);
 
+                                UDACTag.appendChild(deleteCmt);
                                 UDACTag.appendChild(addComment);
                                 commentBoxTag.appendChild(writerInfoTag);
                                 commentBoxTag.appendChild(pTag);
                                 commentBoxTag.appendChild(UDACTag);
-                                comment.appendChild(commentBoxTag);
+                                commentDiv.appendChild(commentBoxTag);
 
                             }else if(commentData[i].cgroup>0 && commentData[i].cdepth>0) {
                                 let image = document.createElement("i");
@@ -241,11 +248,11 @@
                                 image.style.marginRight="5px";
 
                                 commentBoxTag.style.marginLeft="30px";
-                                updateAndDelete.innerHTML="삭제 ";
-                                updateAndDelete.style.marginRight="4rem"
+                                deleteCmt.innerHTML="삭제 ";
+                                deleteCmt.style.marginRight="4rem"
                                 pTag.style.marginLeft="3rem";
 
-                                UDACTag.appendChild(updateAndDelete);
+                                UDACTag.appendChild(deleteCmt);
                                 commentBoxTag.appendChild(image);
                                 commentBoxTag.appendChild(writerInfoTag);
                                 commentBoxTag.appendChild(pTag);
@@ -259,10 +266,10 @@
                 }
             }
     }
-
-    function saveCommentFunction(commentInfo,id){
-
+    <!--댓글저장-->
+    function saveCommentFunction(commentInfo,reCmtId){
         let commentData=new Object();
+
         if(commentInfo=="reComment"){
             if(reCommentTxt.value.trim()=="" || reCommentTxt.value.trim()==null){
                 alert("댓글의 내용을 입력해주세요.");
@@ -271,7 +278,7 @@
             commentData.cmt=reCommentTxt.value;
             commentData.noteSeq=noteSeq;
             commentData.cDepth=1;
-            commentData.cGroup=id.slice(2);
+            commentData.cGroup=reCmtId.slice(2);
 
         }else if(commentInfo=="comment"){
             if(commentTxt.value.trim()==null || commentTxt.value.trim()==""){
@@ -294,10 +301,11 @@
             xhr.onreadystatechange = () => {
                 if (xhr.readyState == 4 && xhr.status == 200) {
                     // 데이터 확인
-                    let errorData = xhr.responseText;
-                    console.log(errorData);
-                    if(errorData==-1||errorData=="-1"){
-                        alert("서버오류로 인한 댓글 저장실패");
+                    let errorInfo = xhr.responseText;
+                    console.log(errorInfo);
+                    cDepth=0;
+                    if(errorInfo=='Y'){
+                        alert(errorInfo.Msg);
                         return;
                     }else{
                         commentTxt.value="";
@@ -306,7 +314,8 @@
                 }
             }
     }
-   function makeReCommentBox(id){
+    <!--대댓글 입력창 띄우기-->
+    function makeReCommentBox(id){
        let addCommentId=document.getElementById(id);
         reCommentBoxTag.innerHTML="";
 
@@ -340,15 +349,15 @@
         addCommentId.parentNode.parentNode.appendChild(reCommentBoxTag);
         reCommentTxtTag.focus();
     }
-
+    <!--댓글삭제-->
     function deleteComment(id){
-        let deleteCommentJSON=new Object();
+        let deleteCommentData=new Object();
 
         for(i=0;i<commentData.length;i++){
             if(commentData[i].commentSeq==parseInt(id.slice(2))){
-                deleteCommentJSON.commentSeq=commentData[i].commentSeq;
-                deleteCommentJSON.noteSeq=commentData[i].noteSeq;
-                deleteCommentJSON.writer=commentData[i].writer;
+                deleteCommentData.commentSeq=commentData[i].commentSeq;
+                deleteCommentData.noteSeq=commentData[i].noteSeq;
+                deleteCommentData.writer=commentData[i].writer;
             }
         }
        if(commentData.writer!=sessionData.memberId){
@@ -359,30 +368,28 @@
             title : '댓글삭제'
             , text : 'ヽ(✿ﾟ▽ﾟ)ノ \n'
                      +'댓글을 삭제하시겠습니까? \n'
-                     +'대댓글들도 전부 삭제됩니다.'
+                     +'(본 댓글의 경우 대댓글도 삭제됩니다.)'
             , buttons : ["취소","확인"]
             , buttonColor : 'tomato'
         }).then(function(result) {
             if(result==null) return;
             else{
-                console.log(deleteCommentJSON);
-                let deleteCommentData=[];
-                deleteCommentData.push(deleteCommentJSON);
-                deleteCommentData=JSON.stringify(deleteCommentData);
+                console.log(deleteCommentData);
+                let deleteCommentArr=[];
+                deleteCommentArr.push(deleteCommentData);
+                deleteCommentArr=JSON.stringify(deleteCommentArr);
 
                 let xhr = new XMLHttpRequest();
-                xhr.open('Delete', "/stuhel/board/deleteBoardComment?deleteCommentData="+encodeURI(deleteCommentData)
+                xhr.open('Delete', "/stuhel/board/deleteBoardComment?deleteCommentData="+encodeURI(deleteCommentArr)
                             ,true);
                 xhr.setRequestHeader('Accept', 'application/json');
                 xhr.send();
                 xhr.onreadystatechange = () => {
                     if (xhr.readyState == 4 && xhr.status == 200) {
-                        let errorCd = xhr.responseText;
-                        console.log(errorCd);
-                        if(errorCd.errorCd==-1){
-                            alert("오류로 인해 댓글이 삭제되지 않았습니다.");
-                        }else if(errorCd.errorCd==0){
-                            retrieveBoardComment();
+                        let errorInfo = xhr.responseText;
+                        console.log(errorInfo);
+                        if(errorInfo.errorCd=='Y'){
+                            alert(errorInfo.errorMsg);
                         }
                         retrieveBoardComment();
                     }

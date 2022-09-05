@@ -22,12 +22,20 @@ public class BoardServiceImpl implements BoardService{
         return boardMapper.selectTopicList();
     }
     @Override
-    public HashMap<String, String> saveWrite(BoardTO boardTO) {
+    public HashMap<String, String> saveWrite(BoardTO board) {
         HashMap<String, String> map = new HashMap<>();
+        if(board.getTitle().isEmpty()||board.getNote().isEmpty()){
+            map.put("errorCd","Y");
+            map.put("errorMsg","제목 / 내용을 입력해주세요");
+            return map;
+        }
+        System.out.println("저장1board = " + board);
+        board.setNote(board.getNote().replaceAll("\n\r","<br/>")); //엔터키 유효하게 변경
+        System.out.println("저장2board = " + board);
         map.put("errorCd", "N");
-        map.put("errorMsg", "성공");
+        map.put("errorMsg", "성공적으로 저장되었습니다.");
         try {
-            boardMapper.insertWrite(boardTO);
+            boardMapper.insertWrite(board);
         }catch (Exception e){
             e.printStackTrace();
             map.put("errorCd", "Y");
@@ -36,76 +44,87 @@ public class BoardServiceImpl implements BoardService{
         return map;
     }
     @Override
-    public ArrayList<BoardTO> retrieveBoardKeyword(HashMap<String, Object> map) {
-        //요거는 서비스단에서 하자..! 앞단에서 받은것을 문자열로 서비스단에 넘겨준 다음, 서비스단에서 가공하여서 디비조사.
-        String[] keywordList = ((String)map.get("fullKeyword")).split(" ");
-
-        //HashMap<String, String[]> map = new HashMap<>();
-        map.put("keywordList", keywordList);
-
-        ArrayList<BoardTO> board = boardMapper.selectBoardKeyword(map);
-        return board;
+    public ArrayList<BoardTO> retrieveBoardKeyword(BoardTO board) {
+        //문장형식으로 들어온 keyword 를 잘라서 mapper에 전달
+        board.setKeywordList(board.getFullKeyword().split(" "));
+        return boardMapper.selectBoardKeyword(board);
     }
 
     @Override
-    public ArrayList<BoardTO> retrieveBoardList(BoardTO boardTO) {
-        ArrayList<BoardTO>board= boardMapper.selectBoardList(boardTO);
-        return board;
+    public ArrayList<BoardTO> retrieveBoardList(BoardTO board) {
+        return boardMapper.selectBoardList(board);
     }
 
     @Override
     public BoardTO retrieveBoardRead(BoardTO boardTO) {
         BoardTO board= boardMapper.selectReadBoard(boardTO);
-        board.setNote(board.getNote().replaceAll("\n\r","</br>"));
+        board.setNote(board.getNote().replaceAll("<br/>","\n")); //유효 엔터키로 변경
         System.out.println("board = " + board);
         return board;
     }
 
     @Override
     public int addViewCount(BoardTO board) {
-        boardMapper.updateViewCount(board);
-        return 0;
+        int returnInfo;
+        if(board.getWriter().equals(board.getReader())){
+            return -1;
+        }
+        try {
+            boardMapper.updateViewCount(board);
+            returnInfo=0;
+        }catch (Exception e){
+            e.printStackTrace();
+            returnInfo=-1;
+        }
+        return returnInfo;
     }
 
     @Override
-    public ArrayList<BoardCommentTO> retrieveBoardComment(String noteSeq) {
-        return boardMapper.selectBoardComment(noteSeq);
+    public ArrayList<BoardCommentTO> retrieveBoardComment(BoardCommentTO boardComment) {
+        return boardMapper.selectBoardComment(boardComment);
     }
 
     @Override
-    public HashMap<String, Integer> saveComment(BoardCommentTO boardComment) {
-        HashMap<String, Integer> map = new HashMap<>();
-        map.put("errorCd",0);
+    public HashMap<String, String> saveComment(BoardCommentTO boardComment) {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("errorCd","N");
+        if(boardComment.getCmt().isEmpty()){
+            map.put("errorCd","Y");
+            map.put("errorMsg","댓글이 입력되지 않았습니다.");
+            return map;
+        }
         try {
             boardMapper.insertComment(boardComment);
         }catch (Exception e){
             e.printStackTrace();
-            map.put("errorCd",-1);
+            map.put("errorCd","Y");
+            map.put("errorMsg","댓글 저장 중 오류발생");
         }
         return map;
     }
 
     @Override
-    public HashMap<String, Integer> deleteBoardComment(ArrayList<BoardCommentTO> boardComment) {
-        HashMap<String, Integer> map = new HashMap<>();
-        map.put("errorCd", 0);
+    public HashMap<String, String> deleteBoardComment(ArrayList<BoardCommentTO> boardComment) {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("errorCd", "N");map.put("errorMsg", "삭제완료");
         ArrayList<BoardCommentTO> deleteBoardList = new ArrayList<>();
         try {
             for(BoardCommentTO board:boardComment){
-                deleteBoardList = boardMapper.selectRecomment(board); //원댓글 삭제시 대댓글삭제
+                deleteBoardList = boardMapper.selectRecomment(board); //원댓글에 달린 대댓글 조회
             }
             if(!deleteBoardList.isEmpty()){
                 for(BoardCommentTO deleteBoardComment:deleteBoardList){
-                    boardMapper.deleteBoardComment(deleteBoardComment);
+                    boardMapper.deleteBoardComment(deleteBoardComment); //원댓글에 달린 대댓글 전부 삭제
                 }
             }
-            for(BoardCommentTO a:boardComment){
+            for(BoardCommentTO a:boardComment){ //원댓글 삭제
                 boardMapper.deleteBoardComment(a);
             }
 
         }catch(Exception e){
             e.printStackTrace();
-            map.put("errorCd", -1);
+            map.put("errorCd", "Y");
+            map.put("errorMsg", "댓글 삭제중 오류발생");
         }
         return map;
     }

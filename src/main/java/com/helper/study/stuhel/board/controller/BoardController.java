@@ -31,30 +31,23 @@ public class BoardController {
     }
 
     @GetMapping("/retrieveBoardList")
-    ArrayList<BoardTO> retrieveBoardList(HttpServletRequest request,@RequestParam("minNum")int minNum, @RequestParam("maxNum")int maxNum){
+    ArrayList<BoardTO> retrieveBoardList(HttpServletRequest request,@RequestParam("retrieveBoardData")String retrieveBoardData){
         HttpSession session = request.getSession();
-        BoardTO boardTO = new BoardTO();
-        boardTO.setMaxNum(maxNum);
-        boardTO.setMinNum(minNum);
-/*        String sessionId = (String)session.getAttribute("memberId");*/
+        BoardTO boardTO = gson.fromJson(retrieveBoardData, BoardTO.class);
         ArrayList<BoardTO> board=boardService.retrieveBoardList(boardTO);
         return board;
     }
 
     @GetMapping("/retrieveBoardKeyword")
-    ArrayList<BoardTO> retrieveBoardKeyword(HttpServletRequest request,@RequestParam("fullKeyword")String fullKeyword, @RequestParam("minNum")int minNum, @RequestParam("maxNum")int maxNum){
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("maxNum",maxNum);
-        map.put("minNum",minNum);
-        map.put("fullKeyword", fullKeyword);
-        ArrayList<BoardTO> board = boardService.retrieveBoardKeyword(map);
-        return board; //리다이렉트 게시글 조회
+    ArrayList<BoardTO> retrieveBoardKeyword(HttpServletRequest request,@RequestParam("retrieveBoardData")String retrieveBoardData){
+        BoardTO board = gson.fromJson(retrieveBoardData, BoardTO.class);
+        return boardService.retrieveBoardKeyword(board); //리다이렉트 게시글 조회
     }
 
     @PostMapping("/saveWrite")
     HashMap<String,String> saveWrite(HttpServletRequest request,@RequestParam("addNoteData")String addNoteData){
-        JsonReader reader = new JsonReader(new StringReader(addNoteData)); /*특수문자 변환*/
-        reader.setLenient(true);
+/*        JsonReader reader = new JsonReader(new StringReader(addNoteData)); *//*특수문자 변환*//*
+        reader.setLenient(true);*/
         BoardTO boardTO = gson.fromJson(addNoteData, BoardTO.class);
         boardTO.setWriter((String)request.getSession().getAttribute("memberId"));
 
@@ -75,16 +68,16 @@ public class BoardController {
     @PatchMapping("/addViewCount")
     int addViewCount(@RequestParam("boardData")String boardData){
         BoardTO board = gson.fromJson(boardData, BoardTO.class);
-        boardService.addViewCount(board);
-        return 0;
+        return boardService.addViewCount(board);
     }
     @GetMapping("/retrieveBoardComment")
-    ArrayList<BoardCommentTO> retrieveBoardComment (@RequestParam("noteSeq") String noteSeq){
-        ArrayList<BoardCommentTO> boardCommentList = boardService.retrieveBoardComment(noteSeq);
+    ArrayList<BoardCommentTO> retrieveBoardComment (@RequestParam("retrieveCmtData") String retrieveCmtData){
+        BoardCommentTO boardCommentTO=gson.fromJson(retrieveCmtData, BoardCommentTO.class);
+        ArrayList<BoardCommentTO> boardCommentList = boardService.retrieveBoardComment(boardCommentTO);
         return boardCommentList;
     }
     @PostMapping("/saveComment")
-    HashMap<String,Integer> saveComment (@RequestParam("commentData") String commentData, HttpServletRequest request){
+    HashMap<String,String> saveComment (@RequestParam("commentData") String commentData, HttpServletRequest request){
         HttpSession session = request.getSession();
         BoardCommentTO boardComment= gson.fromJson(commentData, BoardCommentTO.class);
         boardComment.setWriter((String)session.getAttribute("memberId"));
@@ -92,7 +85,7 @@ public class BoardController {
         return boardService.saveComment(boardComment);
     }
     @DeleteMapping("/deleteBoardComment")
-    HashMap<String,Integer> deleteBoardComment(@RequestParam("deleteCommentData") String deleteCommentData){
+    HashMap<String,String> deleteBoardComment(@RequestParam("deleteCommentData") String deleteCommentData){
         ArrayList<BoardCommentTO> boardComment = gson.fromJson(deleteCommentData,  new TypeToken<ArrayList<BoardCommentTO>>() {}.getType());
         return boardService.deleteBoardComment(boardComment);
 

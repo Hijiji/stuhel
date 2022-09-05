@@ -25,22 +25,6 @@
     <link rel="stylesheet" href="https://unpkg.com/ag-grid-community/dist/styles/ag-grid.css">
     <link rel="stylesheet" href="https://unpkg.com/ag-grid-community/dist/styles/ag-theme-balham.css">
     <style>
-a:link {
-  text-decoration: none;
-}
-
-a:visited {
-  text-decoration: none;
-  color: blue;
-}
-
-a:hover {
-  text-decoration: underline;
-}
-
-a:active {
-  text-decoration: underline;
-}
     </style>
 </head>
 <body id="page-top">
@@ -68,7 +52,7 @@ a:active {
                 <h1 class="text-white font-weight-bold">게시판</h1>
                 <hr class="divider" />
                 <div align="center">
-                    <input type="text" id="boardSearchTxt" class="form-control" placeholder="키워드를 입력하세요" onkeyup="enterkeyEvent()" style="width:40%;display:inline; ">
+                    <input type="text" id="boardSearchTxt" class="form-control" placeholder="키워드를 입력하세요" onkeyup="moveNextSpot(boardSearchBtn)" style="width:40%;display:inline; ">
                     <input type="button" id="boardSearchBtn" value="검색" onclick="retrieveBoardKeyword()" class="btn btn-primary btn-xl" style="font-size:15px;padding:11px 22px;text-align:center">
                 </div>
             </div>
@@ -118,54 +102,46 @@ a:active {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/SimpleLightbox/2.1.0/simpleLightbox.min.js"></script>
 <!-- Core theme JS-->
 <script src="../../js/scripts.js"></script>
+<script src="../../js/common.js"></script>
 <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
 
 <script>
-    <!--세션체크-->
-    let sessionStatus = null;
-    (function(){
-        let xhr = new XMLHttpRequest();
-        xhr.open('Get', "/session/sessionCheck"
-                 ,true);
-        xhr.setRequestHeader('Accept', 'application/json');
-        xhr.send();
-        xhr.onreadystatechange = () => {
-            if (xhr.readyState == 4 && xhr.status == 200) {
-                // 데이터 확인
-                sessionStatus = xhr.responseText;
-                if(sessionStatus==null||sessionStatus==''){
-                    location.href="/index.html";
-                }else if(sessionStatus!=null){
-                    retrieveBoardList();
-                }
-            }
-        }
-    })();
-
     const boardSearchTxt = document.querySelector("#boardSearchTxt");
     const boardSearchBtn = document.querySelector("#boardSearchBtn");
-    const boardListBody = document.querySelector("#boardListBody");
     const boardListTable = document.querySelector("#boardListTable");
+    const boardListBody = document.querySelector("#boardListBody");
     const retrieveMoreListBtn = document.querySelector("#retrieveMoreListBtn");
     const noMoreList= document.querySelector("#noMoreList");
-    let boardList=0;
+    let boardList;
     let userSelectedRowData;
     let maxNum;
     let minNum;
-    let kMaxNum;
+    let kMaxNum; //keywordSearch
     let kMinNum;
 
-    function enterkeyEvent(){
-        if(event.keyCode == 13){
-            retrieveBoardKeyword();
+    <!--초기세팅-->
+    (function(){
+        sessionCheck(); //세션체크
+        retrieveBoardList();
+    })();
+    //게시글목록조회
+    function retrieveBoardList(moreList){
+        kMaxNum=0; kMinNum=0;
+        //더보기버튼 클릭이 아닐경우
+        if(moreList!="more"){
+            maxNum=10;
+            minNum=1;
+        }else{
+            maxNum=maxNum+10;
+            minNum=minNum+10;
         }
-    }
+        let retrieveBoardData=new Object();
+        retrieveBoardData.minNum=minNum;
+        retrieveBoardData.maxNum=maxNum;
+        retrieveBoardData=JSON.stringify(retrieveBoardData);
 
-    function retrieveBoardList(){
-        maxNum=10;
-        minNum=1;
 	    let xhr = new XMLHttpRequest();
-	    xhr.open('GET', '/stuhel/board/retrieveBoardList?minNum='+minNum+'&maxNum='+maxNum
+	    xhr.open('GET', '/stuhel/board/retrieveBoardList?retrieveBoardData='+encodeURI(retrieveBoardData)
 	        ,true)
 	    xhr.setRequestHeader('Accept', 'application/json');
 	    xhr.send();
@@ -175,29 +151,41 @@ a:active {
 	            boardList = JSON.parse(boardList);
 	            console.log(boardList);
 	            setBoardList(boardList);
-
 	        }
 	    }
 	}
-
-    function retrieveBoardKeyword(){
-        if(boardSearchTxt.value==null||boardSearchTxt.value==''){
-            retrieveBoardList();
-            return;
-        }
-        kMaxNum=10;
-        kMinNum=1;
-        maxNum=0;
-        minNum=0;
-        let boardListTableRows = boardListTable.rows.length-1;
-        if(boardListTableRows>0){
-            for(i=boardListTableRows;i>=0;i--){
-                boardListTable.deleteRow(i);
+    //키워드 검색
+    function retrieveBoardKeyword(moreList){
+        maxNum=0; minNum=0;
+        //더보기버튼 클릭이 아닐경우
+        if(moreList!="more"){
+            //기존의 게시글 목록 지우기
+            let boardListTableRows = boardListTable.rows.length-1;
+            if(boardListTableRows>0){
+                for(i=boardListTableRows;i>=0;i--){
+                    boardListTable.deleteRow(i);
+                }
             }
+
+            if(boardSearchTxt.value==null||boardSearchTxt.value==''){
+                retrieveBoardList();
+                return;
+            }
+            console.log("걍");
+            kMaxNum=10; kMinNum=1;
+        }else{
+        console.log("더보ㄱㅣ");
+            kMaxNum=kMaxNum+10;
+            kMinNum=kMinNum+10;
         }
+        let retrieveBoardData=new Object();
+        retrieveBoardData.minNum=kMinNum;
+        retrieveBoardData.maxNum=kMaxNum;
+        retrieveBoardData.fullKeyword=boardSearchTxt.value;
+        retrieveBoardData=JSON.stringify(retrieveBoardData);
 
         let xhr = new XMLHttpRequest();
-        xhr.open('GET', "/stuhel/board/retrieveBoardKeyword?fullKeyword="+boardSearchTxt.value+"&minNum="+kMinNum+"&maxNum="+kMaxNum
+        xhr.open('GET', "/stuhel/board/retrieveBoardKeyword?retrieveBoardData="+encodeURI(retrieveBoardData)
             ,true);
         xhr.setRequestHeader('Accept', 'application/json');
         xhr.send();
@@ -207,71 +195,21 @@ a:active {
                 boardList = JSON.parse(boardList);
                 console.log(boardList);
                 setBoardList(boardList);
-                location.href="#list";
+                if(kMinNum==1)location.href="#list";
             }
         }
     }
 
-    function retrieveBoardRead(userSelectedRowData){
-        if(userSelectedRowData==null||userSelectedRowData==""){
-            return;
-        }
-        console.log('userSelectedRowData');
-        console.log(userSelectedRowData);
-        userSelectedRowData = JSON.stringify(userSelectedRowData);
-        let xhr = new XMLHttpRequest();
-        xhr.open('GET', "/stuhel/board/retrieveBoardRead?boardData="+encodeURI(userSelectedRowData)
-            ,true);
-        xhr.setRequestHeader('Accept', 'application/json');
-        xhr.send();
-        xhr.onreadystatechange = () => {
-            if (xhr.readyState == 4 && xhr.status == 200) {
-                let txt = xhr.responseText;
-                location.href="/stuhel/board/boardRead.html?boardReadData="+encodeURI(txt);
-            }
-        }
-    }
+    //목록 더보기버튼 클릭
     function retrieveMoreList(){
         if(boardSearchTxt.value==null||boardSearchTxt.value==''){
-            maxNum=maxNum+10;
-            minNum=minNum+10;
-            kMaxNum=0;
-            kMinNum=0;
-            let xhr = new XMLHttpRequest();
-	        xhr.open('GET', '/stuhel/board/retrieveBoardList?minNum='+minNum+'&maxNum='+maxNum
-	            ,true)
-    	    xhr.setRequestHeader('Accept', 'application/json');
-	        xhr.send();
-	        xhr.onreadystatechange = () => {
-	            if (xhr.readyState == 4 && xhr.status == 200) {
-	                boardList = xhr.responseText;
-    	            boardList = JSON.parse(boardList);
-	                console.log(boardList);
-	                setBoardList(boardList);
-	            }
-	        }
+            retrieveBoardList("more"); //일반게시글조회
         }else{
-            kMaxNum=kMaxNum+10;
-            kMinNum=kMinNum+10;
-            maxNum=0;
-            minNum=0;
-
-            let xhr = new XMLHttpRequest();
-            xhr.open('GET', "/stuhel/board/retrieveBoardKeyword?fullKeyword="+boardSearchTxt.value+"&minNum="+kMinNum+"&maxNum="+kMaxNum
-                ,true);
-            xhr.setRequestHeader('Accept', 'application/json');
-            xhr.send();
-            xhr.onreadystatechange = () => {
-                if (xhr.readyState == 4 && xhr.status == 200) {
-                    boardList = xhr.responseText;
-                    boardList = JSON.parse(boardList);
-                    console.log(boardList);
-                    setBoardList(boardList);
-                    location.href="#list";
-                }
-            }
+            retrieveBoardKeyword("more"); //키워드게시글 조회
         }
     }
+
+    //조회된 게시글 list 세팅
     function setBoardList(boardList){
         if(boardList.length<=0){
             noMoreList.innerHTML="등록된 게시글이 없습니다.";
@@ -296,6 +234,7 @@ a:active {
                 writeDateTag.style.width="150px";
                 titleATag.style.textDecorationLine="none";
                 titleATag.style.color="black";
+                //titleATag.hover(function(){titleATag.style.color="blue"; titleATag.style.textDecorationLine="underline";});
                 noMoreList.innerHTML="";
 
                 titleATag.onclick = () => {
@@ -323,16 +262,24 @@ a:active {
             }
 	    }
 	}
-    /*로그아웃*/
-    function logoutButton(){
+
+    //글 제목링크 클릭 / 글 내용확인창
+    function retrieveBoardRead(userSelectedRowData){
+        if(userSelectedRowData==null||userSelectedRowData==""){
+            return;
+        }
+        console.log('userSelectedRowData');
+        console.log(userSelectedRowData);
+        userSelectedRowData = JSON.stringify(userSelectedRowData);
         let xhr = new XMLHttpRequest();
-        xhr.open('DELETE', "/session/logout"
+        xhr.open('GET', "/stuhel/board/retrieveBoardRead?boardData="+encodeURI(userSelectedRowData)
             ,true);
         xhr.setRequestHeader('Accept', 'application/json');
         xhr.send();
         xhr.onreadystatechange = () => {
             if (xhr.readyState == 4 && xhr.status == 200) {
-                location.href="/index.html";
+                let txt = xhr.responseText;
+                location.href="/stuhel/board/boardRead.html?boardReadData="+encodeURI(txt);
             }
         }
     }

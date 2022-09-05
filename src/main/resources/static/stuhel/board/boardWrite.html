@@ -76,10 +76,9 @@
 <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
 
 <script>
-    const dateDiv = document.querySelector("#dateBox");
     const note = document.querySelector("#note");
     const title = document.querySelector("#title");
-    const selectTag = document.querySelector("#topicSelect");
+    const topicSelect = document.querySelector("#topicSelect");
 
     <!--초기세팅-->
     (function(){
@@ -103,7 +102,7 @@
                     let optionTag = document.createElement("option");
                     optionTag.innerHTML=topicList[i].topicNm;
                     optionTag.id=topicList[i].topicCd;
-                    selectTag.appendChild(optionTag);
+                    topicSelect.appendChild(optionTag);
                 }
             }
         }
@@ -117,7 +116,7 @@
     }
 
     function saveWrite(){
-        let brNote = note.value.replace(/\n/g, '<br/>'); //유효한 내려쓰기를 위한 엔터키데이터 변경
+        let brNote = note.value.replace(/\n/g, "<br/>"); //유효한 내려쓰기를 위한 엔터키데이터 변경
 
         if(title.value.trim()==null || title.value.trim()==""){
             alert("글의 제목을 입력해주세요.");
@@ -129,8 +128,9 @@
         let addNoteData = new Object();
         addNoteData.title=title.value;
         addNoteData.note=brNote;
-        addNoteData.topicNm=selectTag.value;
+        addNoteData.topicNm=topicSelect.value;
         addNoteData = JSON.stringify(addNoteData);
+        console.log(addNoteData);
 
         let xhr = new XMLHttpRequest();
 	    xhr.open('POST', '/stuhel/board/saveWrite?addNoteData='+encodeURI(addNoteData)
@@ -141,13 +141,12 @@
 	        if (xhr.readyState == 4 && xhr.status == 200) {
 	            let errorInfo = xhr.responseText;
 	            errorInfo=JSON.parse(errorInfo);
-	            if(errorInfo.errorCd=="N"){
-	                alert("성공적으로 저장되었습니다.");
+	            alert(errorInfo.errorMsg);
+	            if(errorInfo.errorCd=="Y"){
+	                return;
+	            }else{
                     location.reload();
                     location.href="/stuhel/board/boardList.html";
-	            }else{
-	                alert("서버오류로 저장에 실패하였습니다.");
-	                return;
 	            }
 	        }
 	    }

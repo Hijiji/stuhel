@@ -33,7 +33,6 @@
             AND   R_NUM >= #{minNum}
         ]]>
     </select>
-    <!--SELECT TITLE, NOTE_SEQ, WRITE_DATE, TOPIC_NM, CLICK_AMOUNT, WRITER FROM BOARD-->
     <select id="selectReadBoard" resultMap="Board" parameterType="map">
         SELECT *
         FROM BOARD
@@ -42,7 +41,7 @@
         AND TITLE = #{title}
         ORDER BY NOTE_SEQ ASC
     </select>
-    <select id="selectBoardKeyword" parameterType="map" resultMap="Board">
+    <select id="selectBoardKeyword" parameterType="com.helper.study.stuhel.board.to.BoardTO" resultMap="Board">
         <![CDATA[
             SELECT
                 TITLE, NOTE_SEQ, WRITE_DATE, TOPIC_NM, CLICK_AMOUNT, WRITER, R_NUM, TOTAL_LIST_CNT
@@ -107,7 +106,7 @@
             AND TITLE=#{title}
             AND WRITER=#{writer}
     </update>
-    <select id="selectBoardComment" parameterType="java.lang.String" resultType="com.helper.study.stuhel.board.to.BoardCommentTO">
+    <select id="selectBoardComment" parameterType="com.helper.study.stuhel.board.to.BoardCommentTO" resultType="com.helper.study.stuhel.board.to.BoardCommentTO">
         SELECT *
         FROM BOARD_COMMENT
         WHERE NOTE_SEQ = #{noteSeq}

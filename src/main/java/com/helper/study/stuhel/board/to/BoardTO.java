@@ -17,6 +17,9 @@ public class BoardTO {
     int clickAmount;
     @Id
     String writer;
+    String reader;
+    String fullKeyword;
+    String[] keywordList;
     int minNum;
     int maxNum;
     int totalListCnt;

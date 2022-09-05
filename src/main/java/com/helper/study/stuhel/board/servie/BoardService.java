@@ -8,12 +8,12 @@ import java.util.HashMap;
 
 public interface BoardService {
     ArrayList<BoardTO> retrieveTopicList();
-    HashMap<String, String> saveWrite(BoardTO boardTO);
-    ArrayList<BoardTO> retrieveBoardKeyword(HashMap<String, Object> map);
-    ArrayList<BoardTO> retrieveBoardList(BoardTO boardTO);
-    BoardTO retrieveBoardRead(BoardTO boardTO);
+    HashMap<String, String> saveWrite(BoardTO board);
+    ArrayList<BoardTO> retrieveBoardKeyword(BoardTO board);
+    ArrayList<BoardTO> retrieveBoardList(BoardTO board);
+    BoardTO retrieveBoardRead(BoardTO board);
     int addViewCount(BoardTO board);
-    ArrayList<BoardCommentTO> retrieveBoardComment(String noteSeq);
-    HashMap<String, Integer> saveComment(BoardCommentTO boardComment);
-    HashMap<String, Integer> deleteBoardComment(ArrayList<BoardCommentTO> boardComment);
+    ArrayList<BoardCommentTO> retrieveBoardComment(BoardCommentTO boardComment);
+    HashMap<String, String> saveComment(BoardCommentTO boardComment);
+    HashMap<String, String> deleteBoardComment(ArrayList<BoardCommentTO> boardComment);
 }

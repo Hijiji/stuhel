@@ -11,11 +11,11 @@ import java.util.HashMap;
 public interface BoardMapper {
     ArrayList<BoardTO> selectTopicList();
     void insertWrite(BoardTO board);
-    ArrayList<BoardTO> selectBoardKeyword(HashMap<String, Object> map);
+    ArrayList<BoardTO> selectBoardKeyword(BoardTO board);
     ArrayList<BoardTO> selectBoardList(BoardTO boardTO);
     BoardTO selectReadBoard(BoardTO board);
     int updateViewCount(BoardTO board);
-    ArrayList<BoardCommentTO> selectBoardComment(String noteSeq);
+    ArrayList<BoardCommentTO> selectBoardComment(BoardCommentTO boardComment);
     void insertComment(BoardCommentTO boardComment);
     void deleteBoardComment(BoardCommentTO boardComment);
     ArrayList<BoardCommentTO> selectRecomment(BoardCommentTO boardComment);
