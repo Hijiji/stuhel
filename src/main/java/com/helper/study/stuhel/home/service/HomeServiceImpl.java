@@ -4,6 +4,7 @@ import com.helper.study.stuhel.home.mapper.HomeMapper;
 import com.helper.study.stuhel.home.to.BookTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,6 +27,7 @@ public class HomeServiceImpl implements HomeService {
     }
 
     @Override
+    @Transactional
     public HashMap<String, String> addReservationInfo(BookTO bookTO) {
         HashMap<String,String> map =new HashMap<>();
         try {

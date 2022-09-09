@@ -5,6 +5,7 @@ import com.helper.study.stuhel.board.to.BoardCommentTO;
 import com.helper.study.stuhel.board.to.BoardTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,6 +23,7 @@ public class BoardServiceImpl implements BoardService{
         return boardMapper.selectTopicList();
     }
     @Override
+    @Transactional
     public HashMap<String, String> saveWrite(BoardTO board) {
         HashMap<String, String> map = new HashMap<>();
         if(board.getTitle().isEmpty()||board.getNote().isEmpty()){
@@ -64,6 +66,7 @@ public class BoardServiceImpl implements BoardService{
     }
 
     @Override
+    @Transactional
     public int addViewCount(BoardTO board) {
         int returnInfo;
         if(board.getWriter().equals(board.getReader())){
@@ -85,6 +88,7 @@ public class BoardServiceImpl implements BoardService{
     }
 
     @Override
+    @Transactional
     public HashMap<String, String> saveComment(BoardCommentTO boardComment) {
         HashMap<String, String> map = new HashMap<>();
         map.put("errorCd","N");
@@ -104,6 +108,7 @@ public class BoardServiceImpl implements BoardService{
     }
 
     @Override
+    @Transactional
     public HashMap<String, String> deleteBoardComment(ArrayList<BoardCommentTO> boardComment) {
         HashMap<String, String> map = new HashMap<>();
         map.put("errorCd", "N");map.put("errorMsg", "삭제완료");

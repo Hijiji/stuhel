@@ -6,6 +6,7 @@ import com.helper.study.stuhel.exception.PwMissMatchException;
 import com.helper.study.stuhel.member.mapper.MemberMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.regex.Pattern;
@@ -55,6 +56,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    @Transactional
     public HashMap<String, String> memberJoin(MemberTO memberTO) {
         HashMap<String, String> map = new HashMap<>();
 
@@ -67,10 +69,14 @@ public class MemberServiceImpl implements MemberService {
             map.put("errorMsg", "생년월일을 숫자로만 입력해주세요.");
             return map;
         }
-        memberMapper.insertMember(memberTO);
-        map.put("errorCode", "N");
+        try {
+            memberMapper.insertMember(memberTO);
+            map.put("errorCode", "N");
+        }catch (Exception e){
+            e.printStackTrace();
+            map.put("errorCode", "Y");
+            map.put("errorMsg", "데이터 입력중 에러발생.");
+        }
         return map;
     }
-
-
 }

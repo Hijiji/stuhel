@@ -3,19 +3,15 @@ package com.helper.study.stuhel.board.controller;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import com.google.gson.stream.JsonReader;
 import com.helper.study.stuhel.board.servie.BoardServiceImpl;
 import com.helper.study.stuhel.board.to.BoardCommentTO;
 import com.helper.study.stuhel.board.to.BoardTO;
-import com.helper.study.stuhel.home.to.BookTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.io.StringReader;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 
