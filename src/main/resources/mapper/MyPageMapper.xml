@@ -24,6 +24,10 @@
         where ID = #{id}
     </select>
 
+    <delete id="deleteMemberInfo" parameterType="com.helper.study.stuhel.member.to.MemberTO">
+        DELETE MEMBER_SECURITY
+        WHERE
+    </delete>
     <update id="updateMemberInfo" parameterType="com.helper.study.stuhel.member.to.MemberTO">
         UPDATE MEMBER_SECURITY
         SET

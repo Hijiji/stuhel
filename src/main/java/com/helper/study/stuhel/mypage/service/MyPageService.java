@@ -10,6 +10,8 @@ import java.util.HashMap;
 public interface MyPageService {
     MemberTO retrieveMemberInfo(MemberTO memberTO);
 
+    HashMap<String, String> deleteMemberInfo(MemberTO memberTO);
+
     HashMap<String, String> changeMemberInfo(MemberTO memberTO,HttpSession session);
 
     ArrayList<BookTO> retrieveBookStatus(BookTO bookTO);

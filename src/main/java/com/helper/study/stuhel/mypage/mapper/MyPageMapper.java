@@ -9,6 +9,7 @@ import java.util.ArrayList;
 @Mapper
 public interface MyPageMapper {
     MemberTO selectMemberInfo(MemberTO memberTO);
+    void deleteMemberInfo(MemberTO memberTO);
     void updateMemberInfo(MemberTO memberTO);
     ArrayList<BookTO> selectBookStatus(BookTO bookTO);
     void deleteBook(BookTO bookTO);

@@ -6,6 +6,7 @@ import com.google.gson.reflect.TypeToken;
 import com.helper.study.stuhel.mypage.service.MyPageService;
 import com.helper.study.stuhel.home.to.BookTO;
 import com.helper.study.stuhel.member.to.MemberTO;
+import org.apache.ibatis.annotations.Delete;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,7 +46,13 @@ public class MyPageController {
         }
         return gson.toJson(memberTO);
     }
-
+    @DeleteMapping("/deleteMember")
+    HashMap<String,String> deleteMember(HttpServletRequest request, @RequestParam("deleteMemberInfo") String deleteMemberInfo){
+        HttpSession session = request.getSession();
+        MemberTO memberTO = gson.fromJson(deleteMemberInfo, MemberTO.class);
+        HashMap<String, String> map=myPageService.deleteMemberInfo(memberTO);
+        return map;
+    }
     @PutMapping("/changeMemberInfo")
     HashMap<String, String> changeMemberInfo(HttpServletRequest request, @RequestParam("changeMemberInfo") String changeMemberInfo){
         HttpSession session = request.getSession();

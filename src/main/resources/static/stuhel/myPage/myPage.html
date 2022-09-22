@@ -106,6 +106,7 @@
                             <div class="fw-bolder" id="confirmBeforeCheckMsg" style="color:tomato; font-size:18px;"></div>
                         </div>
                     </div>
+                    <input type="button" class="btn btn-primary btn-xl" id="deleteMemberInfo" onclick="deleteMember()" value="회원탈퇴"/>
                     <!--수정창 오픈-->
                     <div class="d-grid">
                         <input type="button" class="btn btn-primary btn-xl" id="changeButton" onclick="userInfoChange()" value="정보수정"/>
@@ -164,7 +165,7 @@
         <div class="fw-bolder" id="checkMsg" style="color:#1a1e21;"></div>
         </br>
         <div class="close-wrapper">
-            <button class="btn btn-light btn-xl" id="idPwConfirm" onfocus="idPwConfirmFunc()">확인</button>&nbsp;&nbsp;
+            <button class="btn btn-light btn-xl" id="idPwConfirm" onfocus="editableMemberInfo()">확인</button>&nbsp;&nbsp;
             <button class="btn btn-light btn-xl" value="userCheckModalClose" onclick="modalClose(this)" >닫기</button>
         </div>
     </div>
@@ -272,7 +273,6 @@
     }
 
 <!--달력-->
-
     function setDate(){
             year.innerHTML=choiceYear;
             month.innerHTML=choiceMonth+1;
@@ -482,10 +482,14 @@
         });
     }
 
-    <!--회원정보수정 modal onclick-->
+    <!--회원 확인 modal창 오픈 ID,PW확인-->
     function userInfoChange(){
         userCheckModal.style.display="flex";
         checkId.focus();
+    }
+
+    function editableMemberInfo(){
+        idPwConfirmFunc('editableMemberInfo');
     }
 
     <!--회원정보수정시 회원인증-->
@@ -517,7 +521,7 @@
                       checkMsg.innerHTML = "※ " + txt.errorMsg;
                        return;
                    } else {
-                      userCheckModal.style.display = "none";
+<!--                      userCheckModal.style.display = "none";
                       userName.disabled=false;
                       userId.disabled=false;
                       userBirth.disabled=false;
@@ -533,7 +537,7 @@
                       checkMsg.innerHTML="";
                       userName.value = dbUserName;
                       userId.value  = dbUserId;
-                      userBirth.value  = dbUserBirth;
+                      userBirth.value  = dbUserBirth;-->
                    }
                }
            }
@@ -594,7 +598,49 @@
         }
     });
 
+    <!--회원탈퇴-->
+    function deleteMember(){
+        userInfoChange();
+        swal({
+                  title : '회원 탈퇴'
+                , text : 'ヽ(✿ﾟ▽ﾟ)ノ \n'
+                        +'정말 탈퇴하시겠습니까?'
+                , buttons : ["취소","확인"]
+        }).then(function(result){
+                console.log(result);
+                if(result==null) return;
+                else {
+                    let deleteMemberInfo = {"id":,"name":,"password":changeUserPassword} //데이터 추가하기
+                    console.log(deleteMemberInfo);
+                    deleteMemberInfo = JSON.stringify(deleteMemberInfo);
 
+                    let xhr = new XMLHttpRequest();
+                    xhr.open('DELETE',  "/stuhel/myPage/deleteMember?"
+                                        + "deleteMemberInfo=" + encodeURI(deleteMemberInfo)
+                            ,true);
+                    xhr.setRequestHeader('Accept', 'application/json');
+                    xhr.send();
+                    xhr.onreadystatechange = () => {
+                        if (xhr.readyState == 4 && xhr.status == 200) {
+                            // 데이터 확인
+                            let errorInfo = xhr.responseText;
+                            errorInfo = JSON.parse(errorInfo);
+                            console.log(errorInfo.errorCd);
+                            console.log(errorInfo.errorMsg);
+                            if (errorInfo.errorCd== "Y" ) {
+                                alert(errorInfo.errorMsg);
+                                return;
+                            } else {
+                                alert("탈퇴되었습니다.");
+                                location.reload(true);
+                            }
+                        }
+                    }
+                }
+        })
+    }
+
+    <!--회원정보 수정 저장-->
     function userInfoChangeSubmitBtn(){
     let changeUserName="" ;
     let changeUserId="";

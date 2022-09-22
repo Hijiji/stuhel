@@ -28,6 +28,12 @@ public class MyPageServiceImpl implements MyPageService{
 
     @Override
     @Transactional
+    public HashMap<String, String> deleteMemberInfo(MemberTO memberTO) {
+        return null;
+    }
+
+    @Override
+    @Transactional
     public HashMap<String,String> changeMemberInfo(MemberTO memberTO,HttpSession session){
         HashMap<String, String> map = new HashMap<>();
         map.put("errorCd", "N");
