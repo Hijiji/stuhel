@@ -53,7 +53,7 @@ public class MemberController {
     }
     /*회원가입*/
     @PostMapping("/join")
-    public HashMap<String, String> memberJoin (@RequestParam("                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              joinData") String memberJoinData ){
+    public HashMap<String, String> memberJoin (@RequestParam("joinData") String memberJoinData ){
         MemberTO memberTO = gson.fromJson(memberJoinData, MemberTO.class);
         return memberService.memberJoin(memberTO);
     }

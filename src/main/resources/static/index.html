@@ -266,7 +266,7 @@
             joinResultMsg.innerHTML = "※ 비밀번호를 다시 확인해주세요";
             return;
         }else if(isNaN(newMemberBirth.value)||newMemberBirth.value.length != 8){
-            joinResultMsg.innerHTML="※ 8자리 숫자만 입력가능합니다. ex) 19450815";
+            joinResultMsg.innerHTML="※ 생년월일에는 8자리 숫자만 입력가능합니다. ex) 19450815";
             return;
         }else {
             let joinData ={"id" : newMemberId.value, "name" : newMemberName.value, "password" : newMemberPassword.value, "birth" : newMemberBirth.value};

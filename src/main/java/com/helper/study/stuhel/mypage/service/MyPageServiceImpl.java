@@ -29,7 +29,16 @@ public class MyPageServiceImpl implements MyPageService{
     @Override
     @Transactional
     public HashMap<String, String> deleteMemberInfo(MemberTO memberTO) {
-        return null;
+        HashMap<String, String> map = new HashMap<>();
+        map.put("errorCd","N");
+        try{
+            myPageMapper.deleteMemberInfo(memberTO);
+        }catch(Exception e){
+            e.printStackTrace();
+            map.put("errorCd","Y");
+            map.put("errorMsg","탈퇴중 오류가 발생했습니다. 잠시후 다시 시도해주세요.");
+        }
+        return map;
     }
 
     @Override

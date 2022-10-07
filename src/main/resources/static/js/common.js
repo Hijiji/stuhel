@@ -33,8 +33,9 @@
         if(event.keyCode == 13){
             if(next=="block"){ /*block이 들어오면, 엔터를 막는다.*/
                 event.returnValue=false;
+            }else{
+                next.focus();
             }
-            next.focus();
         }
     }
 

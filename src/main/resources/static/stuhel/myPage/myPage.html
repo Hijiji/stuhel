@@ -31,7 +31,7 @@
         <button class="navbar-toggler navbar-toggler-right" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ms-auto my-2 my-lg-0">
-                <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+                <!--<li class="nav-item"><a class="nav-link" href="#about">About</a></li>-->
                 <li class="nav-item"><a class="nav-link" href="#myInfo">회원정보</a></li>
                 <li class="nav-item"><a class="nav-link" href="#bookStatus">예약현황</a></li>
                 <li class="nav-item"><a class="nav-link" href="/stuhel/home/home.html">Home</a></li>
@@ -81,7 +81,7 @@
                     </div>
                     <!-- birth input-->
                     <div class="form-floating mb-3">
-                        <h6 class="mt-0"> BIRTH </h6><input class="form-control" id="userBirth" onkeyup="moveNextSpot(UserPassword)" disabled/><!--placeholder="ID" data-sb-validations="required" -->
+                        <h6 class="mt-0"> BIRTH </h6><input class="form-control" id="userBirth" onkeyup="moveNextSpot(userPassword)" disabled/><!--placeholder="ID" data-sb-validations="required" -->
                     </div>
                     <div>
                         <div class="text-center mb-3">
@@ -90,7 +90,7 @@
                     </div>
                 <!-- Password input-->
                     <div class="form-floating mb-3" id="pwDiv" style="display:none" >
-                        <h6 class="mt-0"> NEW PW </h6><input class="form-control" id="UserPassword" type="password" onkeyup="moveNextSpot(confirmPassword)" placeholder="Password" data-sb-validations="required"/>
+                        <h6 class="mt-0"> NEW PW </h6><input class="form-control" id="userPassword" type="password" onkeyup="moveNextSpot(confirmPassword)" placeholder="Password" data-sb-validations="required"/>
                     </div>
                     <div>
                         <div class="text-center mb-3">
@@ -106,10 +106,10 @@
                             <div class="fw-bolder" id="confirmBeforeCheckMsg" style="color:tomato; font-size:18px;"></div>
                         </div>
                     </div>
-                    <input type="button" class="btn btn-primary btn-xl" id="deleteMemberInfo" onclick="deleteMember()" value="회원탈퇴"/>
+
                     <!--수정창 오픈-->
                     <div class="d-grid">
-                        <input type="button" class="btn btn-primary btn-xl" id="changeButton" onclick="userInfoChange()" value="정보수정"/>
+                        <input type="button" class="btn btn-primary btn-xl" id="changeButton" onfocus="userInfoChange('memberInfoChange')" value="정보수정"/>
                     </div>
                     <!--수정저장-->
                     <div class="d-grid">
@@ -165,7 +165,7 @@
         <div class="fw-bolder" id="checkMsg" style="color:#1a1e21;"></div>
         </br>
         <div class="close-wrapper">
-            <button class="btn btn-light btn-xl" id="idPwConfirm" onfocus="editableMemberInfo()">확인</button>&nbsp;&nbsp;
+            <button class="btn btn-light btn-xl" class="idPwConfirm" onfocus="idPwConfirmFunc(this)">확인</button>&nbsp;&nbsp;
             <button class="btn btn-light btn-xl" value="userCheckModalClose" onclick="modalClose(this)" >닫기</button>
         </div>
     </div>
@@ -193,6 +193,7 @@
 
 <!-- Footer-->
 <footer class="bg-light py-5">
+    <input type="button" class="btn btn-light btn-xl" id="deleteMemberInfo" onclick="userInfoChange('memberInfoDelete')" value="회원탈퇴" style="margin:7px;aling:write;"/>
     <div class="container px-4 px-lg-5"><div class="small text-center text-muted">Copyright &copy; 2022 - isjiji</div></div>
 </footer>
 <!-- Bootstrap core JS-->
@@ -213,7 +214,7 @@
     const userName = document.querySelector("#userName");
     const userId = document.querySelector("#userId");
     const userBirth = document.querySelector("#userBirth");
-    const UserPassword = document.querySelector("#UserPassword");
+    const userPassword = document.querySelector("#userPassword");
     const confirmPassword = document.querySelector("#confirmPassword");
 
     const idDoubleCheckDiv = document.querySelector("#idDoubleCheckDiv");
@@ -226,7 +227,7 @@
     const checkPw = document.querySelector("#checkPw");
     const checkMsg = document.querySelector("#checkMsg");
     const idCheckResultMsg = document.querySelector("#idCheckResultMsg");
-    const idPwConfirm = document.querySelector("#idPwConfirm");
+    const idPwConfirm = document.querySelector(".idPwConfirm");
     let idCheckInfo = new Object();
     const bookConditionModal = document.querySelector("#bookConditionModal");
 
@@ -260,7 +261,7 @@
                     // 데이터 확인
                     let userData = xhr.responseText;
                     userData = JSON.parse(userData);
-                    if(userData==null){logoutButton();}
+                    if(userData==null){logoutButton();location.reload(true);}
                     dbUserName=userData.name;
                     dbUserId=userData.id;
                     dbUserBirth=userData.birth;
@@ -483,17 +484,17 @@
     }
 
     <!--회원 확인 modal창 오픈 ID,PW확인-->
-    function userInfoChange(){
+    function userInfoChange(divide){
         userCheckModal.style.display="flex";
         checkId.focus();
-    }
-
-    function editableMemberInfo(){
-        idPwConfirmFunc('editableMemberInfo');
+        console.log(divide);
+        console.log(divide+"");
+        console.log(""+divide);
+        idPwConfirm.value=divide;
     }
 
     <!--회원정보수정시 회원인증-->
-    function idPwConfirmFunc(){
+    function idPwConfirmFunc(divide){
         if(checkPw.value.trim()==null||checkPw.value.trim()=="" ||
            checkId.value.trim()==null||checkId.value.trim()==""
         ){
@@ -518,26 +519,19 @@
                    let txt = xhr.responseText;
                    txt = JSON.parse(txt);
                    if (txt.errorCd == 'Y') {
-                      checkMsg.innerHTML = "※ " + txt.errorMsg;
-                       return;
+                        checkMsg.innerHTML = "※ " + txt.errorMsg;
+                        return;
                    } else {
-<!--                      userCheckModal.style.display = "none";
-                      userName.disabled=false;
-                      userId.disabled=false;
-                      userBirth.disabled=false;
-                      UserPassword.style.display="block";
-                      idDoubleCheckDiv.style.display="block";
-                      pwDiv.style.display="block";
-                      pwConfirmDiv.style.display="block";
-                      changeButton.style.display="none";
-                      userInfoChangeSubmit.style.display="block";
-                      changeCancelButton.display="block";
-                      checkPw.value="";
-                      checkId.value="";
-                      checkMsg.innerHTML="";
-                      userName.value = dbUserName;
-                      userId.value  = dbUserId;
-                      userBirth.value  = dbUserBirth;-->
+                        userCheckModal.style.display = "none";
+                        checkPw.value="";
+                        checkId.value="";
+                        checkMsg.innerHTML="";
+                        console.log(divide);
+                        if(divide.id=="memberInfoChange"){
+                            memberInfoChangeFunc();
+                        }else if(divide.id=="memberInfoDelete"){
+                            deleteMember();
+                        }
                    }
                }
            }
@@ -561,6 +555,23 @@
             return;
         }
     };
+
+    <!--회원정보수정창 오픈-->
+    function memberInfoChangeFunc(){
+            userName.disabled=false;
+            userId.disabled=false;
+            userBirth.disabled=false;
+            userPassword.style.display="block";
+            idDoubleCheckDiv.style.display="block";
+            pwDiv.style.display="block";
+            pwConfirmDiv.style.display="block";
+            changeButton.style.display="none";
+            userInfoChangeSubmit.style.display="block";
+            changeCancelButton.display="block";
+            userName.value = dbUserName;
+            userId.value  = dbUserId;
+            userBirth.value  = dbUserBirth;
+    }
 
     <!--아이디 더블체크-->
     idDoubleCheck.addEventListener('click', () => {
@@ -598,48 +609,6 @@
         }
     });
 
-    <!--회원탈퇴-->
-    function deleteMember(){
-        userInfoChange();
-        swal({
-                  title : '회원 탈퇴'
-                , text : 'ヽ(✿ﾟ▽ﾟ)ノ \n'
-                        +'정말 탈퇴하시겠습니까?'
-                , buttons : ["취소","확인"]
-        }).then(function(result){
-                console.log(result);
-                if(result==null) return;
-                else {
-                    let deleteMemberInfo = {"id":,"name":,"password":changeUserPassword} //데이터 추가하기
-                    console.log(deleteMemberInfo);
-                    deleteMemberInfo = JSON.stringify(deleteMemberInfo);
-
-                    let xhr = new XMLHttpRequest();
-                    xhr.open('DELETE',  "/stuhel/myPage/deleteMember?"
-                                        + "deleteMemberInfo=" + encodeURI(deleteMemberInfo)
-                            ,true);
-                    xhr.setRequestHeader('Accept', 'application/json');
-                    xhr.send();
-                    xhr.onreadystatechange = () => {
-                        if (xhr.readyState == 4 && xhr.status == 200) {
-                            // 데이터 확인
-                            let errorInfo = xhr.responseText;
-                            errorInfo = JSON.parse(errorInfo);
-                            console.log(errorInfo.errorCd);
-                            console.log(errorInfo.errorMsg);
-                            if (errorInfo.errorCd== "Y" ) {
-                                alert(errorInfo.errorMsg);
-                                return;
-                            } else {
-                                alert("탈퇴되었습니다.");
-                                location.reload(true);
-                            }
-                        }
-                    }
-                }
-        })
-    }
-
     <!--회원정보 수정 저장-->
     function userInfoChangeSubmitBtn(){
     let changeUserName="" ;
@@ -674,9 +643,9 @@
                 changeUserBirth=userBirth.value.trim();
             }
         }
-        if(UserPassword.value!=null || UserPassword.value.trim()!="" && confirmPassword.value!=null || confirmPassword.value.trim()!=""){
-            if(UserPassword.value==confirmPassword.value){
-                changeUserPassword=UserPassword.value.trim();
+        if(userPassword.value!=null || userPassword.value.trim()!="" && confirmPassword.value!=null || confirmPassword.value.trim()!=""){
+            if(userPassword.value==confirmPassword.value){
+                changeUserPassword=userPassword.value.trim();
 
             }else{
                 pwCheckResultMsg.innerHTML="입력한 비밀번호를 확인해주세요.";
@@ -719,7 +688,7 @@
                             userName.disabled=true;
                             userId.disabled=true;
                             userBirth.disabled=true;
-                            UserPassword.style.display="none";
+                            userPassword.style.display="none";
                             idDoubleCheckDiv.style.display="none";
                             pwDiv.style.display="none";
                             pwConfirmDiv.style.display="none";
@@ -730,7 +699,7 @@
                             userId.value  = dbUserId
                             userBirth.value  = dbUserBirth;
                             idDoubleCheck.value="ID중복확인";
-                            UserPassword.value="";
+                            userPassword.value="";
                             confirmPassword.value="";
                             idCheckResultMsg.innerHTML="";
                             pwCheckResultMsg.innerHTML="";
@@ -745,6 +714,47 @@
                     }
                 }
         });
+    }
+    <!--회원탈퇴-->
+    function deleteMember(){
+            swal({
+                  title : '회원 탈퇴'
+                , text : 'ヽ(✿ﾟ▽ﾟ)ノ \n'
+                        +'정말 탈퇴하시겠습니까?'
+                , buttons : ["취소","확인"]
+            }).then(function(result){
+                console.log(result);
+                if(result==null) return;
+                else {
+                    let deleteMemberInfo = {"id":dbUserId,"name":dbUserName,"birthDay":dbUserBirth} //데이터 추가하기
+                    console.log(deleteMemberInfo);
+                    deleteMemberInfo = JSON.stringify(deleteMemberInfo);
+
+                    let xhr = new XMLHttpRequest();
+                    xhr.open('DELETE',  "/stuhel/myPage/deleteMember?"
+                                        + "deleteMemberInfo=" + encodeURI(deleteMemberInfo)
+                            ,true);
+                    xhr.setRequestHeader('Accept', 'application/json');
+                    xhr.send();
+                    xhr.onreadystatechange = () => {
+                        if (xhr.readyState == 4 && xhr.status == 200) {
+                            // 데이터 확인
+                            let errorInfo = xhr.responseText;
+                            errorInfo = JSON.parse(errorInfo);
+                            console.log(errorInfo.errorCd);
+                            console.log(errorInfo.errorMsg);
+                            if (errorInfo.errorCd== "Y" ) {
+                                alert(errorInfo.errorMsg);
+                                return;
+                            } else {
+                                alert("탈퇴되었습니다.");
+                                logoutButton();
+                                location.reload(true);
+                            }
+                        }
+                    }
+                }
+            });
     }
 </script>
 </body>
