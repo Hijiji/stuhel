@@ -10,6 +10,9 @@ import java.util.ArrayList;
 public interface MyPageMapper {
     MemberTO selectMemberInfo(MemberTO memberTO);
     void deleteMemberInfo(MemberTO memberTO);
+    void deleteMemberBoardCommentData(MemberTO memberTO);
+    void deleteMemberBoardData(MemberTO memberTO);
+    void deleteMemberRoomBookData(MemberTO memberTO);
     void updateMemberInfo(MemberTO memberTO);
     ArrayList<BookTO> selectBookStatus(BookTO bookTO);
     void deleteBook(BookTO bookTO);

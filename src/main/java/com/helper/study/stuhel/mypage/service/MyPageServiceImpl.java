@@ -32,7 +32,10 @@ public class MyPageServiceImpl implements MyPageService{
         HashMap<String, String> map = new HashMap<>();
         map.put("errorCd","N");
         try{
-            myPageMapper.deleteMemberInfo(memberTO);
+            myPageMapper.deleteMemberInfo(memberTO); //탈퇴요청회원 정보삭제
+            myPageMapper.deleteMemberBoardCommentData(memberTO);  //탈퇴요청회원 댓글삭제
+            myPageMapper.deleteMemberBoardData(memberTO);   //탈퇴요청회원 게시글삭제
+            myPageMapper.deleteMemberRoomBookData(memberTO);    //탈퇴요청회원 예약현황삭제
         }catch(Exception e){
             e.printStackTrace();
             map.put("errorCd","Y");

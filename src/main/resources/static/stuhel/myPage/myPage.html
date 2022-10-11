@@ -165,7 +165,7 @@
         <div class="fw-bolder" id="checkMsg" style="color:#1a1e21;"></div>
         </br>
         <div class="close-wrapper">
-            <button class="btn btn-light btn-xl" class="idPwConfirm" onfocus="idPwConfirmFunc(this)">확인</button>&nbsp;&nbsp;
+            <button class="btn btn-light btn-xl" id="idPwConfirm" onfocus="idPwConfirmFunc(this.value)">확인</button>&nbsp;&nbsp;
             <button class="btn btn-light btn-xl" value="userCheckModalClose" onclick="modalClose(this)" >닫기</button>
         </div>
     </div>
@@ -193,8 +193,10 @@
 
 <!-- Footer-->
 <footer class="bg-light py-5">
-    <input type="button" class="btn btn-light btn-xl" id="deleteMemberInfo" onclick="userInfoChange('memberInfoDelete')" value="회원탈퇴" style="margin:7px;aling:write;"/>
     <div class="container px-4 px-lg-5"><div class="small text-center text-muted">Copyright &copy; 2022 - isjiji</div></div>
+    <div align="right">
+        <input type="button" class="btn btn-light btn-xl" id="deleteMemberInfo" onclick="userInfoChange('memberInfoDelete')" value="회원탈퇴" style="margin:20px;background-color:#BDBDBD"/>
+    </div>
 </footer>
 <!-- Bootstrap core JS-->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -227,7 +229,7 @@
     const checkPw = document.querySelector("#checkPw");
     const checkMsg = document.querySelector("#checkMsg");
     const idCheckResultMsg = document.querySelector("#idCheckResultMsg");
-    const idPwConfirm = document.querySelector(".idPwConfirm");
+    const idPwConfirm = document.querySelector("#idPwConfirm");
     let idCheckInfo = new Object();
     const bookConditionModal = document.querySelector("#bookConditionModal");
 
@@ -488,13 +490,14 @@
         userCheckModal.style.display="flex";
         checkId.focus();
         console.log(divide);
-        console.log(divide+"");
-        console.log(""+divide);
         idPwConfirm.value=divide;
+        console.log(idPwConfirm.value);
     }
 
     <!--회원정보수정시 회원인증-->
     function idPwConfirmFunc(divide){
+    console.log("확인버튼 클릭");
+    console.log(divide);
         if(checkPw.value.trim()==null||checkPw.value.trim()=="" ||
            checkId.value.trim()==null||checkId.value.trim()==""
         ){
@@ -527,9 +530,9 @@
                         checkId.value="";
                         checkMsg.innerHTML="";
                         console.log(divide);
-                        if(divide.id=="memberInfoChange"){
+                        if(divide=="memberInfoChange"){
                             memberInfoChangeFunc();
-                        }else if(divide.id=="memberInfoDelete"){
+                        }else if(divide=="memberInfoDelete"){
                             deleteMember();
                         }
                    }

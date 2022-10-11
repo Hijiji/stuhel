@@ -28,6 +28,19 @@
         DELETE MEMBER_SECURITY
         WHERE ID=#{id} AND NAME=#{name} AND BIRTH=#{birth}
     </delete>
+    <delete id="deleteMemberRoomBookData" parameterType="com.helper.study.stuhel.member.to.MemberTO">
+        DELETE FROM ROOM_BOOK WHERE USER_ID=#{id}
+    </delete>
+    <delete id="deleteMemberBoardData" parameterType="com.helper.study.stuhel.member.to.MemberTO">
+        DELETE FROM BOARD WHERE WRITER=#{id}
+    </delete>
+    <delete id="deleteMemberBoardCommentData" parameterType="com.helper.study.stuhel.member.to.MemberTO">
+        DELETE FROM BOARD_COMMENT
+        WHERE WRITER=#{id}
+        OR CGROUP IN (SELECT COMMENT_SEQ  FROM BOARD_COMMENT WHERE WRITER=#{id})
+        OR NOTE_SEQ IN (SELECT NOTE_SEQ  FROM BOARD WHERE WRITER=#{id})
+    </delete>
+
     <update id="updateMemberInfo" parameterType="com.helper.study.stuhel.member.to.MemberTO">
         UPDATE MEMBER_SECURITY
         SET
