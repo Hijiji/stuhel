@@ -15,5 +15,6 @@ public interface BoardService {
     int addViewCount(BoardTO board);
     ArrayList<BoardCommentTO> retrieveBoardComment(BoardCommentTO boardComment);
     HashMap<String, String> saveComment(BoardCommentTO boardComment);
-    HashMap<String, String> deleteBoardComment(ArrayList<BoardCommentTO> boardComment);
+    HashMap<String, String> deleteCheckedBoardComment(ArrayList<BoardCommentTO> boardComment);
+    HashMap<String, String> deleteBoard(BoardTO board);
 }

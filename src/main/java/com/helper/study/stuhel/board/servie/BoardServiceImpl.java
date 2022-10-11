@@ -3,6 +3,7 @@ package com.helper.study.stuhel.board.servie;
 import com.helper.study.stuhel.board.mapper.BoardMapper;
 import com.helper.study.stuhel.board.to.BoardCommentTO;
 import com.helper.study.stuhel.board.to.BoardTO;
+import com.helper.study.stuhel.member.to.MemberTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -109,7 +110,7 @@ public class BoardServiceImpl implements BoardService{
 
     @Override
     @Transactional
-    public HashMap<String, String> deleteBoardComment(ArrayList<BoardCommentTO> boardComment) {
+    public HashMap<String, String> deleteCheckedBoardComment(ArrayList<BoardCommentTO> boardComment) {
         HashMap<String, String> map = new HashMap<>();
         map.put("errorCd", "N");map.put("errorMsg", "삭제완료");
         ArrayList<BoardCommentTO> deleteBoardList = new ArrayList<>();
@@ -119,17 +120,34 @@ public class BoardServiceImpl implements BoardService{
             }
             if(!deleteBoardList.isEmpty()){
                 for(BoardCommentTO deleteBoardComment:deleteBoardList){
-                    boardMapper.deleteBoardComment(deleteBoardComment); //원댓글에 달린 대댓글 전부 삭제
+                    boardMapper.deleteCheckedBoardComment(deleteBoardComment); //원댓글에 달린 대댓글 전부 삭제
                 }
             }
             for(BoardCommentTO a:boardComment){ //원댓글 삭제
-                boardMapper.deleteBoardComment(a);
+                boardMapper.deleteCheckedBoardComment(a);
             }
 
         }catch(Exception e){
             e.printStackTrace();
             map.put("errorCd", "Y");
             map.put("errorMsg", "댓글 삭제중 오류발생");
+        }
+        return map;
+    }
+
+    @Override
+    @Transactional
+    public HashMap<String, String> deleteBoard(BoardTO board) {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("errorCd","N");
+        map.put("errorMsg","게시글이 삭제되었습니다.");
+        try {
+            boardMapper.deleteBoard(board);
+            boardMapper.deleteBoardComment(board); //삭제된 게시글의 댓글 삭제
+        }catch (Exception e){
+            e.printStackTrace();
+            map.put("errorCd","Y");
+            map.put("errorMsg","오류발생");
         }
         return map;
     }

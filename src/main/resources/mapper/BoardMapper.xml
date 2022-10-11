@@ -133,7 +133,7 @@
             ,#{cGroup}
         )
     </insert>
-    <delete id="deleteBoardComment" parameterType="com.helper.study.stuhel.board.to.BoardCommentTO">
+    <delete id="deleteCheckedBoardComment" parameterType="com.helper.study.stuhel.board.to.BoardCommentTO">
         DELETE
         FROM BOARD_COMMENT
         WHERE COMMENT_SEQ=#{commentSeq}
@@ -147,4 +147,14 @@
         AND NOTE_SEQ = #{noteSeq}
         AND CDEPTH = 1
     </select>
+    <delete id="deleteBoard" parameterType="com.helper.study.stuhel.board.to.BoardTO">
+        DELETE FROM BOARD
+        WHERE WRITER = #{writer}
+        AND NOTE_SEQ = #{noteSeq}
+        AND TITLE = #{title}
+    </delete>
+    <delete id="deleteBoardComment" parameterType="com.helper.study.stuhel.board.to.BoardTO">
+        DELETE FROM BOARD_COMMENT
+        WHERE NOTE_SEQ = #{noteSeq}
+    </delete>
 </mapper>

@@ -83,7 +83,12 @@ public class BoardController {
     @DeleteMapping("/deleteBoardComment")
     HashMap<String,String> deleteBoardComment(@RequestParam("deleteCommentData") String deleteCommentData){
         ArrayList<BoardCommentTO> boardComment = gson.fromJson(deleteCommentData,  new TypeToken<ArrayList<BoardCommentTO>>() {}.getType());
-        return boardService.deleteBoardComment(boardComment);
+        return boardService.deleteCheckedBoardComment(boardComment);
 
+    }
+    @DeleteMapping("/deleteBoard")
+    HashMap<String,String> deleteBoard(@RequestParam("deleteBoardData") String deleteBoardData, HttpServletRequest request){
+        BoardTO board = gson.fromJson(deleteBoardData, BoardTO.class);
+        return boardService.deleteBoard(board);
     }
 }

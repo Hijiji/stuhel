@@ -34,6 +34,7 @@
             <ul class="navbar-nav ms-auto my-2 my-lg-0">
                 <li class="nav-item"><a class="nav-link" href="/stuhel/home/home.html" style="color:#495057">Home</a></li>
                 <li class="nav-item"><a class="nav-link" href="/stuhel/board/boardList.html" style="color:#495057">목록</a></li>
+                <li class="nav-item"><a class="nav-link" id="deleteTextButton" onclick="deleteTextFn()" style="color:tomato;display:none;align:right;">삭제</a></li>
             </ul>
         </div>
     </div>
@@ -52,6 +53,7 @@
             <div>
                 <span id="wroteDate" align="right" style="color=#D5D5D5; font-size:14px"></span>&nbsp;&nbsp;·&nbsp;&nbsp;
                 <span id="writer" align="left" style="color=#D5D5D5; font-size:14px"></span>
+
             </div>
             <hr>
             <div align="right" visible=false>
@@ -95,9 +97,10 @@
     const note = document.querySelector("#note");
     const title = document.querySelector("#title");
     const commentDiv = document.querySelector("#commentDiv");
-    const commentTxt =document.querySelector("#commentTxt");
-    const ud =document.getElementsByClassName("ud");
-    const ac =document.getElementsByClassName("ac");
+    const commentTxt = document.querySelector("#commentTxt");
+    const ud = document.getElementsByClassName("ud");
+    const ac = document.getElementsByClassName("ac");
+    const deleteTextButton = document.querySelector("#deleteTextButton");
     let cDepth=0;
     let cGroup=0;
     let noteSeq;
@@ -124,6 +127,7 @@
                 }else if(sessionStatus!=null){
                     <!--게시글 목록에서 보낸 파라메터 정보 받음-->
                     sessionData = JSON.parse(sessionStatus);
+                    console.log(sessionData);
                     let url = new URL(window.location.href);
                     let urlParams = url.searchParams;
                     boardReadData = JSON.parse(urlParams.get("boardReadData"));
@@ -134,6 +138,11 @@
                     note.value=boardReadData.note.replaceAll("<br/>", "\r\n");  //내려쓰기 변경
                     noteSeq=boardReadData.noteSeq;
 
+                    console.log(boardReadData.writer);
+                    console.log(sessionData.id);
+                    if(boardReadData.writer==sessionData.id){
+                        deleteTextButton.style.display="block";
+                    }
                     textareaResize(note);
                     viewCount();
                     retrieveBoardComment();
@@ -393,6 +402,37 @@
                             alert(errorInfo.errorMsg);
                         }
                         retrieveBoardComment();
+                    }
+                }
+            }
+        });
+    }
+    function deleteTextFn(){
+        swal({
+            title : '게시글 삭제'
+            , text : 'ヽ(✿ﾟ▽ﾟ)ノ \n'
+                     +'게시글을 삭제하시겠습니까? \n'
+            , buttons : ["취소","확인"]
+            , buttonColor : 'tomato'
+        }).then(function(result) {
+            if(result==null){
+                return;
+            }else{
+                let deleteBoardData = {"title":boardReadData.title,"writer":boardReadData.writer,"noteSeq":boardReadData.noteSeq};
+                console.log(deleteBoardData);
+                    deleteBoardData = JSON.stringify(deleteBoardData);
+                let xhr = new XMLHttpRequest();
+                xhr.open('Delete', "/stuhel/board/deleteBoard?deleteBoardData="+encodeURI(deleteBoardData)
+                            ,true);
+                xhr.setRequestHeader('Accept', 'application/json');
+                xhr.send();
+                xhr.onreadystatechange = () => {
+                    if (xhr.readyState == 4 && xhr.status == 200) {
+                        let errorInfo = xhr.responseText;
+                            errorInfo = JSON.parse(errorInfo);
+                        console.log(errorInfo.errorCd);
+                        alert(errorInfo.errorMsg);
+                        location.href="/stuhel/board/boardList.html";
                     }
                 }
             }
