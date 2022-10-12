@@ -213,17 +213,19 @@
                             let UDACTag = document.createElement("div");
                             let deleteCmt = document.createElement("a");
                             let addComment = document.createElement("a");
+                            let divideLine = document.createElement("span");;
                             UDACTag.align="right";
                             commentBoxTag.id='div'+commentData[i].commentSeq;
-
-                            deleteCmt.innerHTML="삭제 / ";
-                            deleteCmt.style.fontSize="0.8rem";
-                            deleteCmt.style.textDecorationLine="none";
-                            deleteCmt.style.color="gray";
-                            deleteCmt.id='ud'+commentData[i].commentSeq;
-                            deleteCmt.onclick =()=> {deleteComment(deleteCmt.id);  commentDiv.focus();}
-                            deleteCmt.href="javascript:void(0)";
-
+                            if(commentData[i].writer == sessionData.id){
+                                deleteCmt.innerHTML="삭제 ";
+                                deleteCmt.style.fontSize="0.8rem";
+                                deleteCmt.style.textDecorationLine="none";
+                                deleteCmt.style.color="gray";
+                                deleteCmt.id='ud'+commentData[i].commentSeq;
+                                deleteCmt.onclick =()=> {deleteComment(deleteCmt.id);  commentDiv.focus();}
+                                deleteCmt.href="javascript:void(0)";
+                                divideLine.innerHTML = " / "
+                            }
                             addComment.innerHTML=" 댓글달기";
                             addComment.style.textDecorationLine="none";
                             addComment.style.color="gray";
@@ -246,6 +248,7 @@
                                 commentDiv.appendChild(hrTag);
 
                                 UDACTag.appendChild(deleteCmt);
+                                UDACTag.appendChild(divideLine);
                                 UDACTag.appendChild(addComment);
                                 commentBoxTag.appendChild(writerInfoTag);
                                 commentBoxTag.appendChild(pTag);
@@ -258,8 +261,6 @@
                                 image.style.marginRight="5px";
 
                                 commentBoxTag.style.marginLeft="30px";
-                                deleteCmt.innerHTML="삭제 ";
-                                deleteCmt.style.marginRight="4rem"
                                 pTag.style.marginLeft="3rem";
 
                                 UDACTag.appendChild(deleteCmt);
@@ -407,6 +408,7 @@
             }
         });
     }
+    <!--게시글 삭제기능-->
     function deleteTextFn(){
         swal({
             title : '게시글 삭제'
