@@ -343,6 +343,12 @@
 
     var userLng,userLat, mapContainer, map, infowindow,
         ps = new kakao.maps.services.Places(); // 장소 검색 객체를 생성;
+    //맛집키워드 랜덤하게 띠우기
+    var tasteKeyWord = new Array('이탈리안','중국집','마라탕','치킨','한정식','국밥','술집','멕시코','일본','가정식','라멘','분식','피자','떡볶이','튀김','집밥');
+    function randomKeyword(key) {
+        return key[Math.floor(Math.random() * key.length)];
+    }
+
     <!--var keyword = document.getElementById('keyword').value;-->
     var markers = [];
 	navigator.geolocation.getCurrentPosition(getLocWeather, showErrorMsg);
@@ -358,7 +364,8 @@
         };
         map = new kakao.maps.Map(mapContainer, mapOption); //지도생성
         infowindow = new kakao.maps.InfoWindow({zIndex:1}); // 검색 결과 목록이나 마커를 클릭했을 때 장소명을 표출할 인포윈도우를 생성
-        searchPlaces("맛집");
+
+        searchPlaces(randomKeyword(tasteKeyWord));
     }
 
     function showErrorMsg(error){ //위치찾기 오류발생
