@@ -14,6 +14,9 @@ public interface MyPageMapper {
     void deleteMemberBoardData(MemberTO memberTO);
     void deleteMemberRoomBookData(MemberTO memberTO);
     void updateMemberInfo(MemberTO memberTO);
+    void updateBoardInfo(MemberTO memberTO);
+    void updateBoardCmtInfo(MemberTO memberTO);
+    void updateRoomBookInfo(MemberTO memberTO);
     ArrayList<BookTO> selectBookStatus(BookTO bookTO);
     void deleteBook(BookTO bookTO);
 }

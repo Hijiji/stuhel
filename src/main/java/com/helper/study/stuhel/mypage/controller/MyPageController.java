@@ -70,7 +70,6 @@ public class MyPageController {
         book.setUserId((String)session.getAttribute("memberId"));
         return gson.toJson(myPageService.retrieveBookStatus(book));
     }
-
     @DeleteMapping("/cancelBook")
     public HashMap<String, String> cancelBook(@RequestParam("cancelBookData") String bookCancelData){
         ArrayList<BookTO> bookTOList = gson.fromJson(bookCancelData, new TypeToken<ArrayList<BookTO>>() {}.getType());

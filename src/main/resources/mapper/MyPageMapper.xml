@@ -52,7 +52,22 @@
         <if test="birth>0" >,BIRTH = #{birth}</if>
         WHERE ID = #{sessionId}
     </update>
+    <update id="updateBoardInfo" parameterType="com.helper.study.stuhel.member.to.MemberTO">
+        UPDATE BOARD
+        SET WRITER = #{id}
+        WHERE WRITER = #{sessionId}
 
+    </update>
+    <update id="updateBoardCmtInfo" parameterType="com.helper.study.stuhel.member.to.MemberTO">
+        UPDATE BOARD_COMMENT
+        SET WRITER = #{id}
+        WHERE WRITER = #{sessionId}
+    </update>
+    <update id="updateRoomBookInfo" parameterType="com.helper.study.stuhel.member.to.MemberTO">
+        UPDATE ROOM_BOOK
+        SET USER_ID = #{id}
+        WHERE USER_ID = #{sessionId}
+    </update>
     <select id="selectBookStatus" parameterType="com.helper.study.stuhel.home.to.BookTO" resultMap="myPageBook">
         SELECT *
         FROM ROOM_BOOK
